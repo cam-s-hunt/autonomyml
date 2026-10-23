@@ -1,0 +1,95 @@
+//
+// Content blocks (specification parts, tables, architecture layers)
+//
+
+.spec-card {
+    height: 100%;
+    padding: 2rem;
+    background-color: $white;
+    border-top: 4px solid $primary;
+    box-shadow: 0 0.25rem 1rem rgba($black, 0.08);
+
+    h4 {
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        margin-bottom: 0;
+        padding-left: 1.25rem;
+    }
+
+    li {
+        line-height: $line-height-lg;
+    }
+}
+
+.table-spec {
+    background-color: $white;
+    box-shadow: 0 0.25rem 1rem rgba($black, 0.08);
+
+    th {
+        font-family: $headings-font-family;
+        text-transform: uppercase;
+        letter-spacing: $headings-letter-spacing;
+        font-size: 0.85rem;
+        background-color: $gray-900;
+        color: $white;
+        border-color: $gray-900;
+    }
+
+    td:first-child {
+        font-family: $headings-font-family;
+        font-weight: $headings-font-weight;
+    }
+
+    td {
+        line-height: $line-height-lg;
+    }
+}
+
+.layer-card {
+    height: 100%;
+    padding: 2rem;
+    background-color: $white;
+    box-shadow: 0 0.25rem 1rem rgba($black, 0.08);
+
+    .layer-number {
+        font-family: $headings-font-family;
+        font-weight: $headings-font-weight;
+        font-size: 2.5rem;
+        color: $primary;
+        line-height: 1;
+    }
+}
+
+// Privacy modal (carried over from the theme's portfolio modal)
+
+.portfolio-modal {
+    .modal-dialog {
+        margin: 1rem;
+        max-width: 100vw;
+    }
+
+    .modal-content {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+        text-align: center;
+
+        h2 {
+            font-size: 3rem;
+            line-height: 3rem;
+        }
+
+        p.item-intro {
+            font-style: italic;
+            margin-bottom: 2rem;
+            font-family: $subheadings-font-family;
+        }
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+    }
+}

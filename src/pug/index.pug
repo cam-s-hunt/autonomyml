@@ -1,0 +1,205 @@
+doctype html
+html(lang='en')
+
+    head
+
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        meta(name='description', content='AutonomyML (Autonomy Model Language): a robust and semantically-grounded means of defining autonomous capabilities, built on OGC API - Connected Systems, SensorML, finite state machines and behavior trees.')
+        meta(name='author', content='AutonomyML')
+        meta(name='theme-color', content='#212529')
+        link(rel='canonical', href='https://autonomyml.org/')
+
+        // Open Graph
+        meta(property='og:type', content='website')
+        meta(property='og:site_name', content='AutonomyML')
+        meta(property='og:title', content='AutonomyML - Autonomy Model Language')
+        meta(property='og:description', content='A robust and semantically-grounded means of defining autonomous capabilities.')
+        meta(property='og:url', content='https://autonomyml.org/')
+
+        title AutonomyML - Autonomy Model Language
+
+        // Favicon
+        link(rel='icon', type='image/svg+xml', href='assets/favicon.svg')
+
+        // Font Awesome icons (free version)
+        script(src='https://use.fontawesome.com/releases/v5.15.3/js/all.js', crossorigin='anonymous')
+
+        // Google fonts
+        link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700', rel='stylesheet', type='text/css')
+        link(href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700', rel='stylesheet', type='text/css')
+
+        // Core theme CSS (includes Bootstrap)
+        link(href='css/styles.css', rel='stylesheet')
+
+    body#page-top(data-bs-spy='scroll', data-bs-target='#mainNav', data-bs-offset='74')
+
+        // Navigation
+        nav#mainNav.navbar.navbar-expand-lg.navbar-dark.fixed-top
+            .container
+                a.navbar-brand(href='#page-top') HOME
+                button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarResponsive', aria-controls='navbarResponsive', aria-expanded='false', aria-label='Toggle navigation')
+                    | Menu
+                    i.fas.fa-bars.ms-1
+                #navbarResponsive.collapse.navbar-collapse
+                    ul.navbar-nav.text-uppercase.ms-auto.py-4.py-lg-0
+                        li.nav-item
+                            a.nav-link(href='#why') Why
+                        li.nav-item
+                            a.nav-link(href='#overview') Overview
+                        li.nav-item
+                            a.nav-link(href='#goal') Goal
+                        li.nav-item
+                            a.nav-link(href='#implementation') Implementation
+                        li.nav-item
+                            a.nav-link(href='#architecture') Architecture
+
+                a(href='https://github.com/cam-s-hunt/autonomyml')
+                    img(style='position: absolute; top: 0; right: 0; border: 0;' src='https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png' alt='Fork me on GitHub')
+
+        // Masthead
+        header.masthead
+            .container
+                .masthead-heading.text-uppercase Autonomy Model Language
+                .masthead-subheading A robust and semantically-grounded means of defining autonomous capabilities
+
+                a.btn.btn-primary.btn-xl.text-uppercase(href='#why') Tell Me More
+                a.btn.btn-primary.btn-xl.text-uppercase(href='#overview') Overview
+
+        // Why
+        section#why.page-section
+            .container
+                .text-center
+                    h2.section-heading.text-uppercase Why?
+                    h3.section-subheading.text-muted Main reasons for describing autonomy with AutonomyML.
+                .row.text-center
+                    .col-md-4
+                        span.fa-stack.fa-4x
+                            i.fas.fa-circle.fa-stack-2x.text-primary
+                            i.fas.fa-project-diagram.fa-stack-1x.fa-inverse
+                        h4.my-3 Enhance Interoperability
+                        p.text-muted Enhance interoperability of autonomous systems.
+                    .col-md-4
+                        span.fa-stack.fa-4x
+                            i.fas.fa-circle.fa-stack-2x.text-primary
+                            i.fas.fa-equals.fa-stack-1x.fa-inverse
+                        h4.my-3 Describe Equivalent Behaviors
+                        p.text-muted Describe equivalent behaviors between autonomous frameworks.
+                    .col-md-4
+                        span.fa-stack.fa-4x
+                            i.fas.fa-circle.fa-stack-2x.text-primary
+                            i.fas.fa-sync-alt.fa-stack-1x.fa-inverse
+                        h4.my-3 Iterate Across the Spectrum
+                        p.text-muted Iterative development across the spectrum of autonomy.
+
+        // Overview
+        section#overview.page-section.bg-light
+            .container
+                .text-center
+                    h2.section-heading.text-uppercase Overview
+                    h3.section-subheading.text-muted AutonomyML defines reusable autonomous capabilities and composes their data processing, state transitions, and behavioral execution.
+                .row.gy-4
+                    .col-md-6
+                        .spec-card
+                            h4 Part 1 &mdash; Specifications
+                            ul.text-muted
+                                li Typed Interfaces
+                                li Execution Lifecycles
+                                li State/Event Exchange
+                                li Resource Coordination
+                    .col-md-6
+                        .spec-card
+                            h4 Part 2 &mdash; Bindings
+                            ul.text-muted
+                                li Computational Methods
+                                li System Interactions
+                                li Concrete Implementations
+
+        // Goal
+        section#goal.page-section
+            .container
+                .row.justify-content-center
+                    .col-lg-9.text-center
+                        h2.section-heading.text-uppercase Goal
+                        h3.section-subheading.text-muted Open, observable, equivalent.
+                        p.lead.text-muted AutonomyML ensures that different independent autonomous UxS system implementations publish their autonomy capabilities openly via a standard that enables the description of equivalent observable behavior, without relying on undocumented conventions inside its components.
+
+        // Implementation
+        section#implementation.page-section.bg-light
+            .container
+                .text-center
+                    h2.section-heading.text-uppercase Implementation
+                    h3.section-subheading.text-muted Built on OGC API - Connected Systems and SensorML, with finite state machines and behavior trees.
+                p.text-muted
+                    | AutonomyML relies on the OGC API - Connected Systems Standard (CSAPI) and SensorML standards as well as formalisms from Finite State Machines (FSM) and Behavioral Trees (BT) to create executable models of autonomous capabilities.
+                .table-responsive.mt-4
+                    table.table.table-spec.align-middle.mb-0
+                        thead
+                            tr
+                                th(scope='col') Concern
+                                th(scope='col') Mechanism
+                                th(scope='col') What it provides
+                        tbody
+                            tr
+                                td Interaction with a particular system
+                                td OGC CSAPI
+                                td.text-muted System-facing observations, commands, and command-status resources.
+                            tr
+                                td Computational functions and dataflow
+                                td SensorML
+                                td.text-muted Typed inputs, outputs, parameters, methods, and hierarchical process composition. Its framework includes computational processes, sensors, and actuators&mdash;not just sensor metadata.
+                            tr
+                                td Modes and transitions
+                                td FSMs
+                                td.text-muted Explicit state-oriented behavior management.
+                            tr
+                                td Reactive task composition
+                                td BTs
+                                td.text-muted Hierarchical selection and sequencing of conditions and actions, with execution status propagated through the tree.
+                            tr
+                                td Executable algorithms
+                                td Process implementations and system implementations
+                                td.text-muted The actual perception, estimation, planning, control, or other computations invoked through these models. SensorML describes their interfaces and methodology; an execution environment supplies support for those methods.
+
+        // Architecture
+        section#architecture.page-section
+            .container
+                .text-center
+                    h2.section-heading.text-uppercase AutonomyML Architecture
+                    h3.section-subheading.text-muted Three layers, from a core composition language out to the research frontier.
+                .row.gy-4
+                    .col-lg-4
+                        .layer-card
+                            .layer-number 1
+                            h4.my-3 Core composition language
+                            p.text-muted Capabilities, typed interfaces, process/behavior composition, FSM/BT primitive states &amp; events, lifecycle, timing, and resource coordination.
+                    .col-lg-4
+                        .layer-card
+                            .layer-number 2
+                            h4.my-3 Execution and domain profiles
+                            p.text-muted Supported SensorML methods, OGC CSAPI mappings, FSM/BT dialects, platform capabilities, and domain-specific meanings.
+                    .col-lg-4
+                        .layer-card
+                            .layer-number 3
+                            h4.my-3 Research frontier extensions
+                            p.text-muted Declarative planning, rich belief models, online learning, dynamic behavior generation, multi-agent coordination, and assurance artifacts.
+
+        // Footer
+        footer.footer.py-4.bg-light
+            .container
+                .row.align-items-center
+                    .col-lg-4.text-lg-start
+                        | Copyright &copy; 2026 AutonomyML
+                    .col-lg-4.my-3.my-lg-0
+                        a.btn.btn-dark.btn-social.mx-2(href='https://github.com/cam-s-hunt/autonomyml', title='GitHub')
+                            i.fab.fa-github
+                    .col-lg-4.text-lg-end
+                        a.link-dark.text-decoration-none.me-3(href='#', data-bs-toggle='modal', data-bs-target='#privacyModal') Privacy Policy
+
+        include includes/privacy-modal
+
+        // Bootstrap core JS
+        script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js')
+
+        // Core theme JS
+        script(src='js/scripts.js')
