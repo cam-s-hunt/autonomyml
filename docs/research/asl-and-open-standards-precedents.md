@@ -309,8 +309,9 @@ AutonomyML unifies both formalisms through **bidirectional, typed composition** 
 1. **FSM Hosting a Behavior Tree (`"type": "behaviorTree"` State):** Any state in an AutonomyML `controlFlow` state machine can declare `"type": "behaviorTree"` with an explicit `tickRateHz` and `root` node (`reactiveSequence`, `sequence`, `fallback`, `reactiveFallback`, `parallel`).
    * `SUCCESS` at the BT root transitions the enclosing FSM state to `next`.
    * `RUNNING` at the BT root keeps the FSM in the current state for the next tick (subject to `timeoutSeconds`).
-   * `FAILURE` at the BT root raises a typed fault (`AutonomyML.BehaviorTreeFailed` or a specific guard `failureError` such as `AutonomyML.GeofenceBreach`) that routes cleanly through the enclosing FSM's `catch` block—calling `onHalt` on any active leaf action first.
+   * `FAILURE` at the BT root raises a typed fault (`AutonomyML.BehaviorTreeFailed` or a specific guard `failureError` such as `AutonomyML.GeofenceBreach`) that routes cleanly through the enclosing state or parent mode's `catch` block—calling `onHalt` on any active leaf action first.
 2. **Behavior Tree Invoking a Sub-Capability (`"nodeType": "invokeCapability"` Leaf):** Conversely, any BT leaf action can invoke another reusable AutonomyML capability URI whose internal implementation may itself be an FSM, a SensorML `AggregateProcess`, or another BT—returning `RUNNING` until that sub-capability's physical `postcondition` succeeds.
+3. **Optional SCXML-Style Parent Modes (`"type": "mode"`) & Fault Bubbling:** Simple single-stage capabilities (like the Ground Rover examples) can keep a flat `states` map, whereas multi-stage capabilities (like the Aerial UxS example) can group child states inside parent `"type": "mode"` blocks with `modeInvariants` and shared `catch` handlers. Just like nested `try / catch` scopes, any fault not handled by a child state automatically halts the active action and bubbles up to its enclosing parent mode—eliminating copy-pasted `catch` blocks across flight phases.
 
 ```mermaid
 flowchart LR
@@ -507,24 +508,26 @@ The example below extends the Ground Rover `WaypointNavigation` baseline into a 
 }
 ```
 
-### 5.3 Hybrid Example B — Aerial UxS Profile (`Takeoff`, `Survey`, and `ExecuteRTL`)
+### 5.3 Hybrid Example B — Aerial UxS Profile (`Takeoff`, `Survey`, and `ExecuteRTL` with Parent Modes)
 
-Placing an **Aerial UxS** capability (`urn:semvocab:profile:uxs-aerial:1.0`) alongside the Ground Rover example highlights why AutonomyML separates **Layer 1 Core Composition** from **Layer 2 Domain Profiles** and **Part 2 Bindings**:
+Placing an **Aerial UxS** capability (`urn:semvocab:profile:uxs-aerial:1.0`) alongside the flat Ground Rover example highlights both **Layer 2 Domain Profile** specialization and **SCXML-style parent mode grouping (`"type": "mode"`)**:
 
 1. **3D Coordinate Frames & Explicit Vertical Semantics:** Unlike a 2D rover (`EPSG:4326`), aerial vehicles require 3D WGS84 coordinates (`http://www.opengis.net/def/crs/EPSG/0/4979` with ellipsoidal height) alongside explicit above-ground-level (`AGL`) clearance quantities so altitude datums are never conflated.
-2. **Shared Nominal & Safe-State `ExecuteRTL` Recovery with Tiered Escalation:** In aerial missions, **Return-to-Launch (`ExecuteRTL`)** serves both as the nominal post-survey recovery sequence and as the primary safe-state `catch` target when non-critical faults occur mid-flight (`GeofenceBreach`, `WindLimitExceeded`, `RtlBatteryReserve`, `TelemetryStale`). Recording caught faults via `"faultTarget": "blackboard.lastFault"` lets a `choice` state (`EvaluateMissionOutcome`) check `has(blackboard.lastFault)` with the exact same **CEL** evaluator to distinguish nominal survey completion (`succeed`) from a safe fault-induced RTL (`fail`), while critical power emergencies (`CriticalBatteryLand`) or an RTL failure escalate directly to `EmergencyLandImmediate`.
-3. **Airborne Preemption (`onHaltAction`):** Preempting an airborne trajectory cannot simply cut actuator power or slam wheel brakes; the Part 2 binding specifies active 3D station-keeping (`LOITER_3D_HOLD`) and payload shutter deactivation before transitioning into `ExecuteRTL` or `EmergencyLandImmediate`.
+2. **Concentric Parent Modes (`AirborneEnvelope` $\supset$ `MissionFlight`) Eliminate Repeated `catch` Blocks:** Instead of copy-pasting emergency battery and telemetry `catch` handlers onto every individual flight phase, the capability wraps airborne states in two concentric `"type": "mode"` scopes:
+   * **`MissionFlight` (inner parent mode)** wraps `Takeoff` and `Survey`—neither of which needs any `catch` block of its own. Any recoverable envelope or mission fault (`GeofenceBreach`, `WindLimitExceeded`, `RtlBatteryReserve`, `TelemetryStale`, `PostconditionTimeout`, `BehaviorTreeFailed`, `CSAPI.CommandFailed`) bubbles up to `MissionFlight`'s single `catch` handler, runs `onHalt` (`LOITER_3D_HOLD` + camera `STOP`), records the fault in `blackboard.lastFault`, and transitions to **`ExecuteRTL`**.
+   * **`AirborneEnvelope` (outer parent mode)** wraps both `MissionFlight` and `ExecuteRTL`, continuously enforces a mode-wide `BatteryAboveCriticalLand` invariant (`modeInvariants`), and catches `AutonomyML.CriticalBatteryLand`—or any fault occurring during `ExecuteRTL` itself—routing directly to **`EmergencyLandImmediate`**.
+3. **Unified CEL Outcome Disambiguation:** Because `ExecuteRTL` serves as both the nominal post-survey return and the Tier-1 fault recovery path, `EvaluateMissionOutcome` (`"type": "choice"`) checks `has(blackboard.lastFault)` in CEL to distinguish nominal survey completion (`succeed`) from a safe fault-induced recovery (`fail`).
 
 ```mermaid
 flowchart TB
-    subgraph FSM["Aerial controlFlow FSM (Takeoff -> Survey -> ExecuteRTL)"]
-        Takeoff["Takeoff (csapiCommandAction)"]
-        Survey["Survey (type: behaviorTree at 10 Hz)"]
+    subgraph Airborne["AirborneEnvelope (type: mode | invariant: BatteryAboveCriticalLand)"]
+        subgraph Mission["MissionFlight (type: mode)"]
+            Takeoff["Takeoff (csapiCommandAction)"]
+            Survey["Survey (type: behaviorTree at 10 Hz)"]
+            MissionDone["MissionFlightComplete (succeed)"]
+        end
         RTL["ExecuteRTL (csapiCommandAction)"]
-        LandNow["EmergencyLandImmediate (csapiCommandAction)"]
-        Outcome["EvaluateMissionOutcome (choice)"]
-        Success["SurveyMissionCompleted (succeed)"]
-        Aborted["SafeStateTerminal (fail)"]
+        AirborneDone["AirborneComplete (succeed)"]
     end
 
     subgraph BT["Nested Behavior Tree inside Survey"]
@@ -539,6 +542,11 @@ flowchart TB
         Cap["csapiCommandAction: TriggerSurveyPayload"]
     end
 
+    LandNow["EmergencyLandImmediate (csapiCommandAction)"]
+    Outcome["EvaluateMissionOutcome (choice)"]
+    Success["SurveyMissionCompleted (succeed)"]
+    Aborted["SafeStateTerminal (fail)"]
+
     Takeoff -->|"climb verified"| Survey
     Survey -.->|"ticks at 10 Hz"| RS
     RS --> G1
@@ -550,14 +558,13 @@ flowchart TB
     Par --> Fly
     Par --> Cap
 
-    Survey -->|"BT SUCCESS"| RTL
-    Takeoff -->|"catch: TelemetryStale / Timeout"| RTL
-    Survey -->|"catch: Geofence / Wind / RtlReserve (onHalt -> RTL)"| RTL
-    Takeoff -->|"catch: CriticalBatteryLand"| LandNow
-    Survey -->|"catch: CriticalBatteryLand"| LandNow
-    RTL -->|"catch: CriticalBatteryLand / RTL Fault"| LandNow
+    Survey -->|"BT SUCCESS"| MissionDone
+    Mission -->|"next (nominal)"| RTL
+    Mission -->|"catch: Geofence / Wind / RtlReserve / Timeout (onHalt -> RTL)"| RTL
+    RTL -->|"touchdown + disarm verified"| AirborneDone
 
-    RTL -->|"touchdown + disarm verified"| Outcome
+    Airborne -->|"next"| Outcome
+    Airborne -->|"catch: CriticalBatteryLand or RTL Fault"| LandNow
     Outcome -->|"!has(blackboard.lastFault)"| Success
     Outcome -->|"has(blackboard.lastFault)"| Aborted
     LandNow -->|"touchdown + disarm verified"| Aborted
@@ -644,166 +651,167 @@ flowchart TB
     }
   },
   "controlFlow": {
-    "startAt": "Takeoff",
+    "startAt": "AirborneEnvelope",
     "states": {
-      "Takeoff": {
-        "type": "csapiCommandAction",
-        "resource": "urn:autonomyml:binding:controlstream:VerticalTakeoff",
-        "inputPorts": {
-          "targetAltitudeAgl": "interface.inputs.surveyAltitudeAgl"
-        },
-        "postcondition": {
-          "observationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
-          "maxObservationAgeSeconds": 0.5,
-          "condition": "abs(observation.altitudeAgl - interface.inputs.surveyAltitudeAgl) <= interface.parameters.altitudeTolerance && abs(observation.verticalSpeed) <= 0.3",
-          "sustainDurationSeconds": 2.0
-        },
-        "timeoutSeconds": 60,
-        "catch": [
+      "AirborneEnvelope": {
+        "type": "mode",
+        "modeInvariants": [
           {
-            "errors": ["AutonomyML.CriticalBatteryLand"],
-            "faultTarget": "blackboard.lastFault",
-            "next": "EmergencyLandImmediate"
-          },
-          {
-            "errors": [
-              "AutonomyML.TelemetryStale",
-              "AutonomyML.PostconditionTimeout",
-              "CSAPI.CommandFailed"
-            ],
-            "faultTarget": "blackboard.lastFault",
-            "next": "ExecuteRTL"
+            "name": "BatteryAboveCriticalLand",
+            "condition": "blackboard.batterySoc >= interface.parameters.criticalLandSoc",
+            "failureError": "AutonomyML.CriticalBatteryLand"
           }
         ],
-        "next": "Survey"
-      },
-      "Survey": {
-        "type": "behaviorTree",
-        "tickRateHz": 10.0,
-        "timeoutSeconds": 900,
-        "root": {
-          "nodeType": "reactiveSequence",
-          "name": "AirspaceGuardedSurvey",
-          "children": [
-            {
-              "nodeType": "condition",
-              "name": "BatteryAboveCriticalLand",
-              "expression": "blackboard.batterySoc >= interface.parameters.criticalLandSoc",
-              "failureError": "AutonomyML.CriticalBatteryLand"
-            },
-            {
-              "nodeType": "condition",
-              "name": "GeofenceAndCeilingClear",
-              "expression": "withinVolume3D(blackboard.vehiclePose3D, interface.inputs.airspaceVolume)",
-              "failureError": "AutonomyML.GeofenceBreach"
-            },
-            {
-              "nodeType": "condition",
-              "name": "WindWithinEnvelope",
-              "expression": "blackboard.windSpeed <= interface.parameters.maxWindSpeed",
-              "failureError": "AutonomyML.WindLimitExceeded"
-            },
-            {
-              "nodeType": "condition",
-              "name": "BatteryAboveRtlReserve",
-              "expression": "blackboard.batterySoc >= interface.parameters.rtlReserveSoc",
-              "failureError": "AutonomyML.RtlBatteryReserve"
-            },
-            {
-              "nodeType": "sequence",
-              "name": "PlanAndFlyTransects",
-              "children": [
-                {
-                  "nodeType": "sensorMLProcess",
-                  "name": "GenerateLawnmowerTransects",
-                  "process": "urn:autonomyml:process:CoveragePathGenerator3D",
-                  "inputPorts": {
-                    "polygon": "interface.inputs.surveyPolygon",
-                    "altitudeAgl": "interface.inputs.surveyAltitudeAgl",
-                    "swathWidth": "interface.parameters.sensorSwathWidth"
-                  },
-                  "outputPorts": {
-                    "waypoints": "blackboard.transectPath"
-                  }
+        "startAt": "MissionFlight",
+        "states": {
+          "MissionFlight": {
+            "type": "mode",
+            "startAt": "Takeoff",
+            "states": {
+              "Takeoff": {
+                "type": "csapiCommandAction",
+                "resource": "urn:autonomyml:binding:controlstream:VerticalTakeoff",
+                "inputPorts": {
+                  "targetAltitudeAgl": "interface.inputs.surveyAltitudeAgl"
                 },
-                {
-                  "nodeType": "parallel",
-                  "name": "FlyAndCapture",
-                  "successThreshold": 2,
-                  "failureThreshold": 1,
+                "postcondition": {
+                  "observationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+                  "maxObservationAgeSeconds": 0.5,
+                  "condition": "abs(observation.altitudeAgl - interface.inputs.surveyAltitudeAgl) <= interface.parameters.altitudeTolerance && abs(observation.verticalSpeed) <= 0.3",
+                  "sustainDurationSeconds": 2.0
+                },
+                "timeoutSeconds": 60,
+                "next": "Survey"
+              },
+              "Survey": {
+                "type": "behaviorTree",
+                "tickRateHz": 10.0,
+                "timeoutSeconds": 900,
+                "root": {
+                  "nodeType": "reactiveSequence",
+                  "name": "AirspaceGuardedSurvey",
                   "children": [
                     {
-                      "nodeType": "csapiCommandAction",
-                      "name": "FlyTransectPath3D",
-                      "resource": "urn:autonomyml:binding:controlstream:FollowTrajectory3D",
-                      "inputPorts": {
-                        "waypoints": "blackboard.transectPath"
-                      },
-                      "postcondition": {
-                        "observationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
-                        "maxObservationAgeSeconds": 0.5,
-                        "condition": "distance3D(observation.position, last(blackboard.transectPath)) <= interface.parameters.waypointRadius3D",
-                        "sustainDurationSeconds": 1.5
-                      }
+                      "nodeType": "condition",
+                      "name": "GeofenceAndCeilingClear",
+                      "expression": "withinVolume3D(blackboard.vehiclePose3D, interface.inputs.airspaceVolume)",
+                      "failureError": "AutonomyML.GeofenceBreach"
                     },
                     {
-                      "nodeType": "csapiCommandAction",
-                      "name": "TriggerSurveyPayload",
-                      "resource": "urn:autonomyml:binding:controlstream:CameraIntervalCapture",
-                      "inputPorts": {
-                        "surveyArea": "interface.inputs.surveyPolygon"
-                      },
-                      "outputPorts": {
-                        "captureCount": "interface.outputs.capturedImageCount"
-                      },
-                      "postcondition": {
-                        "observationStream": "urn:autonomyml:binding:datastream:PayloadStatus",
-                        "maxObservationAgeSeconds": 1.0,
-                        "condition": "observation.transectCaptureComplete",
-                        "sustainDurationSeconds": 0.5
-                      }
+                      "nodeType": "condition",
+                      "name": "WindWithinEnvelope",
+                      "expression": "blackboard.windSpeed <= interface.parameters.maxWindSpeed",
+                      "failureError": "AutonomyML.WindLimitExceeded"
+                    },
+                    {
+                      "nodeType": "condition",
+                      "name": "BatteryAboveRtlReserve",
+                      "expression": "blackboard.batterySoc >= interface.parameters.rtlReserveSoc",
+                      "failureError": "AutonomyML.RtlBatteryReserve"
+                    },
+                    {
+                      "nodeType": "sequence",
+                      "name": "PlanAndFlyTransects",
+                      "children": [
+                        {
+                          "nodeType": "sensorMLProcess",
+                          "name": "GenerateLawnmowerTransects",
+                          "process": "urn:autonomyml:process:CoveragePathGenerator3D",
+                          "inputPorts": {
+                            "polygon": "interface.inputs.surveyPolygon",
+                            "altitudeAgl": "interface.inputs.surveyAltitudeAgl",
+                            "swathWidth": "interface.parameters.sensorSwathWidth"
+                          },
+                          "outputPorts": {
+                            "waypoints": "blackboard.transectPath"
+                          }
+                        },
+                        {
+                          "nodeType": "parallel",
+                          "name": "FlyAndCapture",
+                          "successThreshold": 2,
+                          "failureThreshold": 1,
+                          "children": [
+                            {
+                              "nodeType": "csapiCommandAction",
+                              "name": "FlyTransectPath3D",
+                              "resource": "urn:autonomyml:binding:controlstream:FollowTrajectory3D",
+                              "inputPorts": {
+                                "waypoints": "blackboard.transectPath"
+                              },
+                              "postcondition": {
+                                "observationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+                                "maxObservationAgeSeconds": 0.5,
+                                "condition": "distance3D(observation.position, last(blackboard.transectPath)) <= interface.parameters.waypointRadius3D",
+                                "sustainDurationSeconds": 1.5
+                              }
+                            },
+                            {
+                              "nodeType": "csapiCommandAction",
+                              "name": "TriggerSurveyPayload",
+                              "resource": "urn:autonomyml:binding:controlstream:CameraIntervalCapture",
+                              "inputPorts": {
+                                "surveyArea": "interface.inputs.surveyPolygon"
+                              },
+                              "outputPorts": {
+                                "captureCount": "interface.outputs.capturedImageCount"
+                              },
+                              "postcondition": {
+                                "observationStream": "urn:autonomyml:binding:datastream:PayloadStatus",
+                                "maxObservationAgeSeconds": 1.0,
+                                "condition": "observation.transectCaptureComplete",
+                                "sustainDurationSeconds": 0.5
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
-                }
-              ]
-            }
-          ]
-        },
-        "catch": [
-          {
-            "errors": ["AutonomyML.CriticalBatteryLand"],
-            "faultTarget": "blackboard.lastFault",
-            "next": "EmergencyLandImmediate"
-          },
-          {
-            "errors": [
-              "AutonomyML.GeofenceBreach",
-              "AutonomyML.WindLimitExceeded",
-              "AutonomyML.RtlBatteryReserve",
-              "AutonomyML.TelemetryStale",
-              "AutonomyML.PostconditionTimeout",
-              "AutonomyML.BehaviorTreeFailed"
+                },
+                "next": "MissionFlightComplete"
+              },
+              "MissionFlightComplete": {
+                "type": "succeed"
+              }
+            },
+            "catch": [
+              {
+                "errors": [
+                  "AutonomyML.GeofenceBreach",
+                  "AutonomyML.WindLimitExceeded",
+                  "AutonomyML.RtlBatteryReserve",
+                  "AutonomyML.TelemetryStale",
+                  "AutonomyML.PostconditionTimeout",
+                  "AutonomyML.BehaviorTreeFailed",
+                  "CSAPI.CommandFailed"
+                ],
+                "faultTarget": "blackboard.lastFault",
+                "next": "ExecuteRTL"
+              }
             ],
-            "faultTarget": "blackboard.lastFault",
             "next": "ExecuteRTL"
+          },
+          "ExecuteRTL": {
+            "type": "csapiCommandAction",
+            "resource": "urn:autonomyml:binding:controlstream:ReturnToLaunch",
+            "inputPorts": {
+              "home": "interface.inputs.homePosition",
+              "minimumRtlAltitudeAgl": "interface.parameters.rtlAltitudeAgl"
+            },
+            "postcondition": {
+              "observationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+              "maxObservationAgeSeconds": 0.5,
+              "condition": "distance2D(observation.position, interface.inputs.homePosition) <= 2.0 && observation.altitudeAgl <= 0.2 && !observation.armed",
+              "sustainDurationSeconds": 2.0
+            },
+            "timeoutSeconds": 300,
+            "next": "AirborneComplete"
+          },
+          "AirborneComplete": {
+            "type": "succeed"
           }
-        ],
-        "next": "ExecuteRTL"
-      },
-      "ExecuteRTL": {
-        "type": "csapiCommandAction",
-        "resource": "urn:autonomyml:binding:controlstream:ReturnToLaunch",
-        "inputPorts": {
-          "home": "interface.inputs.homePosition",
-          "minimumRtlAltitudeAgl": "interface.parameters.rtlAltitudeAgl"
         },
-        "postcondition": {
-          "observationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
-          "maxObservationAgeSeconds": 0.5,
-          "condition": "distance2D(observation.position, interface.inputs.homePosition) <= 2.0 && observation.altitudeAgl <= 0.2 && !observation.armed",
-          "sustainDurationSeconds": 2.0
-        },
-        "timeoutSeconds": 300,
         "catch": [
           {
             "errors": [
@@ -922,15 +930,15 @@ flowchart TB
 
 ### 5.4 Cross-Profile Comparison: Ground Rover vs. Aerial UxS
 
-Comparing both examples side by side demonstrates how **Layer 1 (Core Composition Language)** stays completely uniform while **Layer 2 (Domain Profiles)** and **Part 2 (Bindings)** capture the physical invariants of each vehicle class:
+Comparing both examples side by side demonstrates how **Layer 1 (Core Composition Language)** supports both simple flat capabilities and nested mode hierarchies while **Layer 2 (Domain Profiles)** and **Part 2 (Bindings)** capture the physical invariants of each vehicle class:
 
 | Architectural Dimension | Ground Rover Profile (`uxs-ground-rover:1.0`) | Aerial UxS Profile (`uxs-aerial:1.0`) |
 | :--- | :--- | :--- |
 | **Spatial Reference Frame (`interface`)** | 2D geographic `EPSG:4326` (`lat`, `lon`) + planar inclusion polygon. | 3D geographic `EPSG:4979` (`lat`, `lon`, `ellipsoidalHeight`) + explicit `AGL` altitude & 3D airspace volume. |
-| **Outer FSM Lifecycle Modes** | `ActiveNavigation` $\rightarrow$ `NavigationSucceeded` (or `SafeHoldFallback`). | `Takeoff` $\rightarrow$ `Survey` $\rightarrow$ `ExecuteRTL` $\rightarrow$ `EvaluateMissionOutcome` (plus `EmergencyLandImmediate`). |
-| **Nested Reactive BT Guards (`10 Hz`)** | `GeofenceClear` (2D polygon), `BatteryAboveReserve`, local obstacle detour `fallback`. | `BatteryAboveCriticalLand`, `GeofenceAndCeilingClear` (3D volume), `WindWithinEnvelope`, `BatteryAboveRtlReserve`, `parallel` flight + payload capture. |
+| **FSM Structure (`controlFlow`)** | Simple flat `states` (`ActiveNavigation` $\rightarrow$ `NavigationSucceeded` or `SafeHoldFallback`). | Nested SCXML-style parent modes: `AirborneEnvelope` (`modeInvariants`) $\supset$ `MissionFlight` (`Takeoff` $\rightarrow$ `Survey`) + `ExecuteRTL`, with zero repeated `catch` blocks on child states. |
+| **Nested Reactive BT Guards (`10 Hz`)** | `GeofenceClear` (2D polygon), `BatteryAboveReserve`, local obstacle detour `fallback`. | `GeofenceAndCeilingClear` (3D volume), `WindWithinEnvelope`, `BatteryAboveRtlReserve`, `parallel` flight + payload capture (critical battery enforced once at `AirborneEnvelope`). |
 | **Leaf Preemption (`onHaltAction`)** | `BRAKE_HOLD` (bring ground speed to `0 m/s` immediately). | `LOITER_3D_HOLD` + payload trigger `STOP` (maintain airborne hover before mode transition; never disarm mid-air). |
-| **Approved Safe-State Hierarchy (`catch`)** | Single-tier verified zero-velocity `SafeHoldFallback` (`observation.groundSpeed <= 0.1` for `3.0 s`). | Two-tier safe-state escalation: Tier 1 `ExecuteRTL` (return home, land, disarm) $\rightarrow$ Tier 2 `EmergencyLandImmediate` (vertical touchdown + disarm in place). |
+| **Approved Safe-State Hierarchy (`catch`)** | Single-tier verified zero-velocity `SafeHoldFallback` (`observation.groundSpeed <= 0.1` for `3.0 s`). | Two-tier fault bubbling: `MissionFlight` bubbles mission faults to Tier 1 `ExecuteRTL`; `AirborneEnvelope` bubbles critical battery or RTL failure to Tier 2 `EmergencyLandImmediate`. |
 
 Across both profiles, all five concerns of the [AutonomyML Overview.md](../../AutonomyML%20Overview.md) implementation table—**OGC CSAPI**, **SensorML / SWE Common**, **FSMs**, **BTs**, and **Executable Algorithms**—participate through the exact same OGC-native `camelCase` language primitives and CEL expressions.
 
@@ -939,13 +947,13 @@ Across both profiles, all five concerns of the [AutonomyML Overview.md](../../Au
 ## 6. Strategic Benefits for the AutonomyML Working Group
 
 ### 6.1 OGC-Native Consistency Without Reinventing State/BT Semantics
-By combining ASL's separation of control flow and bindings, SCXML's mode semantics, BT.CPP's reactive trees, and CEL's safe expressions—while standardizing on uniform `camelCase` JSON aligned with SensorML 3.0 and OGC CSAPI—AutonomyML feels like a single coherent OGC standard rather than multiple formats stitched together.
+By combining ASL's separation of control flow and bindings, SCXML's parent-mode hierarchy, BT.CPP's reactive trees, and CEL's safe expressions—while standardizing on uniform `camelCase` JSON aligned with SensorML 3.0 and OGC CSAPI—AutonomyML feels like a single coherent OGC standard rather than multiple formats stitched together.
 
 ### 6.2 Deterministic Compilation to Execution Engines
 A reference AutonomyML runtime (for example, `semautonomy` operating over `semengine`, `semvocab`, and `semconnect`) can validate and compile every capability directly into deterministic execution rules before a vehicle ever arms:
-* **`semvocab` + CEL Type Checker:** Validates `interface` and `blackboard` SWE Common types, UoMs, CRS frames, port bindings, and every CEL `condition` / `postcondition` expression at load time.
-* **`semengine` Rule Packs:** Compiles FSM state transitions, `reactiveSequence` tick guards, temporal staleness checks (`maxObservationAgeSeconds`), and sustained physical `postcondition` predicates (`sustainDurationSeconds`) into deterministic rules over a Semantic Knowledge Graph (SKG).
-* **`semconnect` CSAPI Adapter:** Resolves Part 2 `CapabilityBinding` resources to live OGC CSAPI `/controlstreams` and `/datastreams` endpoints, executing `onHaltAction` overrides automatically whenever a state or BT subtree is preempted.
+* **`semvocab` + CEL Type Checker:** Validates `interface` and `blackboard` SWE Common types, UoMs, CRS frames, port bindings, and every CEL `condition`, `modeInvariants`, and `postcondition` expression at load time.
+* **`semengine` Rule Packs:** Compiles flat and hierarchical `"type": "mode"` state transitions, fault-bubbling scopes, `reactiveSequence` tick guards, temporal staleness checks (`maxObservationAgeSeconds`), and sustained physical `postcondition` predicates (`sustainDurationSeconds`) into deterministic rules over a Semantic Knowledge Graph (SKG).
+* **`semconnect` CSAPI Adapter:** Resolves Part 2 `CapabilityBinding` resources to live OGC CSAPI `/controlstreams` and `/datastreams` endpoints, executing `onHaltAction` overrides automatically whenever a state, parent mode, or BT subtree is preempted.
 
 ### 6.3 Clean JSON Schema & Open-Source Tooling
 Dropping AWS's `"field.$"` key-name mutations means every AutonomyML object has fixed, predictable property names—making JSON Schema authoring, code generation, visual **Graph / JSON / Bindings** editors, and static safety linters dramatically simpler.
@@ -954,11 +962,11 @@ Dropping AWS's `"field.$"` key-name mutations means every AutonomyML object has 
 
 ## 7. Open Design Questions for Specification Drafting
 
-With **CEL** and **OGC-native `camelCase` port wiring** established as the baseline recommendations, four concrete design decisions remain for **Part 1 (Specifications)** and **Part 2 (Bindings)** drafting:
+With **CEL**, **OGC-native `camelCase` port wiring**, and **optional SCXML-style parent modes (`"type": "mode"`)** established as baseline recommendations, four concrete design decisions remain for **Part 1 (Specifications)** and **Part 2 (Bindings)** drafting:
 
 1. **Standard CEL Spatial & Temporal Function Library:** Which built-in geometry and kinematic functions (`distance2D`, `distance3D`, `bearingDegrees`, `withinPolygon`, `withinVolume3D`, `last`) should Part 1 mandate in every compliant AutonomyML CEL environment, and how should CRS mismatch checks (e.g., preventing `distance2D` between `EPSG:4326` and local `NED` without an explicit transform) be enforced?
-2. **Preemption & `onHaltAction` Contract:** When a `reactiveSequence` guard fails or an enclosing FSM `catch` preempts a `RUNNING` `csapiCommandAction`, should Part 2 bindings require every continuous `ControlStream` binding to declare an explicit `onHaltAction` (e.g., `LOITER_3D_HOLD` or `BRAKE_HOLD` vs. `DELETE /commands/{id}`)?
-3. **Hierarchical Compound Modes (`SCXML` Inheritance):** Should `controlFlow.states` allow nested compound modes (so an enclosing `AirborneMode` can declare shared `CriticalBatteryLand` and `TelemetryStale` `catch` transitions once instead of repeating them across `Takeoff`, `Survey`, and `ExecuteRTL`) in v0.1?
+2. **Preemption & `onHaltAction` Contract:** When a `reactiveSequence` guard fails or an enclosing state/parent-mode `catch` preempts a `RUNNING` `csapiCommandAction`, should Part 2 bindings require every continuous `ControlStream` binding to declare an explicit `onHaltAction` (e.g., `LOITER_3D_HOLD` or `BRAKE_HOLD` vs. `DELETE /commands/{id}`)?
+3. **Parent Mode `modeInvariants` Rate & Entry/Exit Hooks (`onEntry` / `onExit`):** Should `modeInvariants` on a parent `"type": "mode"` evaluate reactively on every incoming `sourceStream` observation update (or at a declared tick rate), and should v0.1 include optional SCXML-style `onEntry` / `onExit` lifecycle hooks alongside `onHaltAction`?
 4. **Canonical vs. Compact SWE Common Port Syntax:** Should Part 1 require strict OGC SensorML 3.0 / SWE Common 3.0 JSON objects verbatim inside `interface` and `blackboard` (`"uom": { "code": "m" }`), or also accept a compact authoring shorthand (`"uom": "m"`) that canonicalizes to SWE Common 3.0 JSON?
 
 ---
