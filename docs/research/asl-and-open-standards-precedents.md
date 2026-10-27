@@ -267,16 +267,16 @@ Because `DriveToWaypoint` and `SafeHoldFallback` only reference logical `urn:aut
 
 ---
 
-## 4. Unifying FSMs and Behavior Trees in One Schema
+## 4. Unifying FSMs and Behavior Trees Across Domain Profiles
 
-A central architectural question for AutonomyML is how the **FSM** row (*"Modes and transitions"*) and the **Behavior Tree** row (*"Reactive task composition"*) in [AutonomyML Overview.md](../../AutonomyML%20Overview.md) fit together cleanly without forcing authors into awkward workarounds.
+A central architectural question for AutonomyML is how the **FSM** row (*"Modes and transitions"*) and the **Behavior Tree** row (*"Reactive task composition"*) in [AutonomyML Overview.md](../../AutonomyML%20Overview.md) fit together cleanly—and how that unified schema adapts across distinct **Layer 2 Domain Profiles** such as **Ground Rover** and **Aerial UxS**.
 
 ### 4.1 Architectural Principle: Mode Supervision (FSM) + Reactive Execution (BT)
 
 In safety-critical robotics, FSMs and Behavior Trees are complementary rather than competing formalisms:
 
-* **Hierarchical FSMs excel at Macro-Modes and Lifecycle Governance:** System modes (`Disarmed`, `Armed.Idle`, `Armed.ActiveNavigation`, `SafeHoldFallback`, `EmergencyRTL`) have mutually exclusive operational envelopes, mode-entry/exit invariants (SCXML `<onentry>` / `<onexit>`), and regulatory safe-state fault transitions (ASL `Catch`).
-* **Behavior Trees excel at High-Rate Reactive Task Composition inside an Active Mode:** Within an active mode like `Armed.ActiveNavigation`, the vehicle must continuously evaluate environmental conditions (geofence clearance, obstacle proximity, link quality) at $N\text{ Hz}$ while sequencing local actions and fallbacks (e.g., try local path following; on path obstruction, invoke local replanning; if geofence is breached, halt immediately).
+* **Hierarchical FSMs excel at Macro-Modes and Lifecycle Governance:** System modes (`Takeoff`, `Survey`, `ActiveNavigation`, `SafeHoldFallback`, `ExecuteRTL`, `EmergencyLandImmediate`) have mutually exclusive operational envelopes, mode-entry/exit invariants (SCXML `<onentry>` / `<onexit>`), and regulatory safe-state fault transitions (ASL `Catch`).
+* **Behavior Trees excel at High-Rate Reactive Task Composition inside an Active Mode:** Within an active mode like `ActiveNavigation` or `Survey`, the vehicle must continuously evaluate environmental conditions (geofence clearance, wind limits, obstacle proximity, battery reserves) at $N\text{ Hz}$ while sequencing local actions and fallbacks.
 
 AutonomyML unifies both formalisms through **bidirectional, typed composition** over a shared **SensorML Blackboard**:
 
@@ -315,9 +315,9 @@ flowchart LR
     ActiveNav -->|"Catch: GeofenceBreach / Timeout / BT Failure (triggers onHalt)"| SafeHold
 ```
 
-### 4.2 Unified Hybrid Schema Sketch (FSM + Reactive BT + SensorML Blackboard)
+### 4.2 Hybrid Example A — Ground Rover Profile (`GuardedWaypointNavigation`)
 
-The example below extends `WaypointNavigation` into a hybrid capability where the outer FSM governs lifecycle and safe-state recovery while the `ActiveNavigation` state ticks a reactive Behavior Tree at `10 Hz` over SensorML-typed Blackboard variables:
+The example below extends the Ground Rover `WaypointNavigation` baseline into a hybrid capability where the outer FSM governs lifecycle and zero-velocity safe-hold recovery while the `ActiveNavigation` state ticks a reactive Behavior Tree at `10 Hz` over SensorML-typed Blackboard variables:
 
 ```json
 {
@@ -477,13 +477,426 @@ The example below extends `WaypointNavigation` into a hybrid capability where th
 }
 ```
 
-Notice how all five concerns of the [AutonomyML Overview.md](../../AutonomyML%20Overview.md) implementation table participate seamlessly in a single declarative artifact:
+### 4.3 Hybrid Example B — Aerial UxS Profile (`Takeoff`, `Survey`, and `ExecuteRTL`)
 
-1. **OGC CSAPI:** Logical `ControlStream` and `DataStream` URIs (`Navigate2D`, `HoldPosition`, `VehiclePose`, `BatteryStatus`) bound cleanly in Part 2.
-2. **SensorML / SWE Common:** Typed `interface` and `blackboard` ports (`Vector`, `Quantity`, `DataRecord`, explicit `EPSG:4326` CRS and UCUM `uom` codes) plus inline `SensorMLProcess` nodes (`ComputeLocalDetour`).
-3. **FSMs:** Explicit operational states (`ActiveNavigation`, `SafeHoldFallback`, `NavigationSucceeded`) and deterministic `Catch` safe-state transitions.
-4. **BTs:** Tick-driven `ReactiveSequence`, `Fallback`, and `Sequence` nodes that re-verify safety invariants (`GeofenceClear`, `BatteryAboveReserve`) at `10 Hz` and preempt active motions on violation.
-5. **Executable Algorithms:** Referenced cleanly via `Process` (`urn:autonomyml:process:LocalObstacleAvoidancePlanner`) and CSAPI bindings without leaking implementation-specific code into Part 1.
+Placing an **Aerial UxS** capability (`urn:semvocab:profile:uxs-aerial:1.0`) alongside the Ground Rover example highlights why AutonomyML separates **Layer 1 Core Composition** from **Layer 2 Domain Profiles** and **Part 2 Bindings**:
+
+1. **3D Coordinate Frames & Explicit Vertical Semantics:** Unlike a 2D rover (`EPSG:4326`), aerial vehicles require 3D WGS84 coordinates (`http://www.opengis.net/def/crs/EPSG/0/4979` with ellipsoidal height) alongside explicit above-ground-level (`AGL`) clearance quantities so altitude datums are never conflated.
+2. **Shared Nominal & Safe-State `ExecuteRTL` Recovery with Tiered Escalation:** In aerial missions, **Return-to-Launch (`ExecuteRTL`)** serves both as the nominal post-survey recovery sequence and as the primary safe-state `Catch` target when non-critical faults occur mid-flight (`GeofenceBreach`, `WindLimitExceeded`, `RtlBatteryReserve`, `TelemetryStale`). Recording caught faults via `"ResultPath": "$.fault"` lets an ASL-style `Choice` state (`EvaluateMissionOutcome`) distinguish a nominal survey completion (`Succeed`) from a safe fault-induced RTL (`Fail`), while critical power emergencies (`CriticalBatteryLand`) or an RTL failure escalate directly to `EmergencyLandImmediate`.
+3. **Airborne Preemption (`onHaltAction`):** Preempting an airborne trajectory cannot simply cut actuator power or slam wheel brakes; the Part 2 binding specifies active 3D station-keeping (`LOITER_3D_HOLD`) and payload shutter deactivation before transitioning into `ExecuteRTL` or `EmergencyLandImmediate`.
+
+```mermaid
+flowchart TB
+    subgraph FSM["Aerial ControlFlow FSM (Takeoff -> Survey -> ExecuteRTL)"]
+        Takeoff["Takeoff (CSAPICommandAction)"]
+        Survey["Survey (Type: BehaviorTree at 10 Hz)"]
+        RTL["ExecuteRTL (CSAPICommandAction)"]
+        LandNow["EmergencyLandImmediate (CSAPICommandAction)"]
+        Outcome["EvaluateMissionOutcome (Choice)"]
+        Success["SurveyMissionCompleted (Succeed)"]
+        Aborted["SafeStateTerminal (Fail)"]
+    end
+
+    subgraph BT["Nested Behavior Tree inside Survey"]
+        RS["ReactiveSequence: AirspaceGuardedSurvey"]
+        G1["Condition: GeofenceAndCeilingClear"]
+        G2["Condition: WindWithinEnvelope"]
+        G3["Condition: BatteryAboveRtlReserve"]
+        Seq["Sequence: PlanAndFlyTransects"]
+        P1["SensorMLProcess: GenerateLawnmowerTransects"]
+        Par["Parallel: FlyAndCapture"]
+        Fly["CSAPICommandAction: FlyTransectPath3D"]
+        Cap["CSAPICommandAction: TriggerSurveyPayload"]
+    end
+
+    Takeoff -->|"Climb Verified"| Survey
+    Survey -.->|"Ticks at 10 Hz"| RS
+    RS --> G1
+    RS --> G2
+    RS --> G3
+    RS --> Seq
+    Seq --> P1
+    Seq --> Par
+    Par --> Fly
+    Par --> Cap
+
+    Survey -->|"BT SUCCESS"| RTL
+    Takeoff -->|"Catch: TelemetryStale / Timeout"| RTL
+    Survey -->|"Catch: Geofence / Wind / RtlReserve (onHalt -> RTL)"| RTL
+    Takeoff -->|"Catch: CriticalBatteryLand"| LandNow
+    Survey -->|"Catch: CriticalBatteryLand"| LandNow
+    RTL -->|"Catch: CriticalBatteryLand / RTL Fault"| LandNow
+
+    RTL -->|"Touchdown + Disarm Verified"| Outcome
+    Outcome -->|"No $.fault"| Success
+    Outcome -->|"$.fault Present"| Aborted
+    LandNow -->|"Touchdown + Disarm Verified"| Aborted
+```
+
+#### Part 1 Capability Specification (`TakeoffSurveyAndRTL`)
+
+```json
+{
+  "autonomyMLVersion": "0.1.0",
+  "kind": "CapabilitySpecification",
+  "profile": "urn:semvocab:profile:uxs-aerial:1.0",
+  "capabilityId": "urn:autonomyml:capability:uxs-aerial:TakeoffSurveyAndRTL:0.1.0",
+  "interface": {
+    "comment": "3D spatial frames (EPSG:4979) and explicit AGL vertical clearance quantities",
+    "inputs": {
+      "homePosition": {
+        "type": "Vector",
+        "definition": "http://www.opengis.net/def/property/OGC/0/PlatformLocation",
+        "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4979",
+        "coordinates": [
+          { "name": "lat", "type": "Quantity", "axisID": "Lat", "uom": { "code": "deg" } },
+          { "name": "lon", "type": "Quantity", "axisID": "Lon", "uom": { "code": "deg" } },
+          { "name": "ellipsoidalHeight", "type": "Quantity", "axisID": "h", "uom": { "code": "m" } }
+        ]
+      },
+      "surveyPolygon": {
+        "type": "DataRecord",
+        "definition": "urn:autonomyml:def:geometry:SurveyAreaPolygon2D"
+      },
+      "airspaceVolume": {
+        "type": "DataRecord",
+        "definition": "urn:autonomyml:def:geometry:InclusionAirspaceVolume3D"
+      },
+      "surveyAltitudeAgl": {
+        "type": "Quantity",
+        "definition": "urn:autonomyml:def:property:AltitudeAboveGroundLevel",
+        "uom": { "code": "m" }
+      }
+    },
+    "parameters": {
+      "rtlAltitudeAgl": { "type": "Quantity", "uom": { "code": "m" }, "value": 45.0 },
+      "altitudeTolerance": { "type": "Quantity", "uom": { "code": "m" }, "value": 1.0 },
+      "waypointRadius3D": { "type": "Quantity", "uom": { "code": "m" }, "value": 2.5 },
+      "sensorSwathWidth": { "type": "Quantity", "uom": { "code": "m" }, "value": 30.0 },
+      "maxWindSpeed": { "type": "Quantity", "uom": { "code": "m/s" }, "value": 12.0 },
+      "rtlReserveSoc": { "type": "Quantity", "uom": { "code": "%" }, "value": 30.0 },
+      "criticalLandSoc": { "type": "Quantity", "uom": { "code": "%" }, "value": 15.0 }
+    },
+    "outputs": {
+      "capturedImageCount": {
+        "type": "Count",
+        "definition": "urn:autonomyml:def:property:PayloadCaptureCount"
+      }
+    }
+  },
+  "blackboard": {
+    "vehiclePose3D": {
+      "sourceStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+      "maxAgeSeconds": 0.5,
+      "type": "Vector",
+      "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4979"
+    },
+    "windSpeed": {
+      "sourceStream": "urn:autonomyml:binding:datastream:WindEstimate",
+      "maxAgeSeconds": 2.0,
+      "type": "Quantity",
+      "uom": { "code": "m/s" }
+    },
+    "batterySoc": {
+      "sourceStream": "urn:autonomyml:binding:datastream:BatteryStatus",
+      "maxAgeSeconds": 1.0,
+      "type": "Quantity",
+      "uom": { "code": "%" }
+    },
+    "transectPath": {
+      "type": "DataArray",
+      "definition": "urn:autonomyml:def:trajectory:WaypointArray3D"
+    }
+  },
+  "controlFlow": {
+    "StartAt": "Takeoff",
+    "States": {
+      "Takeoff": {
+        "Type": "CSAPICommandAction",
+        "Resource": "urn:autonomyml:binding:controlstream:VerticalTakeoff",
+        "Parameters": {
+          "targetAltitudeAgl.$": "$.interface.inputs.surveyAltitudeAgl"
+        },
+        "Postcondition": {
+          "ObservationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+          "MaxObservationAgeSeconds": 0.5,
+          "Condition": "abs($.observation.altitudeAgl - $.interface.inputs.surveyAltitudeAgl) <= $.interface.parameters.altitudeTolerance && abs($.observation.verticalSpeed) <= 0.3",
+          "SustainDurationSeconds": 2.0
+        },
+        "TimeoutSeconds": 60,
+        "Catch": [
+          {
+            "ErrorEquals": ["AutonomyML.CriticalBatteryLand"],
+            "ResultPath": "$.fault",
+            "Next": "EmergencyLandImmediate"
+          },
+          {
+            "ErrorEquals": [
+              "AutonomyML.TelemetryStale",
+              "AutonomyML.PostconditionTimeout",
+              "CSAPI.CommandFailed"
+            ],
+            "ResultPath": "$.fault",
+            "Next": "ExecuteRTL"
+          }
+        ],
+        "Next": "Survey"
+      },
+      "Survey": {
+        "Type": "BehaviorTree",
+        "TickRateHz": 10.0,
+        "TimeoutSeconds": 900,
+        "Root": {
+          "NodeType": "ReactiveSequence",
+          "Name": "AirspaceGuardedSurvey",
+          "Children": [
+            {
+              "NodeType": "Condition",
+              "Name": "BatteryAboveCriticalLand",
+              "Expression": "$.blackboard.batterySoc >= $.interface.parameters.criticalLandSoc",
+              "FailureError": "AutonomyML.CriticalBatteryLand"
+            },
+            {
+              "NodeType": "Condition",
+              "Name": "GeofenceAndCeilingClear",
+              "Expression": "withinVolume3D($.blackboard.vehiclePose3D, $.interface.inputs.airspaceVolume)",
+              "FailureError": "AutonomyML.GeofenceBreach"
+            },
+            {
+              "NodeType": "Condition",
+              "Name": "WindWithinEnvelope",
+              "Expression": "$.blackboard.windSpeed <= $.interface.parameters.maxWindSpeed",
+              "FailureError": "AutonomyML.WindLimitExceeded"
+            },
+            {
+              "NodeType": "Condition",
+              "Name": "BatteryAboveRtlReserve",
+              "Expression": "$.blackboard.batterySoc >= $.interface.parameters.rtlReserveSoc",
+              "FailureError": "AutonomyML.RtlBatteryReserve"
+            },
+            {
+              "NodeType": "Sequence",
+              "Name": "PlanAndFlyTransects",
+              "Children": [
+                {
+                  "NodeType": "SensorMLProcess",
+                  "Name": "GenerateLawnmowerTransects",
+                  "Process": "urn:autonomyml:process:CoveragePathGenerator3D",
+                  "InputPorts": {
+                    "polygon": "$.interface.inputs.surveyPolygon",
+                    "altitudeAgl": "$.interface.inputs.surveyAltitudeAgl",
+                    "swathWidth": "$.interface.parameters.sensorSwathWidth"
+                  },
+                  "OutputPorts": {
+                    "waypoints": "$.blackboard.transectPath"
+                  }
+                },
+                {
+                  "NodeType": "Parallel",
+                  "Name": "FlyAndCapture",
+                  "SuccessThreshold": 2,
+                  "FailureThreshold": 1,
+                  "Children": [
+                    {
+                      "NodeType": "CSAPICommandAction",
+                      "Name": "FlyTransectPath3D",
+                      "Resource": "urn:autonomyml:binding:controlstream:FollowTrajectory3D",
+                      "InputPorts": {
+                        "waypoints": "$.blackboard.transectPath"
+                      },
+                      "Postcondition": {
+                        "ObservationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+                        "Condition": "distance3D($.observation.position, last($.blackboard.transectPath)) <= $.interface.parameters.waypointRadius3D",
+                        "SustainDurationSeconds": 1.5
+                      }
+                    },
+                    {
+                      "NodeType": "CSAPICommandAction",
+                      "Name": "TriggerSurveyPayload",
+                      "Resource": "urn:autonomyml:binding:controlstream:CameraIntervalCapture",
+                      "InputPorts": {
+                        "surveyArea": "$.interface.inputs.surveyPolygon"
+                      },
+                      "OutputPorts": {
+                        "captureCount": "$.interface.outputs.capturedImageCount"
+                      },
+                      "Postcondition": {
+                        "ObservationStream": "urn:autonomyml:binding:datastream:PayloadStatus",
+                        "Condition": "$.observation.transectCaptureComplete == true",
+                        "SustainDurationSeconds": 0.5
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "Catch": [
+          {
+            "ErrorEquals": ["AutonomyML.CriticalBatteryLand"],
+            "ResultPath": "$.fault",
+            "Next": "EmergencyLandImmediate"
+          },
+          {
+            "ErrorEquals": [
+              "AutonomyML.GeofenceBreach",
+              "AutonomyML.WindLimitExceeded",
+              "AutonomyML.RtlBatteryReserve",
+              "AutonomyML.TelemetryStale",
+              "AutonomyML.PostconditionTimeout",
+              "AutonomyML.BehaviorTreeFailed"
+            ],
+            "ResultPath": "$.fault",
+            "Next": "ExecuteRTL"
+          }
+        ],
+        "Next": "ExecuteRTL"
+      },
+      "ExecuteRTL": {
+        "Type": "CSAPICommandAction",
+        "Resource": "urn:autonomyml:binding:controlstream:ReturnToLaunch",
+        "Parameters": {
+          "home.$": "$.interface.inputs.homePosition",
+          "minimumRtlAltitudeAgl.$": "$.interface.parameters.rtlAltitudeAgl"
+        },
+        "Postcondition": {
+          "ObservationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+          "MaxObservationAgeSeconds": 0.5,
+          "Condition": "distance2D($.observation.position, $.interface.inputs.homePosition) <= 2.0 && $.observation.altitudeAgl <= 0.2 && $.observation.armed == false",
+          "SustainDurationSeconds": 2.0
+        },
+        "TimeoutSeconds": 300,
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "AutonomyML.CriticalBatteryLand",
+              "AutonomyML.TelemetryStale",
+              "AutonomyML.PostconditionTimeout",
+              "CSAPI.CommandFailed"
+            ],
+            "ResultPath": "$.fault",
+            "Next": "EmergencyLandImmediate"
+          }
+        ],
+        "Next": "EvaluateMissionOutcome"
+      },
+      "EmergencyLandImmediate": {
+        "Type": "CSAPICommandAction",
+        "Resource": "urn:autonomyml:binding:controlstream:LandImmediate",
+        "Postcondition": {
+          "ObservationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+          "MaxObservationAgeSeconds": 0.5,
+          "Condition": "$.observation.altitudeAgl <= 0.2 && $.observation.armed == false",
+          "SustainDurationSeconds": 2.0
+        },
+        "TimeoutSeconds": 120,
+        "Next": "SafeStateTerminal"
+      },
+      "EvaluateMissionOutcome": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Variable": "$.fault",
+            "IsPresent": true,
+            "Next": "SafeStateTerminal"
+          }
+        ],
+        "Default": "SurveyMissionCompleted"
+      },
+      "SurveyMissionCompleted": {
+        "Type": "Succeed"
+      },
+      "SafeStateTerminal": {
+        "Type": "Fail",
+        "Error": "AutonomyML.SafeStateEngaged",
+        "Cause": "Mission aborted cleanly via verified ReturnToLaunch or EmergencyLandImmediate."
+      }
+    }
+  }
+}
+```
+
+#### Companion Part 2 Binding (`CapabilityBinding` for an Aerial Platform)
+
+```json
+{
+  "autonomyMLVersion": "0.1.0",
+  "kind": "CapabilityBinding",
+  "capabilityRef": "urn:autonomyml:capability:uxs-aerial:TakeoffSurveyAndRTL:0.1.0",
+  "targetSystem": "urn:ogc:def:system:uav-quad-04",
+  "csapiBaseUrl": "https://csapi.example.org/ogcapi",
+  "processBindings": {
+    "urn:autonomyml:process:CoveragePathGenerator3D": {
+      "sensorMLProcessUri": "urn:ogc:def:process:semautonomy:BoustrophedonPlanner:1.2"
+    }
+  },
+  "controlStreamBindings": {
+    "urn:autonomyml:binding:controlstream:VerticalTakeoff": {
+      "controlStreamPath": "/controlstreams/uav-quad-04-takeoff",
+      "commandSchema": "urn:ogc:def:csapi:command:TakeoffAGL"
+    },
+    "urn:autonomyml:binding:controlstream:FollowTrajectory3D": {
+      "controlStreamPath": "/controlstreams/uav-quad-04-trajectory3d",
+      "commandSchema": "urn:ogc:def:csapi:command:WaypointTrajectory3D",
+      "onHaltAction": {
+        "method": "POST",
+        "controlStreamPath": "/controlstreams/uav-quad-04-loiter",
+        "payload": { "mode": "LOITER_3D_HOLD" }
+      }
+    },
+    "urn:autonomyml:binding:controlstream:CameraIntervalCapture": {
+      "controlStreamPath": "/controlstreams/uav-quad-04-eo-camera",
+      "commandSchema": "urn:ogc:def:csapi:command:DistanceIntervalTrigger",
+      "onHaltAction": {
+        "method": "POST",
+        "controlStreamPath": "/controlstreams/uav-quad-04-eo-camera",
+        "payload": { "trigger": "STOP" }
+      }
+    },
+    "urn:autonomyml:binding:controlstream:ReturnToLaunch": {
+      "controlStreamPath": "/controlstreams/uav-quad-04-rtl",
+      "commandSchema": "urn:ogc:def:csapi:command:ReturnToLaunch"
+    },
+    "urn:autonomyml:binding:controlstream:LandImmediate": {
+      "controlStreamPath": "/controlstreams/uav-quad-04-land",
+      "commandSchema": "urn:ogc:def:csapi:command:LandVertical"
+    }
+  },
+  "dataStreamBindings": {
+    "urn:autonomyml:binding:datastream:VehicleAirPose": {
+      "dataStreamPath": "/datastreams/uav-quad-04-air-pose",
+      "expectedRateHz": 20.0
+    },
+    "urn:autonomyml:binding:datastream:WindEstimate": {
+      "dataStreamPath": "/datastreams/uav-quad-04-wind",
+      "expectedRateHz": 2.0
+    },
+    "urn:autonomyml:binding:datastream:BatteryStatus": {
+      "dataStreamPath": "/datastreams/uav-quad-04-battery",
+      "expectedRateHz": 5.0
+    },
+    "urn:autonomyml:binding:datastream:PayloadStatus": {
+      "dataStreamPath": "/datastreams/uav-quad-04-eo-camera-status",
+      "expectedRateHz": 5.0
+    }
+  }
+}
+```
+
+### 4.4 Cross-Profile Comparison: Ground Rover vs. Aerial UxS
+
+Comparing both examples side by side demonstrates how **Layer 1 (Core Composition Language)** stays completely uniform while **Layer 2 (Domain Profiles)** and **Part 2 (Bindings)** capture the physical invariants of each vehicle class:
+
+| Architectural Dimension | Ground Rover Profile (`uxs-ground-rover:1.0`) | Aerial UxS Profile (`uxs-aerial:1.0`) |
+| :--- | :--- | :--- |
+| **Spatial Reference Frame (`interface`)** | 2D geographic `EPSG:4326` (`lat`, `lon`) + planar inclusion polygon. | 3D geographic `EPSG:4979` (`lat`, `lon`, `ellipsoidalHeight`) + explicit `AGL` altitude & 3D airspace volume. |
+| **Outer FSM Lifecycle Modes** | `ActiveNavigation` $\rightarrow$ `NavigationSucceeded` (or `SafeHoldFallback`). | `Takeoff` $\rightarrow$ `Survey` $\rightarrow$ `ExecuteRTL` $\rightarrow$ `EvaluateMissionOutcome` (plus `EmergencyLandImmediate`). |
+| **Nested Reactive BT Guards (`10 Hz`)** | `GeofenceClear` (2D polygon), `BatteryAboveReserve`, local obstacle detour `Fallback`. | `BatteryAboveCriticalLand`, `GeofenceAndCeilingClear` (3D volume), `WindWithinEnvelope`, `BatteryAboveRtlReserve`, `Parallel` flight + payload capture. |
+| **Leaf Preemption (`onHaltAction`)** | `BRAKE_HOLD` (bring ground speed to `0 m/s` immediately). | `LOITER_3D_HOLD` + payload trigger `STOP` (maintain airborne hover before mode transition; never disarm mid-air). |
+| **Approved Safe-State Hierarchy (`Catch`)** | Single-tier verified zero-velocity `SafeHoldFallback` (`groundSpeed <= 0.1 m/s` for `3.0 s`). | Two-tier safe-state escalation: Tier 1 `ExecuteRTL` (return home, land, disarm) $\rightarrow$ Tier 2 `EmergencyLandImmediate` (vertical touchdown + disarm in place). |
+
+Across both profiles, all five concerns of the [AutonomyML Overview.md](../../AutonomyML%20Overview.md) implementation table—**OGC CSAPI**, **SensorML / SWE Common**, **FSMs**, **BTs**, and **Executable Algorithms**—participate through the exact same core language primitives.
 
 ---
 
