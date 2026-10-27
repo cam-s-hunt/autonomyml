@@ -6,7 +6,7 @@ This directory collects architectural research, comparative standards analyses, 
 
 | Document | Focus | Relevance to [AutonomyML Overview](../../AutonomyML%20Overview.md) |
 | :--- | :--- | :--- |
-| [ASL & Complementary Open Standards Precedents](./asl-and-open-standards-precedents.md) | Architectural analysis of **Amazon States Language (ASL)** paired with **CNCF Serverless Workflow**, **W3C SCXML**, **BehaviorTree.CPP v4 / ROS 2 Nav2**, and **CEL (Common Expression Language)**, including OGC-native `camelCase` capability examples and unified FSM + Behavior Tree + SensorML/CSAPI blueprints for **Ground Rover** and **Aerial UxS (`Takeoff`, `Survey`, `ExecuteRTL`)** profiles. | Maps external open standards directly to **Part 1 (Specifications)**, **Part 2 (Bindings)**, and all five concerns of the AutonomyML Implementation table (OGC CSAPI, SensorML, FSMs, BTs, and Executable Algorithms). |
+| [ASL & Complementary Open Standards Precedents](./asl-and-open-standards-precedents.md) | Architectural analysis of **Amazon States Language (ASL)** paired with **CNCF Serverless Workflow**, **W3C SCXML**, **BehaviorTree.CPP v4 / ROS 2 Nav2**, and **CEL (Common Expression Language)**, including OGC-native `camelCase` capability examples and unified FSM + Behavior Tree + SensorML/CSAPI blueprints for **Ground Rover** and **Aerial UxS (`Takeoff`, `Survey`, `ExecuteRTL`)** profiles (with standalone JSON files in [`examples/`](../../examples/)). | Maps external open standards directly to **Part 1 (Specifications)**, **Part 2 (Bindings)**, and all five concerns of the AutonomyML Implementation table (OGC CSAPI, SensorML, FSMs, BTs, and Executable Algorithms). |
 
 ## How Research Maps to the AutonomyML Architecture
 

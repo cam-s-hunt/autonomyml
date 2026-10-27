@@ -155,6 +155,8 @@ Compare a raw Amazon States Language `Task` definition (with AWS `PascalCase` an
 
 ### 4.2 AutonomyML Part 1 Equivalent (`WaypointNavigation` — OGC `camelCase` + CEL + SensorML Ports)
 
+Standalone file: [`examples/ground-rover/waypoint-navigation.spec.json`](../../examples/ground-rover/waypoint-navigation.spec.json)
+
 ```json
 {
   "autonomyMLVersion": "0.1.0",
@@ -254,7 +256,7 @@ Compare a raw Amazon States Language `Task` definition (with AWS `PascalCase` an
 
 ### 4.3 Companion AutonomyML Part 2 Binding (Concrete OGC CSAPI Resolution)
 
-Because `DriveToWaypoint` and `SafeHoldFallback` only reference logical `urn:autonomyml:binding:*` URIs, two completely different ground rovers (e.g., a ROS 2 Nav2 UGV vs. an ArduRover/MAVLink UGV exposed via OGC CSAPI) can satisfy the **exact same Part 1 capability** by supplying their own **Part 2 Binding**:
+Because `DriveToWaypoint` and `SafeHoldFallback` only reference logical `urn:autonomyml:binding:*` URIs, two completely different ground rovers (e.g., a ROS 2 Nav2 UGV vs. an ArduRover/MAVLink UGV exposed via OGC CSAPI) can satisfy the **exact same Part 1 capability** by supplying their own **Part 2 Binding** ([`examples/ground-rover/waypoint-navigation.ugv-alpha-01.binding.json`](../../examples/ground-rover/waypoint-navigation.ugv-alpha-01.binding.json)):
 
 ```json
 {
@@ -344,7 +346,7 @@ flowchart LR
 
 ### 5.2 Hybrid Example A — Ground Rover Profile (`GuardedWaypointNavigation`)
 
-The example below extends the Ground Rover `WaypointNavigation` baseline into a hybrid capability where the outer FSM governs lifecycle and zero-velocity safe-hold recovery while the `ActiveNavigation` state ticks a reactive Behavior Tree at `10 Hz` over SensorML-typed Blackboard variables using CEL conditions:
+The example below ([`examples/ground-rover/guarded-waypoint-navigation.spec.json`](../../examples/ground-rover/guarded-waypoint-navigation.spec.json), paired with [`examples/ground-rover/guarded-waypoint-navigation.ugv-alpha-01.binding.json`](../../examples/ground-rover/guarded-waypoint-navigation.ugv-alpha-01.binding.json)) extends the Ground Rover `WaypointNavigation` baseline into a hybrid capability where the outer FSM governs lifecycle and zero-velocity safe-hold recovery while the `ActiveNavigation` state ticks a reactive Behavior Tree at `10 Hz` over SensorML-typed Blackboard variables using CEL conditions:
 
 ```json
 {
@@ -571,6 +573,8 @@ flowchart TB
 ```
 
 #### Part 1 Capability Specification (`TakeoffSurveyAndRTL`)
+
+Standalone file: [`examples/aerial-uxs/takeoff-survey-and-rtl.spec.json`](../../examples/aerial-uxs/takeoff-survey-and-rtl.spec.json)
 
 ```json
 {
@@ -862,6 +866,8 @@ flowchart TB
 ```
 
 #### Companion Part 2 Binding (`CapabilityBinding` for an Aerial Platform)
+
+Standalone file: [`examples/aerial-uxs/takeoff-survey-and-rtl.uav-quad-04.binding.json`](../../examples/aerial-uxs/takeoff-survey-and-rtl.uav-quad-04.binding.json)
 
 ```json
 {
