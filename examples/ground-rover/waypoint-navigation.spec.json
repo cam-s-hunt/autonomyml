@@ -1,0 +1,92 @@
+{
+  "autonomyMLVersion": "0.1.0",
+  "kind": "CapabilitySpecification",
+  "expressionLanguage": "cel",
+  "profile": "urn:semvocab:profile:uxs-ground-rover:1.0",
+  "capabilityId": "urn:autonomyml:capability:uxs-ground-rover:WaypointNavigation:0.1.0",
+  "interface": {
+    "comment": "SensorML 3.0 / SWE Common 3.0 aligned typed ports (validated against profile vocabulary)",
+    "inputs": {
+      "targetWaypoint": {
+        "type": "Vector",
+        "definition": "http://www.opengis.net/def/property/OGC/0/PlatformLocation",
+        "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4326",
+        "coordinates": [
+          { "name": "lat", "type": "Quantity", "axisID": "Lat", "uom": { "code": "deg" } },
+          { "name": "lon", "type": "Quantity", "axisID": "Lon", "uom": { "code": "deg" } }
+        ]
+      }
+    },
+    "parameters": {
+      "arrivalRadius": {
+        "type": "Quantity",
+        "definition": "urn:autonomyml:def:parameter:ArrivalAcceptanceRadius",
+        "uom": { "code": "m" },
+        "value": 1.5
+      }
+    },
+    "outputs": {
+      "achievedPosition": {
+        "type": "Vector",
+        "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4326",
+        "coordinates": [
+          { "name": "lat", "type": "Quantity", "axisID": "Lat", "uom": { "code": "deg" } },
+          { "name": "lon", "type": "Quantity", "axisID": "Lon", "uom": { "code": "deg" } }
+        ]
+      }
+    }
+  },
+  "controlFlow": {
+    "startAt": "DriveToWaypoint",
+    "states": {
+      "DriveToWaypoint": {
+        "type": "csapiCommandAction",
+        "resource": "urn:autonomyml:binding:controlstream:Navigate2D",
+        "inputPorts": {
+          "target": "interface.inputs.targetWaypoint"
+        },
+        "outputPorts": {
+          "finalPosition": "interface.outputs.achievedPosition"
+        },
+        "postcondition": {
+          "observationStream": "urn:autonomyml:binding:datastream:VehiclePose",
+          "maxObservationAgeSeconds": 1.0,
+          "condition": "distance2D(observation.position, interface.inputs.targetWaypoint) <= interface.parameters.arrivalRadius",
+          "sustainDurationSeconds": 2.0
+        },
+        "timeoutSeconds": 120,
+        "catch": [
+          {
+            "errors": [
+              "AutonomyML.TelemetryStale",
+              "AutonomyML.PostconditionTimeout",
+              "CSAPI.CommandFailed"
+            ],
+            "next": "SafeHoldFallback"
+          }
+        ],
+        "next": "HoldAtWaypoint"
+      },
+      "HoldAtWaypoint": {
+        "type": "succeed"
+      },
+      "SafeHoldFallback": {
+        "type": "csapiCommandAction",
+        "resource": "urn:autonomyml:binding:controlstream:HoldPosition",
+        "postcondition": {
+          "observationStream": "urn:autonomyml:binding:datastream:VehicleVelocity",
+          "maxObservationAgeSeconds": 1.0,
+          "condition": "observation.groundSpeed <= 0.1",
+          "sustainDurationSeconds": 3.0
+        },
+        "timeoutSeconds": 30,
+        "next": "SafeHoldTerminated"
+      },
+      "SafeHoldTerminated": {
+        "type": "fail",
+        "error": "AutonomyML.SafeStateEngaged",
+        "cause": "Vehicle transitioned to verified zero-velocity hold after navigation fault."
+      }
+    }
+  }
+}
