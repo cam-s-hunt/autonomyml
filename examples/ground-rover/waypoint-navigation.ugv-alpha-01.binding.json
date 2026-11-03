@@ -1,0 +1,32 @@
+{
+  "autonomyMLVersion": "0.1.0",
+  "kind": "CapabilityBinding",
+  "capabilityRef": "urn:autonomyml:capability:uxs-ground-rover:WaypointNavigation:0.1.0",
+  "targetSystem": "urn:ogc:def:system:ugv-alpha-01",
+  "csapiBaseUrl": "https://csapi.example.org/ogcapi",
+  "controlStreamBindings": {
+    "urn:autonomyml:binding:controlstream:Navigate2D": {
+      "controlStreamPath": "/controlstreams/ugv-alpha-01-nav2d",
+      "commandSchema": "urn:ogc:def:csapi:command:GoalPose2D",
+      "onHaltAction": {
+        "method": "POST",
+        "controlStreamPath": "/controlstreams/ugv-alpha-01-hold",
+        "payload": { "mode": "BRAKE_HOLD" }
+      }
+    },
+    "urn:autonomyml:binding:controlstream:HoldPosition": {
+      "controlStreamPath": "/controlstreams/ugv-alpha-01-hold",
+      "commandSchema": "urn:ogc:def:csapi:command:HoldPosition"
+    }
+  },
+  "dataStreamBindings": {
+    "urn:autonomyml:binding:datastream:VehiclePose": {
+      "dataStreamPath": "/datastreams/ugv-alpha-01-gnss-ins-pose",
+      "expectedRateHz": 10.0
+    },
+    "urn:autonomyml:binding:datastream:VehicleVelocity": {
+      "dataStreamPath": "/datastreams/ugv-alpha-01-twist",
+      "expectedRateHz": 10.0
+    }
+  }
+}

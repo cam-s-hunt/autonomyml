@@ -1,0 +1,159 @@
+{
+  "autonomyMLVersion": "0.1.0",
+  "kind": "CapabilitySpecification",
+  "expressionLanguage": "cel",
+  "profile": "urn:semvocab:profile:uxs-ground-rover:1.0",
+  "capabilityId": "urn:autonomyml:capability:uxs-ground-rover:GuardedWaypointNavigation:0.1.0",
+  "interface": {
+    "inputs": {
+      "targetWaypoint": {
+        "type": "Vector",
+        "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4326",
+        "coordinates": [
+          { "name": "lat", "type": "Quantity", "axisID": "Lat", "uom": { "code": "deg" } },
+          { "name": "lon", "type": "Quantity", "axisID": "Lon", "uom": { "code": "deg" } }
+        ]
+      },
+      "geofencePolygon": {
+        "type": "DataRecord",
+        "definition": "urn:autonomyml:def:geometry:InclusionCorridor2D"
+      }
+    },
+    "parameters": {
+      "arrivalRadius": { "type": "Quantity", "uom": { "code": "m" }, "value": 1.5 },
+      "minReserveSoc": { "type": "Quantity", "uom": { "code": "%" }, "value": 20.0 }
+    }
+  },
+  "blackboard": {
+    "comment": "Shared SensorML-typed state populated from CSAPI DataStreams and internal process ports",
+    "vehiclePose": {
+      "sourceStream": "urn:autonomyml:binding:datastream:VehiclePose",
+      "maxAgeSeconds": 0.5,
+      "type": "Vector",
+      "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4326"
+    },
+    "batterySoc": {
+      "sourceStream": "urn:autonomyml:binding:datastream:BatteryStatus",
+      "maxAgeSeconds": 2.0,
+      "type": "Quantity",
+      "uom": { "code": "%" }
+    },
+    "detourWaypoint": {
+      "type": "Vector",
+      "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4326"
+    }
+  },
+  "controlFlow": {
+    "startAt": "ActiveNavigation",
+    "states": {
+      "ActiveNavigation": {
+        "type": "behaviorTree",
+        "tickRateHz": 10.0,
+        "timeoutSeconds": 180,
+        "root": {
+          "nodeType": "reactiveSequence",
+          "name": "SafetyGuardedDrive",
+          "children": [
+            {
+              "nodeType": "condition",
+              "name": "GeofenceClear",
+              "expression": "withinPolygon(blackboard.vehiclePose, interface.inputs.geofencePolygon)",
+              "failureError": "AutonomyML.GeofenceBreach"
+            },
+            {
+              "nodeType": "condition",
+              "name": "BatteryAboveReserve",
+              "expression": "blackboard.batterySoc >= interface.parameters.minReserveSoc",
+              "failureError": "AutonomyML.LowBatteryReserve"
+            },
+            {
+              "nodeType": "fallback",
+              "name": "NavigateOrDetour",
+              "children": [
+                {
+                  "nodeType": "csapiCommandAction",
+                  "name": "DirectDriveToTarget",
+                  "resource": "urn:autonomyml:binding:controlstream:Navigate2D",
+                  "inputPorts": {
+                    "target": "interface.inputs.targetWaypoint"
+                  },
+                  "postcondition": {
+                    "observationStream": "urn:autonomyml:binding:datastream:VehiclePose",
+                    "maxObservationAgeSeconds": 0.5,
+                    "condition": "distance2D(observation.position, interface.inputs.targetWaypoint) <= interface.parameters.arrivalRadius",
+                    "sustainDurationSeconds": 2.0
+                  }
+                },
+                {
+                  "nodeType": "sequence",
+                  "name": "ComputeAndExecuteLocalDetour",
+                  "children": [
+                    {
+                      "nodeType": "sensorMLProcess",
+                      "name": "ComputeLocalDetour",
+                      "process": "urn:autonomyml:process:LocalObstacleAvoidancePlanner",
+                      "inputPorts": {
+                        "currentPose": "blackboard.vehiclePose",
+                        "goal": "interface.inputs.targetWaypoint"
+                      },
+                      "outputPorts": {
+                        "detourGoal": "blackboard.detourWaypoint"
+                      }
+                    },
+                    {
+                      "nodeType": "csapiCommandAction",
+                      "name": "DriveDetourSegment",
+                      "resource": "urn:autonomyml:binding:controlstream:Navigate2D",
+                      "inputPorts": {
+                        "target": "blackboard.detourWaypoint"
+                      },
+                      "postcondition": {
+                        "observationStream": "urn:autonomyml:binding:datastream:VehiclePose",
+                        "maxObservationAgeSeconds": 0.5,
+                        "condition": "distance2D(observation.position, blackboard.detourWaypoint) <= interface.parameters.arrivalRadius",
+                        "sustainDurationSeconds": 1.0
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "catch": [
+          {
+            "errors": [
+              "AutonomyML.GeofenceBreach",
+              "AutonomyML.LowBatteryReserve",
+              "AutonomyML.TelemetryStale",
+              "AutonomyML.PostconditionTimeout",
+              "AutonomyML.BehaviorTreeFailed"
+            ],
+            "next": "SafeHoldFallback"
+          }
+        ],
+        "next": "NavigationSucceeded"
+      },
+      "NavigationSucceeded": {
+        "type": "succeed"
+      },
+      "SafeHoldFallback": {
+        "type": "csapiCommandAction",
+        "resource": "urn:autonomyml:binding:controlstream:HoldPosition",
+        "postcondition": {
+          "observationStream": "urn:autonomyml:binding:datastream:VehicleVelocity",
+          "maxObservationAgeSeconds": 1.0,
+          "condition": "observation.groundSpeed <= 0.1",
+          "sustainDurationSeconds": 3.0
+        },
+        "timeoutSeconds": 30,
+        "next": "SafeHoldActive"
+      },
+      "SafeHoldActive": {
+        "type": "fail",
+        "error": "AutonomyML.SafeStateEngaged",
+        "cause": "Reactive safety guard or navigation timeout triggered verified hold state."
+      }
+    }
+  }
+}
