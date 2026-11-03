@@ -148,7 +148,7 @@ flowchart TB
 Building `autonomyml-app` on `semengine` and `semvocab` maps every Mission Executive responsibility cleanly onto deterministic framework primitives while keeping external vehicle interactions 100% standard OGC CS API:
 
 ### 4.1 Part 1 & Part 2 Ingestion and Profile Validation
-* Parses portable **AutonomyML Part 1 (`CapabilitySpecification`)** models and **Part 2 (`CapabilityBinding`)** documents.
+* Parses portable **AutonomyML Part 1 (`CapabilitySpecification`)** models and **Part 2 (`CapabilityBinding`)** documents (see [ASL & Complementary Open Standards Precedents](./asl-and-open-standards-precedents.md) and the standalone JSON files in [`examples/`](../../examples/README.md)).
 * Uses `semvocab`-compiled SHACL validators and vocabulary packs to verify SWE Common units of measure, coordinate reference frames (e.g., `EPSG:4326` vs. `EPSG:4979` + `AGL`), required domain-profile safe-state `Catch` handlers, and bound CS API `/datastreams` and `/controlstreams` schemas before execution is ever armed.
 
 ### 4.2 FSM Mode Supervision & Reactive Behavior Tree Execution
@@ -260,7 +260,7 @@ Real-world UxS fleets, robotics labs, and industrial deployments already run mat
 
 1. **Decouple Portable Behavior (Part 1) from Existing System Wiring (Part 2):**
    * **Part 1 (`CapabilitySpecification`)** expresses portable behavior against symbolic stream and process URIs—containing zero vendor wire protocols or topic names.
-   * **Part 2 (`CapabilityBinding`)** maps those symbolic URIs (including preemption `onHalt` actions such as `BRAKE_HOLD` or `LOITER_3D_HOLD`) to a concrete platform's `/controlstreams`, `/datastreams`, and SensorML processes. A ROS 2 Nav2 ground rover and an ArduRover/MAVLink UGV keep their native controllers intact and satisfy the exact same Part 1 capability by swapping only the Part 2 binding file.
+   * **Part 2 (`CapabilityBinding`)** maps those symbolic URIs (including preemption `onHalt` actions such as `BRAKE_HOLD` or `LOITER_3D_HOLD`; see [`examples/ground-rover/waypoint-navigation.ugv-alpha-01.binding.json`](../../examples/ground-rover/waypoint-navigation.ugv-alpha-01.binding.json) and [`examples/aerial-uxs/takeoff-survey-and-rtl.uav-quad-04.binding.json`](../../examples/aerial-uxs/takeoff-survey-and-rtl.uav-quad-04.binding.json)) to a concrete platform's `/controlstreams`, `/datastreams`, and SensorML processes. A ROS 2 Nav2 ground rover and an ArduRover/MAVLink UGV keep their native controllers intact and satisfy the exact same Part 1 capability by swapping only the Part 2 binding file.
 2. **Black-Box Observable Equivalence (*Command Accepted $\neq$ Action Completed*):**
    * Per the Goal in [AutonomyML Overview.md](../../AutonomyML%20Overview.md), AutonomyML never requires access to undocumented internal conventions inside an existing autopilot, ROS node, or PLC controller.
    * An existing system that already runs its own internal autonomy loop (for example, an onboard Nav2 Behavior Tree or an industrial sequence) can either **publish** an AutonomyML capability describing its observable ports and safe-state guarantees, or be invoked as a black-box action whose physical completion is verified externally from `/datastreams` observations.

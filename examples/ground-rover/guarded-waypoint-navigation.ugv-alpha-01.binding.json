@@ -6,7 +6,7 @@
   "csapiBaseUrl": "https://csapi.example.org/ogcapi",
   "processBindings": {
     "urn:autonomyml:process:LocalObstacleAvoidancePlanner": {
-      "sensorMLProcessUri": "urn:ogc:def:process:semautonomy:LocalCostmapDetourPlanner:1.0"
+      "sensorMLProcessUri": "urn:ogc:def:process:autonomyml:LocalCostmapDetourPlanner:1.0"
     }
   },
   "controlStreamBindings": {
