@@ -1,0 +1,286 @@
+{
+  "autonomyMLVersion": "0.1.0",
+  "kind": "CapabilitySpecification",
+  "expressionLanguage": "cel",
+  "profile": "urn:semvocab:profile:uxs-aerial:1.0",
+  "capabilityId": "urn:autonomyml:capability:uxs-aerial:TakeoffSurveyAndRTL:0.1.0",
+  "interface": {
+    "comment": "3D spatial frames (EPSG:4979) and explicit AGL vertical clearance quantities",
+    "inputs": {
+      "homePosition": {
+        "type": "Vector",
+        "definition": "http://www.opengis.net/def/property/OGC/0/PlatformLocation",
+        "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4979",
+        "coordinates": [
+          { "name": "lat", "type": "Quantity", "axisID": "Lat", "uom": { "code": "deg" } },
+          { "name": "lon", "type": "Quantity", "axisID": "Lon", "uom": { "code": "deg" } },
+          { "name": "ellipsoidalHeight", "type": "Quantity", "axisID": "h", "uom": { "code": "m" } }
+        ]
+      },
+      "surveyPolygon": {
+        "type": "DataRecord",
+        "definition": "urn:autonomyml:def:geometry:SurveyAreaPolygon2D"
+      },
+      "airspaceVolume": {
+        "type": "DataRecord",
+        "definition": "urn:autonomyml:def:geometry:InclusionAirspaceVolume3D"
+      },
+      "surveyAltitudeAgl": {
+        "type": "Quantity",
+        "definition": "urn:autonomyml:def:property:AltitudeAboveGroundLevel",
+        "uom": { "code": "m" }
+      }
+    },
+    "parameters": {
+      "rtlAltitudeAgl": { "type": "Quantity", "uom": { "code": "m" }, "value": 45.0 },
+      "altitudeTolerance": { "type": "Quantity", "uom": { "code": "m" }, "value": 1.0 },
+      "waypointRadius3D": { "type": "Quantity", "uom": { "code": "m" }, "value": 2.5 },
+      "sensorSwathWidth": { "type": "Quantity", "uom": { "code": "m" }, "value": 30.0 },
+      "maxWindSpeed": { "type": "Quantity", "uom": { "code": "m/s" }, "value": 12.0 },
+      "rtlReserveSoc": { "type": "Quantity", "uom": { "code": "%" }, "value": 30.0 },
+      "criticalLandSoc": { "type": "Quantity", "uom": { "code": "%" }, "value": 15.0 }
+    },
+    "outputs": {
+      "capturedImageCount": {
+        "type": "Count",
+        "definition": "urn:autonomyml:def:property:PayloadCaptureCount"
+      }
+    }
+  },
+  "blackboard": {
+    "vehiclePose3D": {
+      "sourceStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+      "maxAgeSeconds": 0.5,
+      "type": "Vector",
+      "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4979"
+    },
+    "windSpeed": {
+      "sourceStream": "urn:autonomyml:binding:datastream:WindEstimate",
+      "maxAgeSeconds": 2.0,
+      "type": "Quantity",
+      "uom": { "code": "m/s" }
+    },
+    "batterySoc": {
+      "sourceStream": "urn:autonomyml:binding:datastream:BatteryStatus",
+      "maxAgeSeconds": 1.0,
+      "type": "Quantity",
+      "uom": { "code": "%" }
+    },
+    "transectPath": {
+      "type": "DataArray",
+      "definition": "urn:autonomyml:def:trajectory:WaypointArray3D"
+    },
+    "lastFault": {
+      "type": "DataRecord",
+      "definition": "urn:autonomyml:def:diagnostics:FaultRecord"
+    }
+  },
+  "controlFlow": {
+    "startAt": "AirborneEnvelope",
+    "states": {
+      "AirborneEnvelope": {
+        "type": "mode",
+        "modeInvariants": [
+          {
+            "name": "BatteryAboveCriticalLand",
+            "condition": "blackboard.batterySoc >= interface.parameters.criticalLandSoc",
+            "failureError": "AutonomyML.CriticalBatteryLand"
+          }
+        ],
+        "startAt": "MissionFlight",
+        "states": {
+          "MissionFlight": {
+            "type": "mode",
+            "startAt": "Takeoff",
+            "states": {
+              "Takeoff": {
+                "type": "csapiCommandAction",
+                "resource": "urn:autonomyml:binding:controlstream:VerticalTakeoff",
+                "inputPorts": {
+                  "targetAltitudeAgl": "interface.inputs.surveyAltitudeAgl"
+                },
+                "postcondition": {
+                  "observationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+                  "maxObservationAgeSeconds": 0.5,
+                  "condition": "abs(observation.altitudeAgl - interface.inputs.surveyAltitudeAgl) <= interface.parameters.altitudeTolerance && abs(observation.verticalSpeed) <= 0.3",
+                  "sustainDurationSeconds": 2.0
+                },
+                "timeoutSeconds": 60,
+                "next": "Survey"
+              },
+              "Survey": {
+                "type": "behaviorTree",
+                "tickRateHz": 10.0,
+                "timeoutSeconds": 900,
+                "root": {
+                  "nodeType": "reactiveSequence",
+                  "name": "AirspaceGuardedSurvey",
+                  "children": [
+                    {
+                      "nodeType": "condition",
+                      "name": "GeofenceAndCeilingClear",
+                      "expression": "withinVolume3D(blackboard.vehiclePose3D, interface.inputs.airspaceVolume)",
+                      "failureError": "AutonomyML.GeofenceBreach"
+                    },
+                    {
+                      "nodeType": "condition",
+                      "name": "WindWithinEnvelope",
+                      "expression": "blackboard.windSpeed <= interface.parameters.maxWindSpeed",
+                      "failureError": "AutonomyML.WindLimitExceeded"
+                    },
+                    {
+                      "nodeType": "condition",
+                      "name": "BatteryAboveRtlReserve",
+                      "expression": "blackboard.batterySoc >= interface.parameters.rtlReserveSoc",
+                      "failureError": "AutonomyML.RtlBatteryReserve"
+                    },
+                    {
+                      "nodeType": "sequence",
+                      "name": "PlanAndFlyTransects",
+                      "children": [
+                        {
+                          "nodeType": "sensorMLProcess",
+                          "name": "GenerateLawnmowerTransects",
+                          "process": "urn:autonomyml:process:CoveragePathGenerator3D",
+                          "inputPorts": {
+                            "polygon": "interface.inputs.surveyPolygon",
+                            "altitudeAgl": "interface.inputs.surveyAltitudeAgl",
+                            "swathWidth": "interface.parameters.sensorSwathWidth"
+                          },
+                          "outputPorts": {
+                            "waypoints": "blackboard.transectPath"
+                          }
+                        },
+                        {
+                          "nodeType": "parallel",
+                          "name": "FlyAndCapture",
+                          "successThreshold": 2,
+                          "failureThreshold": 1,
+                          "children": [
+                            {
+                              "nodeType": "csapiCommandAction",
+                              "name": "FlyTransectPath3D",
+                              "resource": "urn:autonomyml:binding:controlstream:FollowTrajectory3D",
+                              "inputPorts": {
+                                "waypoints": "blackboard.transectPath"
+                              },
+                              "postcondition": {
+                                "observationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+                                "maxObservationAgeSeconds": 0.5,
+                                "condition": "distance3D(observation.position, last(blackboard.transectPath)) <= interface.parameters.waypointRadius3D",
+                                "sustainDurationSeconds": 1.5
+                              }
+                            },
+                            {
+                              "nodeType": "csapiCommandAction",
+                              "name": "TriggerSurveyPayload",
+                              "resource": "urn:autonomyml:binding:controlstream:CameraIntervalCapture",
+                              "inputPorts": {
+                                "surveyArea": "interface.inputs.surveyPolygon"
+                              },
+                              "outputPorts": {
+                                "captureCount": "interface.outputs.capturedImageCount"
+                              },
+                              "postcondition": {
+                                "observationStream": "urn:autonomyml:binding:datastream:PayloadStatus",
+                                "maxObservationAgeSeconds": 1.0,
+                                "condition": "observation.transectCaptureComplete",
+                                "sustainDurationSeconds": 0.5
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "next": "MissionFlightComplete"
+              },
+              "MissionFlightComplete": {
+                "type": "succeed"
+              }
+            },
+            "catch": [
+              {
+                "errors": [
+                  "AutonomyML.GeofenceBreach",
+                  "AutonomyML.WindLimitExceeded",
+                  "AutonomyML.RtlBatteryReserve",
+                  "AutonomyML.TelemetryStale",
+                  "AutonomyML.PostconditionTimeout",
+                  "AutonomyML.BehaviorTreeFailed",
+                  "CSAPI.CommandFailed"
+                ],
+                "faultTarget": "blackboard.lastFault",
+                "next": "ExecuteRTL"
+              }
+            ],
+            "next": "ExecuteRTL"
+          },
+          "ExecuteRTL": {
+            "type": "csapiCommandAction",
+            "resource": "urn:autonomyml:binding:controlstream:ReturnToLaunch",
+            "inputPorts": {
+              "home": "interface.inputs.homePosition",
+              "minimumRtlAltitudeAgl": "interface.parameters.rtlAltitudeAgl"
+            },
+            "postcondition": {
+              "observationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+              "maxObservationAgeSeconds": 0.5,
+              "condition": "distance2D(observation.position, interface.inputs.homePosition) <= 2.0 && observation.altitudeAgl <= 0.2 && !observation.armed",
+              "sustainDurationSeconds": 2.0
+            },
+            "timeoutSeconds": 300,
+            "next": "AirborneComplete"
+          },
+          "AirborneComplete": {
+            "type": "succeed"
+          }
+        },
+        "catch": [
+          {
+            "errors": [
+              "AutonomyML.CriticalBatteryLand",
+              "AutonomyML.TelemetryStale",
+              "AutonomyML.PostconditionTimeout",
+              "CSAPI.CommandFailed"
+            ],
+            "faultTarget": "blackboard.lastFault",
+            "next": "EmergencyLandImmediate"
+          }
+        ],
+        "next": "EvaluateMissionOutcome"
+      },
+      "EmergencyLandImmediate": {
+        "type": "csapiCommandAction",
+        "resource": "urn:autonomyml:binding:controlstream:LandImmediate",
+        "postcondition": {
+          "observationStream": "urn:autonomyml:binding:datastream:VehicleAirPose",
+          "maxObservationAgeSeconds": 0.5,
+          "condition": "observation.altitudeAgl <= 0.2 && !observation.armed",
+          "sustainDurationSeconds": 2.0
+        },
+        "timeoutSeconds": 120,
+        "next": "SafeStateTerminal"
+      },
+      "EvaluateMissionOutcome": {
+        "type": "choice",
+        "choices": [
+          {
+            "condition": "has(blackboard.lastFault)",
+            "next": "SafeStateTerminal"
+          }
+        ],
+        "default": "SurveyMissionCompleted"
+      },
+      "SurveyMissionCompleted": {
+        "type": "succeed"
+      },
+      "SafeStateTerminal": {
+        "type": "fail",
+        "error": "AutonomyML.SafeStateEngaged",
+        "cause": "Mission aborted cleanly via verified ReturnToLaunch or EmergencyLandImmediate."
+      }
+    }
+  }
+}

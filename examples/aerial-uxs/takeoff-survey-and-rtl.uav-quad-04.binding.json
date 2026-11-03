@@ -1,0 +1,62 @@
+{
+  "autonomyMLVersion": "0.1.0",
+  "kind": "CapabilityBinding",
+  "capabilityRef": "urn:autonomyml:capability:uxs-aerial:TakeoffSurveyAndRTL:0.1.0",
+  "targetSystem": "urn:ogc:def:system:uav-quad-04",
+  "csapiBaseUrl": "https://csapi.example.org/ogcapi",
+  "processBindings": {
+    "urn:autonomyml:process:CoveragePathGenerator3D": {
+      "sensorMLProcessUri": "urn:ogc:def:process:semautonomy:BoustrophedonPlanner:1.2"
+    }
+  },
+  "controlStreamBindings": {
+    "urn:autonomyml:binding:controlstream:VerticalTakeoff": {
+      "controlStreamPath": "/controlstreams/uav-quad-04-takeoff",
+      "commandSchema": "urn:ogc:def:csapi:command:TakeoffAGL"
+    },
+    "urn:autonomyml:binding:controlstream:FollowTrajectory3D": {
+      "controlStreamPath": "/controlstreams/uav-quad-04-trajectory3d",
+      "commandSchema": "urn:ogc:def:csapi:command:WaypointTrajectory3D",
+      "onHaltAction": {
+        "method": "POST",
+        "controlStreamPath": "/controlstreams/uav-quad-04-loiter",
+        "payload": { "mode": "LOITER_3D_HOLD" }
+      }
+    },
+    "urn:autonomyml:binding:controlstream:CameraIntervalCapture": {
+      "controlStreamPath": "/controlstreams/uav-quad-04-eo-camera",
+      "commandSchema": "urn:ogc:def:csapi:command:DistanceIntervalTrigger",
+      "onHaltAction": {
+        "method": "POST",
+        "controlStreamPath": "/controlstreams/uav-quad-04-eo-camera",
+        "payload": { "trigger": "STOP" }
+      }
+    },
+    "urn:autonomyml:binding:controlstream:ReturnToLaunch": {
+      "controlStreamPath": "/controlstreams/uav-quad-04-rtl",
+      "commandSchema": "urn:ogc:def:csapi:command:ReturnToLaunch"
+    },
+    "urn:autonomyml:binding:controlstream:LandImmediate": {
+      "controlStreamPath": "/controlstreams/uav-quad-04-land",
+      "commandSchema": "urn:ogc:def:csapi:command:LandVertical"
+    }
+  },
+  "dataStreamBindings": {
+    "urn:autonomyml:binding:datastream:VehicleAirPose": {
+      "dataStreamPath": "/datastreams/uav-quad-04-air-pose",
+      "expectedRateHz": 20.0
+    },
+    "urn:autonomyml:binding:datastream:WindEstimate": {
+      "dataStreamPath": "/datastreams/uav-quad-04-wind",
+      "expectedRateHz": 2.0
+    },
+    "urn:autonomyml:binding:datastream:BatteryStatus": {
+      "dataStreamPath": "/datastreams/uav-quad-04-battery",
+      "expectedRateHz": 5.0
+    },
+    "urn:autonomyml:binding:datastream:PayloadStatus": {
+      "dataStreamPath": "/datastreams/uav-quad-04-eo-camera-status",
+      "expectedRateHz": 5.0
+    }
+  }
+}
