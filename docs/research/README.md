@@ -6,7 +6,7 @@ This directory collects architectural research, comparative standards analyses, 
 
 | Document | Focus | Relevance to [AutonomyML Overview](../../AutonomyML%20Overview.md) |
 | :--- | :--- | :--- |
-| [Reference Runtime & Module Boundaries](./reference-runtime-module-boundaries.md) | Architectural separation between the **AutonomyML Mission Executive (`autonomyml-app`)** and **OGC CS API Servers (`semconnect`, OpenSensorHub)**, showing how `autonomyml-app` is built as an independent application on the **`semengine` Go framework** and **`semvocab` library** while interacting with vehicles and C2 strictly over standard **OGC CS API**. | Preserves clean boundaries between **Part 1 (Specifications)**, **Part 2 (Bindings)**, OGC CSAPI/SensorML system interaction, human authority & custody lifecycles, and hierarchical capability composition. |
+| [Reference Runtime & Standards Boundaries](./reference-runtime-module-boundaries.md) | Architectural separation between the **AutonomyML Mission Executive (`autonomyml-app`)**, **OGC CS API Servers (`semconnect`, OpenSensorHub)**, **OGC SensorML 3.0** (overlap vs. why AutonomyML is not a SensorML extension), and **existing brownfield automation stacks** (Part 2 bindings and thin edge protocol bridges without cross-system orchestration middleware). | Preserves clean boundaries between **Part 1 (Specifications)**, **Part 2 (Bindings)**, OGC CSAPI/SensorML system & process modeling, brownfield integration, human authority & custody lifecycles, and hierarchical capability composition. |
 
 ## How Research Maps to the AutonomyML Architecture
 
