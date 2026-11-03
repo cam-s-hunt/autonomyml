@@ -45,7 +45,7 @@ AutonomyML uses ASL strictly as an **architectural precedent** rather than an AW
 * **In ASL:** A `Task` state never embeds imperative implementation code; instead, it references a logical `Resource` URI (an ARN) and passes structured inputs.
 * **In AutonomyML:** This maps directly to the separation between **Part 1 (Specifications)** and **Part 2 (Bindings)**:
   * **Part 1** capability definitions reference symbolic capability or actuation URIs (for example, `urn:autonomyml:capability:uxs-aerial:Takeoff` or `urn:autonomyml:binding:controlstream:Navigate2D`).
-  * **Part 2** bindings resolve those logical URIs to concrete system interactions—such as an OGC CSAPI `ControlStream` endpoint managed by a connector layer (e.g., `semconnect`) or an onboard SensorML computational process—without changing the portable behavior model.
+  * **Part 2** bindings resolve those logical URIs to concrete system interactions—such as an OGC CSAPI `ControlStream` endpoint exposed by a Connected Systems server (e.g., `semconnect` or OpenSensorHub) or an onboard SensorML computational process—without changing the portable behavior model.
 
 ### 1.2 Asynchronous Callback Pattern (`.waitForTaskToken` $\rightarrow$ Physical Postcondition Proof)
 
@@ -878,7 +878,7 @@ Standalone file: [`examples/aerial-uxs/takeoff-survey-and-rtl.uav-quad-04.bindin
   "csapiBaseUrl": "https://csapi.example.org/ogcapi",
   "processBindings": {
     "urn:autonomyml:process:CoveragePathGenerator3D": {
-      "sensorMLProcessUri": "urn:ogc:def:process:semautonomy:BoustrophedonPlanner:1.2"
+      "sensorMLProcessUri": "urn:ogc:def:process:autonomyml:BoustrophedonPlanner:1.2"
     }
   },
   "controlStreamBindings": {
@@ -956,10 +956,10 @@ Across both profiles, all five concerns of the [AutonomyML Overview.md](../../Au
 By combining ASL's separation of control flow and bindings, SCXML's parent-mode hierarchy, BT.CPP's reactive trees, and CEL's safe expressions—while standardizing on uniform `camelCase` JSON aligned with SensorML 3.0 and OGC CSAPI—AutonomyML feels like a single coherent OGC standard rather than multiple formats stitched together.
 
 ### 6.2 Deterministic Compilation to Execution Engines
-A reference AutonomyML runtime (for example, `semautonomy` operating over `semengine`, `semvocab`, and `semconnect`) can validate and compile every capability directly into deterministic execution rules before a vehicle ever arms:
-* **`semvocab` + CEL Type Checker:** Validates `interface` and `blackboard` SWE Common types, UoMs, CRS frames, port bindings, and every CEL `condition`, `modeInvariants`, and `postcondition` expression at load time.
-* **`semengine` Rule Packs:** Compiles flat and hierarchical `"type": "mode"` state transitions, fault-bubbling scopes, `reactiveSequence` tick guards, temporal staleness checks (`maxObservationAgeSeconds`), and sustained physical `postcondition` predicates (`sustainDurationSeconds`) into deterministic rules over a Semantic Knowledge Graph (SKG).
-* **`semconnect` CSAPI Adapter:** Resolves Part 2 `CapabilityBinding` resources to live OGC CSAPI `/controlstreams` and `/datastreams` endpoints, executing `onHaltAction` overrides automatically whenever a state, parent mode, or BT subtree is preempted.
+A reference AutonomyML Mission Executive (for example, `autonomyml-app` built on the `semengine` framework and `semvocab` library, communicating over standard OGC CSAPI with `semconnect` or OpenSensorHub—see [Reference Runtime & Standards Boundaries](./reference-runtime-module-boundaries.md)) can validate and compile every capability directly into deterministic execution rules before a vehicle ever arms:
+* **`semvocab` + CEL Type Checker:** Validates `interface` and `blackboard` SWE Common types, UoMs, CRS frames, SHACL contracts, port bindings, and every CEL `condition`, `modeInvariants`, and `postcondition` expression at load time.
+* **`semengine` Rule Packs & Entity Workflows:** Compiles flat and hierarchical `"type": "mode"` state transitions, fault-bubbling scopes, `reactiveSequence` tick guards, temporal staleness checks (`maxObservationAgeSeconds`), and sustained physical `postcondition` predicates (`sustainDurationSeconds`) into deterministic rules over `autonomyml-app`'s local entity graph.
+* **Standard OGC CSAPI Runtime Boundary (`semconnect` / OpenSensorHub):** `autonomyml-app` resolves Part 2 `CapabilityBinding` resources to live OGC CSAPI `/controlstreams` and `/datastreams` endpoints, dispatching `onHaltAction` preemption commands whenever a state, parent mode, or BT subtree is halted—keeping `semconnect` and OpenSensorHub completely interchangeable.
 
 ### 6.3 Clean JSON Schema & Open-Source Tooling
 Dropping AWS's `"field.$"` key-name mutations means every AutonomyML object has fixed, predictable property names—making JSON Schema authoring, code generation, visual **Graph / JSON / Bindings** editors, and static safety linters dramatically simpler.
