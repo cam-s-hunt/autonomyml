@@ -296,12 +296,78 @@ flowchart LR
 | **Central AutonomyML orchestration / message-broker middleware** | **No** | Explicitly avoided. `semengine` (and its local NATS JetStream `ENTITY_STATES` graph) is compiled *inside* `autonomyml-app` as an internal Go framework—never exposed as a shared bus that external automation systems must join. Across process and network boundaries, systems speak **standard OGC CS API**. If an existing platform already exposes OGC CS API, **zero middleware is needed**. |
 | **Thin edge protocol gateway / driver bridge** *(for MAVLink, ROS 2 DDS, OPC-UA/Modbus, vendor APIs)* | **Yes (thin & mission-agnostic)** | Most existing automation stacks do not speak OGC CS API natively. Rather than embedding hardware or wire drivers inside `autonomyml-app`, a thin **CS API Gateway + Protocol Bridge** translates native telemetry and commands into `/datastreams` and `/controlstreams`:<br>• **OpenSensorHub (OSH):** Turnkey OGC CS API server with built-in Java driver modules (MAVLink/ArduPilot, ROS, sensors).<br>• **`semconnect` + lightweight protocol bridges:** Pairs `semconnect` with small edge adapters (`MAVLink <-> CS API`, `ROS 2 <-> CS API`, `OPC-UA <-> CS API`) that **only** translate wire schemas, timestamps, and SWE Common units—leaving all FSM modes, BT ticks, custody leases, and postcondition proofs in `autonomyml-app`. |
 
-### 6.3 Open Brownfield Integration Questions
+### 6.3 "Wrap vs. Orchestrate": Choosing the Seam Against Existing Autonomy Stacks
 
-To formalize brownfield integration in future specification and reference-stack work, two practical boundaries remain to be detailed:
+When integrating brownfield platforms, capability authors face a recurring boundary decision: **when should an existing stack's behavior be wrapped as a single coarse OGC CS API action ("Wrap"), and when should `autonomyml-app` decompose and sequence its primitives directly ("Orchestrate")?**
 
-1. **Connector Pattern for `semconnect`:** Defining the standard ingest and command-dispatch contract for external protocol bridges (`ROS 2`, `MAVLink`, `OPC-UA`) paired with `semconnect`, contrasted with OpenSensorHub's in-process Java driver model.
-2. **"Wrap vs. Orchestrate" Domain-Profile Guidance:** Establishing clear guidance on when to wrap an existing system's entire onboard workflow (e.g., an existing Nav2 Behavior Tree or PLC routine) as one coarse CS API capability versus supervising its lower-level primitives from `autonomyml-app`.
+Drawing the seam in the wrong place causes one of two failure modes:
+* **Micro-orchestrating inner control loops:** Trying to stream high-rate velocity commands (`cmd_vel`), attitude setpoints, or LiDAR obstacle reactions from `autonomyml-app` over OGC CS API HTTP/streams introduces network jitter and breaks link-loss survivability.
+* **Over-delegating mission governance to an opaque black box:** Handing an entire multi-phase mission (such as *Takeoff + Airspace Geofence + Payload Capture + Reserve-Battery RTL*) to an unobservable onboard script strips the operator and executive of phase visibility, cross-subsystem coordination, custody leases, and intermediate postcondition proofs.
+
+```mermaid
+flowchart TB
+    Exec["autonomyml-app: Mission Modes, Envelope Guards, Custody Leases, Cross-Stream Coordination & Postconditions"]
+
+    subgraph WrapPath["Pattern A — WRAP (High-Level Stack: e.g., ROS 2 Nav2)"]
+        WrapCS["CS API Seam: Coarse GoalPose2D ControlStream + Cancel/BRAKE_HOLD onHalt + Pose/Velocity DataStreams"]
+        Nav2["Onboard Nav2 Stack: 10-20 Hz Local BT, Global/Local Costmaps, LiDAR Clearing & Recovery Spins"]
+        Base["Wheel / Track Base Controller (50-100 Hz)"]
+        WrapCS <--> Nav2 <--> Base
+    end
+
+    subgraph OrchPath["Pattern B — ORCHESTRATE (Primitive Autopilot: e.g., ArduPilot / PX4)"]
+        OrchCS["CS API Seam: Mode/Setpoint ControlStreams (Takeoff, Trajectory3D, RTL, Land, Loiter) + Telemetry DataStreams"]
+        AP["Onboard Autopilot: 50-400 Hz Attitude/Position Loops, EKF & Last-Ditch Hardware Failsafes"]
+        OrchCS <--> AP
+    end
+
+    Exec <-->|"Wraps Nav2 goal as one leaf action; proves arrival via telemetry"| WrapCS
+    Exec <-->|"Sequences flight phases, payload sync & tiered Catch transitions"| OrchCS
+```
+
+#### Three Integration Patterns
+
+1. **Coarse-Grained "Wrap" *(Subsystem Already Runs a Tightly Coupled Local Executive)*:**
+   * **Best fit:** **ROS 2 Nav2** (`NavigateToPose` / `NavigateThroughPoses`), onboard visual-servoing / precision-docking stacks, or self-contained **PLC / OPC-UA** equipment routines (`DeployWinch`, `OpenPayloadBay`).
+   * **How it works:** Keep Nav2's internal `10–20 Hz` Behavior Tree, dense costmaps, and local obstacle recoveries (spin, back-up, costmap clear) intact over intra-process DDS. Expose `Navigate2D` on OGC CS API as a single goal-level `ControlStream` with an explicit `onHalt` preemption payload (`CancelGoal` + zero-twist `BRAKE_HOLD`), while `autonomyml-app` enforces mission-level geofence/battery guards and verifies physical arrival externally on `/datastreams`.
+2. **Fine-Grained "Orchestrate" *(Low-Level Autopilot or Mode-Primitive Controller)*:**
+   * **Best fit:** **ArduPilot / PX4 (MAVLink)** in Guided/Offboard modes, marine heading/waypoint autopilots, or independent gimbal/camera controllers.
+   * **How it works:** Flight controllers excel at `50–400 Hz` attitude/rate/position stabilization, EKF state estimation, and hardware failsafes—not cross-payload Behavior Trees or multi-tier mission fault bubbling. `autonomyml-app` orchestrates `Takeoff` $\rightarrow$ `Survey` (coordinating flight trajectory + payload trigger in parallel) $\rightarrow$ `ExecuteRTL` / `EmergencyLandImmediate` over discrete mode/setpoint `/controlstreams`, leaving inner-loop control onboard.
+3. **Layered Hybrid *("Orchestrate Over Wrapped Capabilities")*:**
+   * **Best fit:** Multi-subsystem platforms (for example, a UGV or UAV combining ROS 2 perception/navigation with an onboard autopilot and separate mission payloads).
+   * **How it works:** `autonomyml-app` orchestrates the outer mission statechart, human approval gates, and cross-subsystem synchronization while invoking wrapped onboard capabilities (`Navigate2D`, `InspectTarget`, `PrecisionLand`) as preemptible leaf actions.
+
+#### Five-Axis Seam Checklist
+
+Use five engineering tests to decide whether a behavior belongs **below the CS API seam (wrapped)** or **above the seam (orchestrated in AutonomyML)**:
+
+| Decision Axis | Keep Below the Seam ("Wrap" Native Stack) | Elevate Above the Seam ("Orchestrate" in AutonomyML) |
+| :--- | :--- | :--- |
+| **1. Control-Loop Rate & Latency** | Tight sensor-to-actuator loops ($\ge 20\text{ Hz}$ or sub-$50\text{ ms}$ latency: attitude/rate PID, `cmd_vel` tracking, local LiDAR collision braking, PLC electrical interlocks). | Mission-rate supervision ($1\text{–}20\text{ Hz}$ guard evaluation, multi-second phase transitions, sustained postcondition windows). |
+| **2. Link-Loss Survivability** | Must react instantaneously if the executive-to-platform link drops (onboard obstacle stop, EKF stabilization, hardware link-loss failsafe). | Operates over live OGC CS API streams with explicit `maxObservationAgeSeconds` staleness detection and safe-state escalation. |
+| **3. Sensor Data Bandwidth** | Consumes high-volume raw streams (3D LiDAR point clouds, depth maps, raw imagery, IMU rates) that should stay on local buses rather than traversing CS API JSON/SWE streams. | Consumes compact, semantically typed state (`VehiclePose`, `VehicleVelocity`, `BatteryStatus`, `WindEstimate`, `PayloadStatus`). |
+| **4. Cross-Subsystem Scope** | Contained within a single tightly coupled subsystem (e.g., Nav2 coordinating its own planner, costmap, and base controller). | Coordinates *separate* Connected Systems or streams (e.g., synchronizing flight path + EO camera capture + airspace geofence + operator custody lease). |
+| **5. Mission Intent & Auditability** | Tactical micro-recoveries that do not alter mission intent or safety envelopes (e.g., clearing a transient costmap cell or smoothing a local trajectory). | Operational mode changes, envelope breaches, safe-state escalations (`ExecuteRTL` vs. `EmergencyLandImmediate`), and behaviors requiring cross-vendor equivalence. |
+
+#### Concrete Seam Mapping Across Common Stacks
+
+| Existing Stack | Kept Native Below the Seam | Exposed OGC CS API Seam (`/controlstreams` & `/datastreams`) | Supervised by `autonomyml-app` Above the Seam |
+| :--- | :--- | :--- | :--- |
+| **ROS 2 + Nav2 UGV** | `bt_navigator` local obstacle/recovery tree, global/local costmaps, `controller_server` (`cmd_vel` at `20–50 Hz`), wheel odometry/SLAM fusion. | **Controls:** `Navigate2D` (`GoalPose2D`), `HoldPosition` (`BRAKE_HOLD` on halt).<br>**Data:** `VehiclePose`, `VehicleVelocity`, `BatteryStatus`. | Mission corridor geofence, battery reserve guards, multi-waypoint sequencing, payload tasking, sustained arrival & zero-speed postconditions. |
+| **ArduPilot / PX4 UAV (MAVLink)** | `50–400 Hz` attitude/rate/position loops, EKF2/EKF3 estimation, motor mixing, last-ditch RC/GCS link-loss and critical-voltage hardware failsafes. | **Controls:** `VerticalTakeoff`, `FollowTrajectory3D` (`LOITER_3D_HOLD` on halt), `ReturnToLaunch`, `LandImmediate`.<br>**Data:** `VehicleAirPose`, `WindEstimate`, `BatteryStatus`. | Concentric `AirborneEnvelope` / `MissionFlight` modes, 3D airspace & wind guards, coverage transect planning (`SensorML`), parallel payload capture, tiered `RTL` $\rightarrow$ `Land` escalation. |
+| **PLC / OPC-UA Industrial Cell or Payload** | Sub-millisecond ladder/structured-text safety interlocks, limit switches, servo torque/current loops, emergency-stop relays. | **Controls:** Coarse cycle commands (`DeploySampler`, `StowActuator`, `SafeStop` on halt).<br>**Data:** `ActuatorState`, `CycleTelemetry`, `FaultRegister`. | Sequencing payload cycles with vehicle station-keeping, human approval gates, custody locks, and verified stowage before vehicle transit resumes. |
+
+#### Three Rules to Prevent "Split-Brain" Between `autonomyml-app` and Onboard Stacks
+
+1. **Every Wrapped Action Must Declare Deterministic Preemption (`onHalt`):** Wrapping an onboard executive like Nav2 is only safe if `autonomyml-app` can halt it immediately when an outer guard fails—cancelling the active onboard goal *and* asserting a known physical hold state (`BRAKE_HOLD`, `LOITER_3D_HOLD`, or `SafeStop`).
+2. **Stagger Onboard Hardware Failsafes *Outside* AutonomyML Guard Thresholds:** Onboard autopilot/PLC failsafes must stay enabled as the last line of defense if the CS API link drops, but their thresholds should sit slightly *outside* AutonomyML's software envelope guards (for example, AutonomyML triggers guarded `ExecuteRTL` at `30%` SoC and `EmergencyLandImmediate` at `15%` SoC, while the autopilot's hardware battery failsafe triggers at `12%` SoC or `> 3 s` heartbeat loss). That way AutonomyML handles nominal fault recovery cleanly with full auditability, and hardware failsafes catch true link or executive loss without the two controllers fighting each other.
+3. **Never Trust Onboard `SUCCEEDED` Status Alone—Always Verify Physical Postconditions:** Even when a wrapped stack like ROS 2 Nav2 reports goal completion on its action server, `autonomyml-app` still proves physical completion over `/datastreams` observations (e.g., `distance2D(observation.position, target) <= arrivalRadius` sustained for `2.0 s`), guaranteeing equivalent observable behavior across heterogeneous implementations.
+
+### 6.4 Remaining Open Brownfield Question: `semconnect` Bridge Contract
+
+With the "Wrap vs. Orchestrate" seam established above, the primary remaining engineering item for brownfield integration is:
+
+* **Connector Pattern for `semconnect`:** Defining the standard ingest and command-dispatch contract for external protocol bridges (`ROS 2`, `MAVLink`, `OPC-UA`) paired with `semconnect`, contrasted with OpenSensorHub's in-process Java driver model.
 
 ---
 
