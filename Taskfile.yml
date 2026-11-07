@@ -1,0 +1,32 @@
+version: '3'
+
+tasks:
+  doctor:
+    desc: Check multi-agent parity, MCP schema token budget, and hook latency
+    cmds:
+      - ateam doctor --check
+
+  spec:check:
+    desc: Validate OpenSpec changes/specs and Hold placement
+    cmds:
+      - ateam state spec-check
+
+  examples:check:
+    desc: Parse and validate standalone JSON capability specs and bindings
+    cmds:
+      - |-
+        node -e 'const fs=require("fs"),path=require("path");const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):e.name.endsWith(".json")?[path.join(d,e.name)]:[]);const files=walk("examples");for(const f of files)JSON.parse(fs.readFileSync(f,"utf8"));console.log("examples: ok ("+files.length+" JSON files)")'
+
+  site:build:
+    desc: Install npm dependencies if missing and build the AutonomyML website
+    cmds:
+      - test -d node_modules || npm ci
+      - npm run build
+
+  verify:
+    desc: Run repository verification gates (doctor, OpenSpec, examples, website build)
+    cmds:
+      - task: doctor
+      - task: spec:check
+      - task: examples:check
+      - task: site:build
