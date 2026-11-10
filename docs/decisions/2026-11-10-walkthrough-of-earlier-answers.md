@@ -33,7 +33,7 @@ Outcome key: **confirmed** (owner kept the earlier answer), **provisional** (kep
 | 3.5 | An executor is defined by what it does, not where it runs | confirmed |
 | 3.6 | A state is defined by the six state types in the examples; SCXML's notion not adopted | **changed (direction chosen, wording not drafted):** on 2026-11-10 the owner chose "restate a minimal definition of your own": a state is a control mode of an automaton, distinct from system state (the world's condition) and from node status (a behavior-tree return value); the six example types become kinds of state under it. Exact wording is the owner's decision. The labelled-transition-system literature (Henzinger) is suggested by the report as an informative reference, not yet adopted. `csapiCommandAction` and `behaviorTree` match no standard state type (Architect's reading, not in the report). Research: `_bmad-output/research-state-and-control-models.md` |
 | 3.7 | A postcondition is a condition over observations | confirmed |
-| 3.8 | A terminal state is only succeed or fail; a third ending is open | **open, blocked on halt behaviour:** research is in (`_bmad-output/research-terminal-states.md`). On 2026-11-10 the owner chose to decide this together with the halt-behaviour design question, so two endings (succeed, fail) stand until then |
+| 3.8 | A terminal state is only succeed or fail; a third ending is open | **open, blocked on halt behaviour:** research is in (`_bmad-output/research-terminal-states.md`). On 2026-11-10 the owner chose to decide this together with the halt-behaviour design question, **superseded by the decision below (2026-11-10, later): a third ending is chosen in principle** |
 
 ## Structure and scope
 
@@ -188,3 +188,102 @@ Research: `_bmad-output/research-ssn-bfo-cco-mapping.md` (agent-written; the Arc
 - **Reconciliation with the 2017 pin (owner chose):** the 2017 Recommendation stays the normative reference; the 2023 module is used as an **alignment source** and cited informatively as work in progress, with the module's 2023 terms translated to the 2017 ones (`sosa:System` to `ssn:System`) where they differ, and each correspondence recorded. Nothing normative depends on the draft.
 - **Decision 5 holds with a caveat:** SOSA `System` imposes no materiality (both editions). Under the W3C module a System is an independent continuant, which allows non-material systems but not code-only ones; software is placed through the carrier-plus-role route (material computer bears a role or function that concretizes the code), which neither mapping provides and the ontology must add.
 - **Known risks accepted:** the module is non-normative and may change before it becomes a Recommendation; it contains a Turtle typo that drops one axiom; it relies on an unversioned CCO import and a CCO 2.1+ term; IRIs differ between 2017 and 2023.
+
+## Third ending chosen, 2026-11-10 (later)
+
+Decision 3.8 / halt behaviour (part): asked whether a run stopped from outside (an operator, a supervising system or an authority) should be its own ending, separate from succeed and fail. The owner chose **yes, a third ending**. Recommendation followed; reasons given were that the Connected Systems API (COMPLETED, FAILED, CANCELED), ROS 2 actions and Temporal already separate them, and that "the behavior's own problem" stays apart from "an authority stopped it".
+
+- **Decided:** terminal endings are succeed, fail and a stopped-from-outside ending. The four-transition rule for terminal states (4.5) is to be worded to hold with three endings.
+- **Not decided (still open):** the ending's name; its definition and wording; whether a stopped run may be restarted; who may issue the halt; whether the halted behavior gets a last step to clean up; whether the halt is an explicit action in the document (the owner's design question); how it maps to the CS API's CANCELED and to ontology terms. Nothing normative is drafted.
+
+## Explicit halt action chosen, 2026-11-10 (later)
+
+Owner design question "explicit halt action": the owner chose **yes, the document format has an explicit halt action**, a named step an authority can issue to stop a running behavior, rather than leaving halting to the executor and platform. Recommendation followed; reasons given were that conformance tests can then say "issue a halt, expect the stopped ending", and that it fits the authority-to-halt notes and the Connected Systems cancel command.
+
+- **Decided:** an explicit halt action exists in the specification vocabulary and leads to the stopped-from-outside ending.
+- **Not decided (still open):** its name and wording; who may issue it; what effect it has on the running behavior (for example a last clean-up step, as in SCXML `onexit` or Nav2 `on_cancelled`, versus immediate stop); whether a halted run can resume or restart; how it maps to the CS API cancel command and to ontology terms; and its place in the document kinds (state machine, behavior tree). Nothing normative is drafted.
+
+## Halt effect chosen, 2026-11-10 (later)
+
+Asked whether a halted behavior gets a last chance to clean up. The owner chose **a defined clean-up step, then the stopped ending** (recommendation followed; reason given: abrupt stops can leave physical systems unsafe, and SCXML exit handlers and Nav2's cancel handler are precedents).
+
+- **Decided:** a halt runs a defined clean-up before the run ends in the stopped-from-outside ending.
+- **Not decided (still open):** what the clean-up may do; what happens if it fails or overruns (including which ending results); whether a second halt can interrupt it; how it appears in state machines versus behavior trees (BehaviorTree.CPP `halt()` resets to IDLE and records no status); who may issue the halt; the names and wording; restart or resume. Nothing normative is drafted.
+
+## Failed clean-up ends in fail, 2026-11-10 (later)
+
+Asked which ending a run gets if the clean-up after a halt fails or runs too long. The owner chose **the fail ending, with the halt recorded as the cause** (recommendation followed; reason given: the stopped ending then means "stopped from outside and left in a defined, cleaned-up condition", and a failed clean-up is a real fault).
+
+- **Decided:** the stopped-from-outside ending is reached only through a clean-up that completes; a failed or overrunning clean-up ends in fail, and the halt is carried as the recorded cause.
+- **Not decided (still open):** the time limit and how it is set; the form of the recorded cause (it ties to the open execution-record contents); whether a second halt can interrupt clean-up; who may issue the halt; names and wording; restart or resume. Nothing normative is drafted.
+
+## Entry and exit actions chosen, 2026-11-10 (later)
+
+Owner design question "mode invariants and entry/exit hooks" (first half): asked whether a state may declare entry and exit actions, as SCXML `onentry` and `onexit` do. The owner chose **yes, both entry and exit** (recommendation followed; reasons given: the halt clean-up needs a home, SCXML runs exit actions for all active states on cancellation, and tests can observe them).
+
+- **Decided:** a state in a state-machine document may declare entry actions and exit actions. They apply to state machines only; behavior trees have no states of this kind.
+- **Not decided (still open):** the order in which they run; what happens if one fails (the halt case already ends in fail, see above); whether the halt clean-up is the exit actions of the active states or a separate named clean-up; what an action may contain; names and wording. **Mode invariants (the second half of this question) not yet asked.** Nothing normative is drafted.
+
+## Halt clean-up is the exit actions, 2026-11-10 (later)
+
+Asked where the halt clean-up lives. The owner chose **the exit actions of the states active when the halt arrives** (recommendation followed; reasons given: no new construct, matches SCXML cancellation, each state cleans up what it set up).
+
+- **Decided:** for state machines, a halt leaves every active state, running each one's exit actions, and then the run ends in the stopped-from-outside ending (or in fail if an exit action fails or overruns, see above). No separate named clean-up construct.
+- **Not decided (still open):** whether a leave caused by a halt can be told apart from an ordinary leave inside an exit action; the order of exit actions across nested or parallel states; the clean-up rule for behavior trees, which have no states; names and wording. Mode invariants not yet asked. Nothing normative is drafted.
+
+## Halt for behavior trees deferred, 2026-11-10 (later)
+
+Asked what the standard requires when a halt reaches a running behavior tree. The owner chose **defer; state machines first** (recommendation followed; reason given: behavior trees get document-level shape only, no node semantics, and no behavior-tree standard was found to follow).
+
+- **Decided:** nothing is written about halting behavior trees for now; the question stays open. Consistent with decision 4.6.
+- **Not decided (still open):** whether a behavior tree can be halted at all, whether it can end in the stopped ending, and how it would clean up (node-level handler, document-level rule, or none). Revisit with the behavior-tree dialect decision.
+
+## Mode invariants chosen, 2026-11-10 (later)
+
+Owner design question "mode invariants and entry/exit hooks" (second half): asked whether a state may declare a mode invariant, a condition that must stay true while the state is active. The owner chose **yes, as a condition over observations**, the same form as postconditions (decision 3.7) (recommendation followed; reasons given: reuses a confirmed form, lets tests check limits during a state).
+
+- **Decided:** a state in a state-machine document may declare an invariant expressed as a condition over observations.
+- **Not decided (still open):** what happens when an invariant is broken (which ending or transition; asked next); when it is evaluated (continuously, on each observation, on each step); how it interacts with the observation model and the CEL-functions question; names and wording. Nothing normative is drafted.
+
+## Broken invariant: the specification names the response, 2026-11-10 (later)
+
+Asked what happens when a state's invariant is broken while the state is active. The Architect recommended a fixed rule (the run ends in fail, with the broken invariant recorded as the cause). The owner **chose a different option: each invariant declares its own response in the specification** (a transition to another state, or a fail).
+
+- **Decided:** a broken invariant triggers a response that the specification declares for that invariant; the standard does not fix one behavior for all.
+- **Not decided (still open):** the form of the response (the list of permitted responses; whether "fail" is one of them or the default when none is declared); whether a specification must declare a response for every invariant; what a conformance test may assume when none is declared; when an invariant is evaluated; names and wording. Consequence the Architect noted: tests cannot assume one behavior, so they will check that the declared response occurs. Nothing normative is drafted.
+
+## Invariant must declare a response, 2026-11-10 (later)
+
+Asked what happens if an invariant declares no response. The owner chose **require a response; no default** (recommendation followed; reason given: it matches "the specification decides" and tests never guess).
+
+- **Decided:** every invariant must declare a response; a specification that omits one does not conform. This closes the owner design question "mode invariants and entry/exit hooks" in outline.
+- **Not decided (still open):** the list of permitted responses; when an invariant is evaluated; names and wording. Two of the owner's four design questions are now answered in outline (explicit halt action; mode invariants and entry/exit hooks). **Remaining: CEL functions and the compact JSON shorthand.** Nothing normative is drafted.
+
+## CEL chosen as the condition language, 2026-11-10 (later)
+
+The decision record showed no earlier decision on the expression language (CEL is recommended in `docs/research/asl-and-open-standards-precedents.md`, and the owner's design question mentions "CEL functions"). Asked whether the standard requires CEL for conditions (postconditions, invariants, transition guards). The owner chose **yes, CEL** (recommendation followed; reasons given: deterministic, cannot loop or change state, type-checkable before a mission).
+
+- **Decided:** conditions in the standard are written in CEL.
+- **Not decided (still open):** the CEL edition to pin (a tenth normative reference; CEL is not an OGC or W3C standard; the pin is the owner's decision, to be named); which functions are available (the owner's design question); how observations are exposed to a condition; whether CEL's own type checking is required before a run; names and wording. Nothing normative is drafted.
+
+## CEL functions: built-in only for now, 2026-11-10 (later)
+
+Owner design question "CEL functions": asked whether the standard defines its own functions beyond CEL's built-ins. The owner chose **built-in CEL only; the standard's own function set is a planned later extension** (recommendation followed; reason given: choosing functions, units and coordinate reference systems is a large decision not yet explored).
+
+- **Decided:** the first version's conditions use only CEL's standard functions. The standard records its own function set as a planned extension.
+- **Not decided (still open):** which CEL edition is pinned; which extension functions (distance, age of observation, etc.), their semantics, units and coordinate reference systems; how observations are exposed to a condition. Three of the owner's four design questions are now answered in outline. **Remaining: the compact JSON shorthand.** Nothing normative is drafted.
+
+## JSON shorthand: full form only, 2026-11-10 (later)
+
+Owner design question "compact JSON shorthand": asked whether value types in a specification use SWE Common 3.0 JSON verbatim or may also use a compact shorthand (`"uom": "m"`). The owner chose **full form only** (recommendation followed; reasons given: existing SWE Common tools and validators accept it, one form to test; a shorthand can be added later without breaking anything).
+
+- **Decided:** documents use the SensorML 3.0 / SWE Common 3.0 JSON in full; no compact shorthand in the first version.
+- **Not decided (still open):** nothing further on this question. A shorthand remains a possible later extension.
+
+## All four owner design questions answered in outline, 2026-11-10 (later)
+
+Explicit halt action: yes. Mode invariants and entry/exit hooks: yes (see above). CEL functions: built-in only for now. Compact JSON shorthand: full form only. Notes the Architect flags for later wording decisions (from the source of these questions, `docs/research/asl-and-open-standards-precedents.md` section 7):
+
+- That research asked the halt question as a **binding** contract (each continuous control-stream binding declaring an `onHaltAction`, Part 2), while the owner's decisions above place the halt action and its clean-up in the **specification** (state exit actions). Where a binding says how a halt reaches the system's control stream is not decided.
+- That research also asked whether invariants are evaluated on every incoming observation or at a declared tick rate. This is **still open**.
+- Research examples use a parent state type named `"mode"`; no name is adopted.
