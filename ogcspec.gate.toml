@@ -1,0 +1,3 @@
+records_dir = "records"
+core = "/req/core"
+core_dependency = "direct"

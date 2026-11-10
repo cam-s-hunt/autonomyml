@@ -87,3 +87,104 @@ All items in the earlier file's final section stay open: definitions of the stan
 - **Licence (1.4):** stays open (owner, 2026-11-10).
 - **Capability identifier (4.8):** stays open (owner, 2026-11-10). The owner asked for a deep recon on formal definitions of capability in the context of what the standard models, with possible inspiration from the US Department of War's Mission Engineering constructs and associated ontologies. In progress: `_bmad-output/research-capability-definitions-and-identifiers.md`.
 - **Gate config:** to be written "when we think we're ready" (owner). Not written. `ogcspec.gate.toml` does not exist yet.
+
+## Gate-config prerequisites decided by the owner, 2026-11-10 (later)
+
+- **ModSpec edition (1.1):** "use the latest ModSpec edition available". The latest the lookup found is OGC 08-131r7 (ModSpec Part 1: Core, v1.1, approved 2026-03-05, published 2026-05-21), which is also the edition the gate cites. Whether a newer edition exists was not independently checked beyond that lookup.
+- **`core_dependency`:** `direct` (the literal reading of Requirement 22). This settles the contested Req 22 reading for the gate; it does not change answer 4.3.
+- **`namespace`:** left empty for now. The owner expects to propose their own autonomy domain ontology (extending BFO, CCO and SOSA/SSN, and including the concepts of https://ceur-ws.org/Vol-3050/Paper1.pdf plus other autonomy ontologies found) and to ground the namespace in it. That is an expectation, not a decision; a recon is running (`_bmad-output/research-autonomy-ontologies.md`).
+- **Clause 6.1.5 check:** result in `_bmad-output/research-modspec-clause-6-1-5.md`. The clause is a definition with an example close to answer 4.3; the standard's own note under definition 6.3.11 says "the testing of indirect dependencies seems to violate this definition". The reading stays the owner's.
+- **Gate config:** written on 2026-11-10 with the owner's yes: `ogcspec.gate.toml` at the repository root with three lines (`records_dir = "records"`, `core = "/req/core"` as a proposed identifier, `core_dependency = "direct"`). No namespace, pins, ontologies, style rules or baseline yet. The gate has not been run (no records exist).
+
+## Ontologies called out explicitly, 2026-11-10 (later)
+
+- **Decision (owner):** the standard explicitly names **SOSA/SSN, BFO and CCO** as ontologies it uses and references, and treats **all three as normative references** (chosen over "BFO and SOSA/SSN normative, CCO informative", which the Architect had recommended because CCO's web addresses point at a moving development branch, CCO 3.0 is due 2026-12-31 and will restructure its information classes, and CCO's Agent is defined as a material entity).
+- **Adds to answer 2.1:** the normative list grows from six documents to nine (the earlier six plus SOSA/SSN, BFO and CCO). Answer 2.4 already fixes SOSA/SSN as the 2017 W3C Recommendation.
+- **Still open, owner's to decide:** the exact editions to pin. Candidates from the research: BFO as ISO/IEC 21838-2 (edition not yet recorded), CCO as the v2.2 release tag (the research advised citing the release tag and its SHA-256 rather than the IRI). Not verified by the Architect beyond the research reports.
+- **Interaction with answer 3.2:** that answer says ontology links in the text are informative by default and the terms-and-definitions clause is normative. Making the ontologies normative references does not by itself make any term mapping normative; mappings stay proposals, informative by default, until the owner says otherwise.
+- **Known risk accepted by this choice:** a normative reference to CCO ties conformance to one CCO release; CCO 3.0 may force a revision. The tension between CCO's material-entity Agent and software counting as a system (answer 3.1) is unresolved.
+- **Gate config:** not changed. Declaring the three in `[[ontologies]]` and `[[normative_references]]` needs the pins above and a separate yes.
+
+## Ontology direction, 2026-11-10 (later)
+
+Owner decisions after the autonomy-ontologies and capability-definitions recons:
+
+1. **The standard will have its own ontology** (the owner's words: "We are going to write our own ontology"). This replaces the earlier "expectation"; it extends BFO, CCO and SOSA/SSN. Scope, name, IRIs, namespace and governance are not decided. Research: `_bmad-output/research-autonomy-ontologies.md`, `_bmad-output/research-capability-definitions-and-identifiers.md`.
+2. **Mapping priority:** "It's more important to map to BFO/CCO than directly to SOSA."
+3. **SOSA still used** for concepts the standard pulls from SensorML and the Connected Systems API: those terms are SOSA-mapped.
+4. **Not decided and flagged by the research:** how software and virtual systems fit (CCO Agent is a material entity); whether "capability" remains the name of the specification document given that DoD, UAF, CCO and IOF all use "capability" for an ability; the identifier and namespace; and whether to pin CCO v2.2 given that the CCO Governance Board recommends users wait for CCO 4.0 (3.0 expected by 2026-12-31, 4.0 by 2027-06-30; per `research-autonomy-ontologies.md` section 2.7, not independently checked).
+
+## Candidate edition pins, from research (not accepted by the owner)
+
+Source: `_bmad-output/research-edition-pins.md` (research date 2026-11-10; agent-written, summary table read by the Architect, details not all re-checked). **Nothing below is pinned in any config; each pin is the owner's decision.**
+
+| Document | Number | Edition / date found | Notes |
+|---|---|---|---|
+| OGC API - Connected Systems Part 1 | OGC 23-001 | v1.0, approved 2025-06-02, published 2025-07-16 | Corrects an earlier note: 2025-07-16 is the publication date, not approval |
+| OGC API - Connected Systems Part 2 | OGC 23-002 | v1.0, same dates | |
+| OGC SensorML | OGC 23-000 | v3.0, same dates | Official title "OGC SensorML Encoding Standard" |
+| OGC SWE Common Data Model | **OGC 24-014** | v3.0 ("3.0.0" on the cover), same dates | Fills the earlier unknown document number |
+| W3C SCXML | none | Recommendation 2015-09-01 | No newer version; 7 editorial errata |
+| W3C PROV-O | none | Recommendation 2013-04-30 | No newer version; 6 non-normative errata |
+| W3C SOSA/SSN | none | Recommendation 2017-10-19 | A "2023 Edition" Working Draft is active (latest 2026-11-04), not citable except as work in progress |
+| BFO | ISO/IEC 21838-2:2021 | Edition 1, 2021-11-30 | Text availability unresolved (price unclear); free electronic inserts exist; the GitHub `bfo-core.owl` differs from the ISO insert |
+| CCO | none | Release tag `v2.2`, 2026-08-14, tag commit `0bc7d33e1bc09fd4693366119ab4e03cb0340042`, BSD-3-Clause | CCO IRIs redirect to the moving `develop` branch; tag commit is not in `develop` history; CCO 3.0 planned by 2026-12-31 |
+
+## SOSA/SSN pin, 2026-11-10 (later)
+
+Owner chose to **pin the 2017 W3C Recommendation** (https://www.w3.org/TR/2017/REC-vocab-ssn-20171019/), consistent with answer 2.4 and with Connected Systems 1.0, and to **note that a "2023 Edition" Working Draft is in active development** (latest dated 2026-11-04). Revisit when that edition becomes a Recommendation. The other eight pins in the candidate table remain candidates, undecided. Nothing is written to `ogcspec.gate.toml`.
+
+## Eleven decisions on the ontology and identifiers, 2026-11-10 (later)
+
+Recorded as given by the owner. Working notes for the ontology are in `docs/ontology/autonomy-ontology-notes.md`.
+
+1. **Terminology:** use **capability specification** and **capability binding** instead of bare "capability". Whether bare "capability" is defined at all, and the identifier's type segment, are not decided. (Related: answer 3.3 and the proposed mapping pattern there.)
+2. **Authority, delegation and boundary terms** are to be captured in the ontology notes. Done as a first pass: notes section 2.
+3. **State** must also be defined in the ontology. Done as a pointer: notes section 3 (answer 3.6 holds).
+4. **SSN-to-BFO/CCO mapping as the default route**, if it resolves or eases mapping, instead of mapping from SOSA directly. **Conditional:** the research (`_bmad-output/research-ssn-bfo-cco-mapping.md`) is checking whether such a mapping exists and whether it covers non-material systems; the earlier note was that the NCOR mapping is material-only.
+5. **SOSA `System` is a valid approach until the new CCO comes out.** Working approach. Whether SOSA `System` can be non-material was not verified at the time of the decision; the research above is checking.
+6. **Behavior is treated as an information carrier** (information plus carrier option: the behavior is information, the executing system bears the ability).
+7. **Pin current CCO** (release tag `v2.2`), adapt later. Pin details in the notes, section 9. The CCO Governance Board's advice to wait for 4.0 was noted. Not written to the gate config.
+8. **Adopt OPTaC concepts, updated to the latest CCO terms.** Which terms exactly, and what to do about Play's competitive context, remain open (notes section 6).
+9. **Mission specification patterns are inspiration** for states and behavior-tree primitives. The pattern list has not yet been read here (notes section 7).
+10. **Do not import "those three"; cite them informatively.** The Architect read "those three" as SkiROS2, SOMA and OMG ROSO. **Confirmed by the owner (SkiROS2, SOMA, OMG ROSO).**
+11. **Identifiers:** use `urn:autonomyml`, and **prepare instructions for the owner to register it**; keep to **OGC's register statuses** for identifier lifecycle. The instructions are being drafted at `docs/identifiers/urn-autonomyml-registration-guide.md`. **Nothing is registered or submitted; registration is the owner's action.** Until it is registered, `urn:autonomyml:...` is not a valid URN under RFC 8141 section 1 (`research-capability-definitions-and-identifiers.md`). The segments after `urn:autonomyml:` are not decided. The gate config's `namespace` (the document's URI namespace) stays empty, as it is a separate matter. This supersedes the "capability identifier form and authority left open" part of answer 4.8 for the scheme only; authority and segment structure remain open.
+
+## Pins accepted, 2026-11-10 (later)
+
+The owner accepted all seven remaining candidate pins. Together with the two decided earlier, the nine pinned normative references are:
+
+| Document | Pin |
+|---|---|
+| OGC API - Connected Systems Part 1 (OGC 23-001) | v1.0, approved 2025-06-02, published 2025-07-16 |
+| OGC API - Connected Systems Part 2 (OGC 23-002) | v1.0, same dates |
+| OGC SensorML (OGC 23-000) | v3.0, same dates |
+| OGC SWE Common Data Model (OGC 24-014) | v3.0, same dates |
+| W3C SCXML | Recommendation, 2015-09-01 |
+| W3C PROV-O | Recommendation, 2013-04-30 |
+| W3C SOSA/SSN | 2017 Recommendation, 2017-10-19 (a 2023 Edition draft is in progress) |
+| ISO/IEC 21838-2 (BFO) | Edition 1, 2021-11-30; the free BFO file on GitHub differs from the ISO insert and has changed since its 2024-01-29 release, so the standard cites the ISO edition and states which free file it mirrors |
+| CCO | release tag `v2.2`, 2026-08-14, tag commit `0bc7d33e1bc09fd4693366119ab4e03cb0340042`; to be adapted later |
+
+**Where these pins live:** in the standard's normative-references clause. They are **not** all gate-config entries: the gate's `[[normative_references]]` entries (name, `uri_prefix`) are only for *external requirements classes* that this standard's classes inherit, and `[[ontologies]]` (key, optional `iri_prefix`) are only for term mappings. (Correction of the Architect's earlier statement that the pins would go into the gate config.) `ogcspec.gate.toml` is unchanged.
+
+## URN registration guide delivered, 2026-11-10 (later)
+
+`docs/identifiers/urn-autonomyml-registration-guide.md` (agent-written from RFC 8141 and other primary sources; reviewed by the Architect, not by the owner). Nothing was submitted, registered or sent; all commitment fields are marked `OWNER TO DECIDE`. Findings: `autonomyml` passes the RFC 8141 NID syntax tests and was not in the IANA registry (last updated 2026-10-28; re-check before submitting). A trademark or name-confusion check was not done (a similar string "AutonoML" appears in search results). Submission goes to the discussion list `urn@ietf.org` (`urn-nid@` is discontinued per RFC 8141 section 7.3). The fast-track route requires a recognized standards body and the IESG decides recognition; whether this standard or OGC would qualify is not established. OGC Naming Authority procedures 09-046r6 define **eleven** status flags (deprecated, experimental, invalid, notAccepted, proposed, reserved, retired, stable, submitted, superseded, valid), and the text is inconsistent on whether a new item starts as `submitted` or `invalid`.
+
+## Identifier lifecycle statuses, 2026-11-10 (later)
+
+Owner chose **all eleven** OGC Naming Authority status flags (09-046r6 clause 7.3): `deprecated`, `experimental`, `invalid`, `notAccepted`, `proposed`, `reserved`, `retired`, `stable`, `submitted`, `superseded`, `valid`. Rules carried with it: a superseding item points to its predecessor; an assigned URN is never reassigned (RFC 8141 section 5). Not decided: the exact wording and the mapping of statuses to a URN namespace specification; the source's inconsistency on whether a new item starts as `submitted` or `invalid`, which would be put to the OGC Naming Authority by the owner if it matters. Nothing sent to OGC.
+
+## Mission specification patterns read, 2026-11-10 (later)
+
+Decision 9 follow-up done: the catalogue (22 patterns: 10 core movement, 6 avoidance, 6 triggers) was read via `_bmad-output/research-mission-patterns.md` and summarised in `docs/ontology/autonomy-ontology-notes.md` section 7, as options for states, behavior-tree primitives and observation-based postconditions. The patterns do not mention behavior trees, FSMs or SCXML. No primitive is adopted; the owner chooses.
+
+## SSN mapping route decided, 2026-11-10 (later)
+
+Research: `_bmad-output/research-ssn-bfo-cco-mapping.md` (agent-written; the Architect read the findings, the term and option tables and the software sections; no reasoner was run).
+
+- **Decision 4 resolved:** the owner chose to **adopt the W3C SOSA/SSN 2023 Edition BFO/CCO alignment module (WD section 7.1.3) as the default** for mapping SOSA/SSN terms, over (a) reusing the agreed terms with own System axioms, which the Architect had recommended, and (b) mapping from SOSA in the standard's own namespace. NCOR's mapping is not adopted (it makes System material).
+- **Reconciliation with the 2017 pin (owner chose):** the 2017 Recommendation stays the normative reference; the 2023 module is used as an **alignment source** and cited informatively as work in progress, with the module's 2023 terms translated to the 2017 ones (`sosa:System` to `ssn:System`) where they differ, and each correspondence recorded. Nothing normative depends on the draft.
+- **Decision 5 holds with a caveat:** SOSA `System` imposes no materiality (both editions). Under the W3C module a System is an independent continuant, which allows non-material systems but not code-only ones; software is placed through the carrier-plus-role route (material computer bears a role or function that concretizes the code), which neither mapping provides and the ontology must add.
+- **Known risks accepted:** the module is non-normative and may change before it becomes a Recommendation; it contains a Turtle typo that drops one axiom; it relies on an unversioned CCO import and a CCO 2.1+ term; IRIs differ between 2017 and 2023.
