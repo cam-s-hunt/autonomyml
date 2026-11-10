@@ -287,3 +287,39 @@ Explicit halt action: yes. Mode invariants and entry/exit hooks: yes (see above)
 - That research asked the halt question as a **binding** contract (each continuous control-stream binding declaring an `onHaltAction`, Part 2), while the owner's decisions above place the halt action and its clean-up in the **specification** (state exit actions). Where a binding says how a halt reaches the system's control stream is not decided.
 - That research also asked whether invariants are evaluated on every incoming observation or at a declared tick rate. This is **still open**.
 - Research examples use a parent state type named `"mode"`; no name is adopted.
+
+## CEL pin chosen: v0.26.0, 2026-11-10 (later)
+
+Asked which CEL specification release to name. The Architect recommended `v0.25.3` (three months old; `v0.26.0` was a day old). The owner **chose a different option: `v0.26.0`**.
+
+| Item | Value |
+|---|---|
+| Source | `github.com/google/cel-spec` (public; looked up via the GitHub API on 2026-11-10; the repository has no 1.0 release, only `v0.x` tags) |
+| Pinned release | tag `v0.26.0`, published 2026-11-09 |
+| Tag commit | `21ec6f4e52e8d694687ff9ed7408d3eccbb955d7` |
+| Previous releases | `v0.25.3` (2026-08-13, `ba58ae5007845f3a1279b488cdeb79645ce958bb`), `v0.25.2` (2026-05-08) |
+
+- **Decided:** the standard names CEL `v0.26.0` as its pinned edition, the **tenth normative reference** (the owner's named pin). It is not an OGC, W3C or ISO standard.
+- **Risks noted (not accepted or rejected by the owner beyond the choice):** the release was one day old when chosen, so problems with it would not yet be visible; the Architect has not read what changed between `v0.25.3` and `v0.26.0`; the project is pre-1.0, so later releases may break conditions written against this one; the tag commit is itself a 2026-10-27 commit ("Add conformance tests for NaN and -0.0 comparisons"), about two weeks before the tag was published.
+- **Not decided (still open):** the exact way the pin is worded in the normative-references clause; whether CEL's type checking is required before a run; the re-pin policy. Nothing normative is drafted.
+
+## Invariant timing: each new observation, 2026-11-10 (later)
+
+Asked when a state's invariant is checked while the state is active. The owner chose **each new observation** (recommendation followed; reasons given: no extra setting, cannot miss a change, testable).
+
+- **Decided:** an invariant is checked whenever a new observation relevant to it arrives while the state is active.
+- **Not decided (still open):** what "relevant" means (which observations trigger which invariant); whether it is also checked on entry to the state; a stale-data rule for an invariant on a silent sensor (not handled by this decision); how an executor that receives observations in batches or out of order behaves; names and wording. Nothing normative is drafted.
+
+## Invariant checked on entry, 2026-11-10 (later)
+
+Asked whether an invariant is also checked when its state is entered. The owner chose **yes, check on entry** (recommendation followed; reason given: closes the gap where a state starts in an unsafe condition and is not noticed until the next observation).
+
+- **Decided:** on entering a state, its invariants are checked against the latest observations before the state does anything else; a broken invariant triggers its declared response at once.
+- **Not decided (still open):** the order relative to the state's entry actions (the wording above says "before the state does anything else", which would put the check before entry actions; not confirmed as the owner's intent); what the "latest observation" is when none has arrived yet (is the invariant true, false or unknown?); whether a response triggered on entry still runs the state's exit actions; names and wording. Nothing normative is drafted.
+
+## Invariant with no data counts as broken, 2026-11-10 (later)
+
+Asked how an invariant counts on state entry when no observation has arrived yet for something it reads. The owner chose **broken until data arrives** (recommendation followed; reason given: "no evidence" should not pass as "safe" for safety limits).
+
+- **Decided:** an invariant whose inputs have no observation yet is treated as broken, so its declared response happens.
+- **Not decided (still open):** what counts as "no observation" for an input that has reported before but has gone silent (a stale-data rule: not decided here); how a specification can enter a state that depends on a slow-starting sensor (for example by declaring a response that tolerates it, or by entering the state only after the sensor reports); whether CEL's handling of missing values needs a rule; names and wording. This, together with the timing and entry decisions above, completes the invariant evaluation rules in outline. Nothing normative is drafted.
