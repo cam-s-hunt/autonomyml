@@ -1,0 +1,8 @@
+[core]
+project_name = "autonomyml-standard"
+output_folder = "{project-root}/_bmad-output"
+
+[modules.ogcspec]
+ogc_doctype = "standard"
+gate_config_path = "ogcspec.gate.toml"
+decisions_dir = "docs/decisions"

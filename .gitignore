@@ -2,3 +2,11 @@ node_modules
 .DS_Store
 dist
 *:Zone.Identifier
+
+# BMAD / ogcspec generated files (config.toml and _bmad/custom are shared)
+.claude/skills/
+skills-lock.json
+_bmad/scripts/
+_bmad/*/scripts/
+_bmad-output/
+build/
