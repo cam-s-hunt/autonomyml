@@ -987,3 +987,51 @@ Asked who connects the names in a specification (datastreams, command status) to
 
 - **Decided (direction):** the capability specification uses its own local names for the data it reads (with the field path and maximum age declared next to each) and for the commands it sends; the capability binding maps each local name to a real datastream or control stream of one system. This keeps the accepted "capability specification" Note 2 (not tied to a particular system) true, and the accepted "capability binding" wording (which ties a specification to a system) is its home.
 - **Not decided (still open):** that a binding must supply every name a specification declares, and what a missing or mismatched one means (conformance rules); whether a binding may also override or add anything else (maximum age, for example); whether the accepted "capability binding" wording needs a Note on this; the names of the fields. Nothing normative is drafted.
+
+## Halt clean-up limit: declared per exit action, 2026-11-12
+
+Asked what "overruns" means in the halt rule and who sets the limit. The owner chose **declared per exit action** (recommendation followed; alternatives were one limit per specification, and a limit set by the binding or the platform).
+
+- **Decided (direction):** each exit action declares its own time limit; a clean-up overruns when an exit action exceeds its limit, and the run then ends in fail. The standard fixes no number. A specification whose exit action omits a limit does not conform.
+- **Consequence:** with nested states, exit actions run in sequence (innermost first), so the total clean-up time is the sum of their limits. The accepted "halt" and "terminal state" Notes ("fail if it does not") stand unchanged.
+- **Not decided (still open):** the field name; whether the limit applies to exit actions run on an ordinary transition as well as on a halt (not decided; the wording above is about halt); whether a cap on the total can also be declared; the clock used to measure the limit; what a halt does to an entry action still running; the second halt, recorded cause, restart, behavior-tree halting and Connected Systems API mapping questions. Nothing normative is drafted.
+
+## Second halt: ignored, 2026-11-12
+
+Asked what an executor does when a second halt arrives during clean-up. The owner chose **ignore it; clean-up continues** (recommendation followed; alternatives were a second halt that abandons clean-up, and a rule declared by each specification).
+
+- **Decided (direction):** a halt received while an earlier halt's clean-up is running changes nothing. The exit actions continue within their declared limits and the run ends in halted or fail as already decided.
+- **Risk noted:** an operator cannot force a faster stop through the standard; the per-exit-action limits are the only backstop. The standard does not say whether the executor reports that it received the second halt.
+- **Not decided (still open):** whether the second halt is recorded or reported; a halt that arrives while an entry action or a state's behavior is still running (assumed to be a first halt, not decided how it interrupts); the recorded cause, restart, behavior-tree halting and Connected Systems API mapping questions. Nothing normative is drafted.
+
+## Recorded cause: ending plus cause, 2026-11-12
+
+Asked whether a run must record why it ended. The owner chose **record ending plus cause** (recommendation followed; alternatives were the ending only, and leaving it to the platform).
+
+- **Decided (direction):** every run records its ending and a cause. For fail, the cause is a reference to the invariant, exit action or command (by its name in the specification) that led to it; for halted, that a halt was issued and when. The cause is a reference to a named item, not free text.
+- **Consequence:** the names of invariants, actions and commands in a specification must be unique within it, so a cause can point at one. That uniqueness rule is not yet decided.
+- **Not decided (still open):** where the record is kept and its format (the Connected Systems API's own status or observation is a likely home; not decided); how it ties to PROV-O (pinned; mapping not decided); whether the identity of whoever issued a halt is recorded (the standard says nothing about authority, so probably not; not decided); the cause for a fail that does not come from one of those items; restart, behavior-tree halting and the Connected Systems API mapping. Nothing normative is drafted.
+
+## Restart: a new run starts fresh, 2026-11-12
+
+Asked whether a run that ended in halted or fail can be restarted or resumed. The owner chose **no; a new run starts fresh** (recommendation followed; alternatives were resuming from where it halted, and leaving it undefined).
+
+- **Decided (direction):** a run that has ended stays ended. Trying again is a new run: it begins at the declared initial state and has its own ending and cause. Nothing is carried over. Resuming from where a halt happened is a possible later extension.
+- **Consequence for accepted wording:** "terminal state" Note 3 ("Whether a halted or failed run may be restarted is not defined here") is now answered; whether it is reworded or removed is not decided. The no-transition-leaves-a-terminal-state wording stands.
+- **Not decided (still open):** who or what starts a new run and how (a start instruction is not defined; "halt" is, "start" is not); whether a new run may begin while the previous run's clean-up is still running (likely not; not decided); behavior-tree halting; the Connected Systems API mapping. Nothing normative is drafted.
+
+## Ending mapping to API command status: state it, 2026-11-12
+
+Asked how the three endings relate to the Connected Systems API command status codes. The owner chose **state the mapping** (recommendation followed; alternatives were leaving it to the binding, and not mapping).
+
+- **Decided (direction):** the standard states that, wherever a run's outcome is reported through the API's command status, succeed is reported as COMPLETED, fail as FAILED, and halted as CANCELED.
+- **Risks noted (not resolved):** (1) the API text read defines CANCELED as cancellation "by an authorized user", while the standard says nothing about who may halt, so a halt issued by the platform itself may not fit the API's own reading; (2) the mapping applies only when a run is reported as a command, which depends on a decision not yet made (how a run is started and reported); (3) the text read was a 2026-09-21 clone, not the pinned v1.0; the exact codes and definitions must be re-read against the pinned text before any wording.
+- **Not decided (still open):** how a run is started and reported (as a command or otherwise); the wording of the mapping; behavior-tree halting. This closes the Connected Systems API mapping question listed under the halt decisions, in outline. Nothing normative is drafted.
+
+## Starting a run: a run is a command, 2026-11-12
+
+Asked how a run is started and reported. The owner chose **a run is a command** (recommendation followed; alternatives were a start instruction defined by the standard, and leaving it to the platform).
+
+- **Decided (direction):** starting a run is a command sent to the executor's control stream, naming the capability specification (and binding) to run. The command's status reports progress and the ending, using the mapping decided above (succeed as COMPLETED, fail as FAILED, halted as CANCELED). A halt is the API's cancel of that command. This makes the ending mapping apply to every run.
+- **Consequences:** the executor exposes a control stream; the standard must say what the start command's parameters are. The accepted "halt" wording ("issued to an executor from outside a run") stands; "who may halt" stays with the platform. The risk noted under the mapping (CANCELED means "by an authorized user") is now live for every halt.
+- **Not decided (still open):** the parameters of the start command; how a system that cannot use the API runs a specification (a wrapping binding is the assumed route; not decided); whether more than one run may be active on one executor at once; whether a new run may start while a previous run's clean-up is running; the parameters of the halt (the API's cancel); the cause record's home (the command status is now a likely place; not decided). Nothing normative is drafted.
