@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/kind
+status: proposed
+statement: A state SHALL have exactly one kind, which is command, mode, behavior tree or terminal.

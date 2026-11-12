@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/initial
+status: proposed
+target: /req/specification/initial
+purpose: Verify that a state machine names exactly one of its states as its initial state.
+steps:
+  - Identify the states of the state machine.
+  - Check that exactly one of them is named as the initial state of the state machine.

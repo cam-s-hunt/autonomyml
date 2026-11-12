@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/mode-initial
+status: proposed
+statement: A state of kind mode SHALL name exactly one of its child states as its initial state.

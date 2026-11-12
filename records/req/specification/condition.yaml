@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/condition
+status: proposed
+statement: A transition SHALL state a condition.

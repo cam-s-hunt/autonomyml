@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification/ending
+status: proposed
+target: /req/specification/ending
+purpose: Verify that each state of kind terminal states its ending, which is succeed or fail.
+steps:
+  - Identify each state of kind terminal.
+  - For each, check that it states an ending.
+  - Check that the ending is succeed or fail.

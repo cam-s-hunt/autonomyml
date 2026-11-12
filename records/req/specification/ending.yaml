@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/ending
+status: proposed
+statement: A state of kind terminal SHALL state its ending, which is succeed or fail.

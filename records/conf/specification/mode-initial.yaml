@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/mode-initial
+status: proposed
+target: /req/specification/mode-initial
+purpose: Verify that each state of kind mode names exactly one of its child states as its initial state.
+steps:
+  - Identify each state of kind mode.
+  - For each, check that exactly one of its child states is named as its initial state.

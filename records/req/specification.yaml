@@ -1,0 +1,19 @@
+# PROPOSED. Identifier /req/specification is the Architect's proposal; none is assigned.
+# Abstract requirements for a capability specification (decision 4.7: the JSON encoding is a separate class).
+# Inherits /req/core directly because ogcspec.gate.toml sets core_dependency = "direct" (M012), and /req/document for the shared rule.
+kind: requirements_class
+id: /req/specification
+title: Capability specification
+status: proposed
+subject: Capability specification
+inherit:
+  - /req/core
+  - /req/document
+requirements:
+  - /req/specification/initial
+  - /req/specification/mode-initial
+  - /req/specification/kind
+  - /req/specification/ending
+  - /req/specification/terminal-exit
+  - /req/specification/condition
+  - /req/specification/target

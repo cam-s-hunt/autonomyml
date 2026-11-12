@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/target
+status: proposed
+statement: A transition SHALL state a target, which is a state of the same state machine.

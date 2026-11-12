@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/initial
+status: proposed
+statement: A capability specification that defines a state machine SHALL name exactly one of the states of that state machine as its initial state.

@@ -1,0 +1,13 @@
+kind: conformance_class
+id: /conf/specification
+title: Capability specification
+status: proposed
+target: /req/specification
+tests:
+  - /conf/specification/initial
+  - /conf/specification/mode-initial
+  - /conf/specification/kind
+  - /conf/specification/ending
+  - /conf/specification/terminal-exit
+  - /conf/specification/condition
+  - /conf/specification/target

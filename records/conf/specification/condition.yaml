@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/condition
+status: proposed
+target: /req/specification/condition
+purpose: Verify that each transition states a condition.
+steps:
+  - Identify each transition.
+  - For each, check that it states a condition.

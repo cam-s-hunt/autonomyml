@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification/kind
+status: proposed
+target: /req/specification/kind
+purpose: Verify that each state has exactly one kind, which is command, mode, behavior tree or terminal.
+steps:
+  - Identify each state.
+  - For each, check that it has exactly one kind.
+  - Check that the kind is command, mode, behavior tree or terminal.

@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification/target
+status: proposed
+target: /req/specification/target
+purpose: Verify that each transition states a target that is a state of the same state machine.
+steps:
+  - Identify each transition.
+  - For each, check that it states a target.
+  - Check that the target is a state of the same state machine.

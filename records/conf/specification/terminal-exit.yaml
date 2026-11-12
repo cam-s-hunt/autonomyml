@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/terminal-exit
+status: proposed
+target: /req/specification/terminal-exit
+purpose: Verify that no transition leaves a state of kind terminal.
+steps:
+  - Identify each state of kind terminal.
+  - For each, check that no transition leaves it.
