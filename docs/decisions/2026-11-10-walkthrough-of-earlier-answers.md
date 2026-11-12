@@ -1108,3 +1108,20 @@ While preparing a question on behavior-tree halting, the Architect found a gap: 
 - **Keeps unchanged:** decision 4.6 (document shape only) and every accepted definition. Behavior-tree halting stays deferred (as on 2026-11-10), now with a stated home.
 - **Risks noted:** a claim that an executor "runs behavior trees" means little until the dialect is written; a core executor need not support one of the four kinds of state; how a state machine that contains a behavior-tree state behaves on an executor that does not claim the class (the start check rejecting it is the likely answer, not decided).
 - **Not decided (still open):** what the conformance class contains and when it is written; the dialect (node types, statuses, evaluation, endings, halting); whether the start check rejects a specification using a behavior tree on an executor without the class; whether BehaviorTree.CPP and Nav2 become normative then (decision 2.2 is "informative for now, revisit"). Nothing normative is drafted.
+
+## Invariant scope in nested states: parent's and child's both, 2026-11-12
+
+Asked which invariants are checked while a child state inside a mode is active. The owner chose **parent's and child's both** (recommendation followed; alternatives were the child's own only, and the specification choosing per invariant).
+
+- **Decided (direction):** while a child is active, the invariants of the child and of every parent above it are checked, each under the rules already decided (each new observation, on entry, no data counts as broken). A parent's invariant therefore covers all its children without being copied into each.
+- **Consequence:** when a parent's invariant breaks, its declared response is followed from inside the child, so the permitted responses must cover that case (a transition out of the parent, or a named target); the list of permitted responses is **still undecided**. On entry to a child, the invariants of newly entered parents are checked as well (the order is the one decided: exit, enter, then check).
+- **Not decided (still open):** the permitted responses; whether a parent's response leaves only the child or the whole parent (assumed to leave the parent, not decided); whether a terminal state may sit inside a mode. Nothing normative is drafted.
+
+## Invariant response: go to a named state, 2026-11-12
+
+Asked what an invariant's declared response may be. The owner chose **go to a named state** (recommendation followed; alternatives were a fixed list of "go to a state" or "fail the run", and a state plus actions).
+
+- **Decided (direction):** a response names one target state, and the executor makes a transition to it in the usual order (exit, enter, then check). To end the run, the target is a terminal state with ending fail; to recover, it is a state whose entry actions do the recovery. A response carries no actions of its own. For a parent's invariant, the target is outside the parent, so the whole parent is left, children first.
+- **Closes:** "the list of permitted responses" (left open under "Invariant must declare a response", 2026-11-10).
+- **Consequence:** an author who wants "fail now" must declare a terminal fail state to point at. A response whose target is missing from the specification, or lies inside the state that breaks, does not conform (assumed; not decided).
+- **Not decided (still open):** whether a target inside the parent that owns the invariant is allowed (assumed not); what happens if the target's own invariants are already broken on entry (a loop between states is possible; a rule against it is not decided); whether the response's transition counts as a transition for the "condition or time limit" wording (assumed it does not need one; not decided); the field name. Nothing normative is drafted.
