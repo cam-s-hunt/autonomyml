@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/max-age
+status: proposed
+statement: A datastream SHALL state its maximum age in its member named `maxAge`, a SWE Common Quantity whose unit is seconds.

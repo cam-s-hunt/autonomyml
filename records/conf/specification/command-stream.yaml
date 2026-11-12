@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification/command-stream
+status: proposed
+target: /req/specification/command-stream
+purpose: Verify that each state or action that sends a command names a declared control stream.
+steps:
+  - Identify each state and each action that sends a command.
+  - For each, check that it names a control stream.
+  - Check that the control stream is declared by the capability specification.

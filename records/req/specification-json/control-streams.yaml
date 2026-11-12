@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/control-streams
+status: proposed
+statement: A capability specification SHALL declare its control streams in the top-level member named `controlStreams`, an array of strings, each the local name of a control stream.

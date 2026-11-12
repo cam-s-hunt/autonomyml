@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/units
+status: proposed
+target: /req/specification/units
+purpose: Verify that the unit expected is stated for each quantity that a condition reads.
+steps:
+  - Identify each quantity that a condition of the capability specification reads.
+  - Check that the unit expected is stated for it.

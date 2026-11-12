@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/specification-json/field-unit-or-size
+status: proposed
+target: /req/specification-json/field-unit-or-size
+purpose: Verify that each declared field has exactly one of a member named `uom` and a member named `maxSize`.
+steps:
+  - Identify each declared field.
+  - For each, check that it has exactly one of a member named `uom` and a member named `maxSize`.
+  - Check that the value of `uom`, where present, is a SWE Common unit reference.
+  - Check that the value of `maxSize`, where present, is a positive whole number.

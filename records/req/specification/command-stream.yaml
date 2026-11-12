@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/command-stream
+status: proposed
+statement: A state or an action that sends a command SHALL name a control stream that the capability specification declares.

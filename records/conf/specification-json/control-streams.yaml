@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/control-streams
+status: proposed
+target: /req/specification-json/control-streams
+purpose: Verify that a capability specification declares its control streams in the top-level member named `controlStreams`.
+steps:
+  - Locate the top-level member named `controlStreams` of the capability specification.
+  - Check that its value is an array of strings.
+  - Check that each string is the local name of a control stream.

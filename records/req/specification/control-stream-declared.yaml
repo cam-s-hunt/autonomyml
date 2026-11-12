@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/control-stream-declared
+status: proposed
+statement: A capability specification SHALL declare each control stream on which it sends a command, by a local name.

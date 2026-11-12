@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification/declared-only
+status: proposed
+target: /req/specification/declared-only
+purpose: Verify that each condition reads only declared datastreams and control streams.
+steps:
+  - Identify each condition of the capability specification.
+  - Identify the datastreams and control streams that it reads.
+  - Check that each is declared by the capability specification.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/field-unit-or-size
+status: proposed
+statement: A field SHALL have exactly one of a member named `uom`, whose value is a SWE Common unit reference, and a member named `maxSize`, whose value is a positive whole number.

@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/specification-json/max-age
+status: proposed
+target: /req/specification-json/max-age
+purpose: Verify that each declared datastream states its maximum age in its member named `maxAge`.
+steps:
+  - Identify each declared datastream.
+  - For each, locate its member named `maxAge`.
+  - Check that its value is a SWE Common Quantity.
+  - Check that the unit of the Quantity is seconds.

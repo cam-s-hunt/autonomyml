@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/field-path
+status: proposed
+target: /req/specification-json/field-path
+purpose: Verify that each declared field states its path in its member named `path`.
+steps:
+  - Identify each declared field.
+  - For each, locate its member named `path`, unless the result is a single scalar value.
+  - Check that its value is a string of the names of nested fields joined by dots.

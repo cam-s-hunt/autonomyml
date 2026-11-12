@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/declared-only
+status: proposed
+statement: A condition SHALL read only datastreams and control streams that the capability specification declares.

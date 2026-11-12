@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/fields
+status: proposed
+statement: A datastream that has fields to declare SHALL state them in its member named `fields`, an array of objects.

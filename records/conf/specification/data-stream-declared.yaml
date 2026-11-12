@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/data-stream-declared
+status: proposed
+target: /req/specification/data-stream-declared
+purpose: Verify that each datastream read by a condition is declared by a local name.
+steps:
+  - Identify each datastream that a condition of the capability specification reads.
+  - Check that the capability specification declares it by a local name.

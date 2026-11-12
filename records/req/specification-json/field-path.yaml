@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/field-path
+status: proposed
+statement: A field SHALL state its path in a member named `path`, a string of the names of nested fields joined by dots, except where the result is a single scalar value.

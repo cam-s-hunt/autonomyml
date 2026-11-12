@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/control-stream-declared
+status: proposed
+target: /req/specification/control-stream-declared
+purpose: Verify that each control stream on which a command is sent is declared by a local name.
+steps:
+  - Identify each control stream on which the capability specification sends a command.
+  - Check that the capability specification declares it by a local name.

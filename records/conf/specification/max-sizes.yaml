@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/max-sizes
+status: proposed
+target: /req/specification/max-sizes
+purpose: Verify that a maximum size is stated for each array, matrix or stream that a condition reads.
+steps:
+  - Identify each array, matrix or stream that a condition of the capability specification reads.
+  - Check that a maximum size is stated for it.

@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/fields
+status: proposed
+target: /req/specification-json/fields
+purpose: Verify that each datastream that has fields to declare states them in its member named `fields`.
+steps:
+  - Identify each declared datastream that has fields to declare.
+  - For each, locate its member named `fields`.
+  - Check that its value is an array of objects.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/units
+status: proposed
+statement: A capability specification SHALL state the unit expected for each quantity that its conditions read.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/max-age
+status: proposed
+statement: A capability specification SHALL state a maximum age for each datastream that it declares.

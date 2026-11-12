@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/data-streams
+status: proposed
+statement: A capability specification SHALL declare its datastreams in the top-level member named `dataStreams`, an object whose members are the datastreams, each member named with the local name of its datastream.

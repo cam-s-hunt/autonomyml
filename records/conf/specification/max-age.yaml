@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/max-age
+status: proposed
+target: /req/specification/max-age
+purpose: Verify that a maximum age is stated for each declared datastream.
+steps:
+  - Identify each datastream that the capability specification declares.
+  - Check that a maximum age is stated for it.

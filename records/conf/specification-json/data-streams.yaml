@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/data-streams
+status: proposed
+target: /req/specification-json/data-streams
+purpose: Verify that a capability specification declares its datastreams in the top-level member named `dataStreams`.
+steps:
+  - Locate the top-level member named `dataStreams` of the capability specification.
+  - Check that its value is an object.
+  - Check that each member of the object is a datastream, named with the local name of that datastream.

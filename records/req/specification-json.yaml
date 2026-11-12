@@ -18,3 +18,9 @@ requirements:
   - /req/specification-json/mode-members
   - /req/specification-json/ending
   - /req/specification-json/transitions
+  - /req/specification-json/data-streams
+  - /req/specification-json/max-age
+  - /req/specification-json/fields
+  - /req/specification-json/field-path
+  - /req/specification-json/field-unit-or-size
+  - /req/specification-json/control-streams
