@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification-json/version
+status: proposed
+target: /req/specification-json/version
+purpose: Verify that the version of a capability specification is stated in the top-level member named `version`.
+steps:
+  - Locate the top-level member named `version` of the capability specification.
+  - Check that the member is present.

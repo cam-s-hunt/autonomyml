@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/document/version
+status: proposed
+target: /req/document/version
+purpose: Verify that a document states its version as a text value.
+steps:
+  - Locate the statement of the version in the document.
+  - Check that the document states a version.
+  - Check that the version is a text value.

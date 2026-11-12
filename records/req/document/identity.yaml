@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/document/identity
+status: proposed
+statement: A document SHALL state its identity as a URI as defined by RFC 3986.

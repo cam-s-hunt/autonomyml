@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/binding-json/specification
+status: proposed
+statement: A capability binding SHALL state the capability specification it applies to in the top-level member named `specification`, an object whose members `href`, `uniqueId` and `version` are each stated.

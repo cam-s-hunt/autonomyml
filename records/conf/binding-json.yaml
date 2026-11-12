@@ -1,0 +1,11 @@
+kind: conformance_class
+id: /conf/binding-json
+title: Capability binding in JSON
+status: proposed
+target: /req/binding-json
+tests:
+  - /conf/binding-json/json-text
+  - /conf/binding-json/identity
+  - /conf/binding-json/version
+  - /conf/binding-json/specification
+  - /conf/binding-json/system

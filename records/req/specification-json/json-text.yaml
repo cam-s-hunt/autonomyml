@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/json-text
+status: proposed
+statement: A capability specification SHALL be a JSON text, as defined by RFC 8259, whose top-level value is an object.

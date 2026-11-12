@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/binding-json/version
+status: proposed
+statement: The version of a capability binding SHALL be stated in the top-level member named `version`.

@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/binding-json/system
+status: proposed
+target: /req/binding-json/system
+purpose: Verify that a capability binding states the system it is for, as a URI, in the top-level member named `system`.
+steps:
+  - Locate the top-level member named `system` of the capability binding.
+  - Check that the member is present.
+  - Check that its value is a URI as defined by RFC 3986.

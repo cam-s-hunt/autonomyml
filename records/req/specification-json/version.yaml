@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/version
+status: proposed
+statement: The version of a capability specification SHALL be stated in the top-level member named `version`.

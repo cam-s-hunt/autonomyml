@@ -1,0 +1,8 @@
+kind: conformance_class
+id: /conf/document
+title: Document
+status: proposed
+target: /req/document
+tests:
+  - /conf/document/identity
+  - /conf/document/version

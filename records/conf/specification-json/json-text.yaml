@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/json-text
+status: proposed
+target: /req/specification-json/json-text
+purpose: Verify that a capability specification is a JSON text, as defined by RFC 8259, whose top-level value is an object.
+steps:
+  - Parse the capability specification as a JSON text as defined by RFC 8259.
+  - Check that it parses without error.
+  - Check that the top-level value is an object.

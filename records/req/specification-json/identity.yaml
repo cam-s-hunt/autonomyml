@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/identity
+status: proposed
+statement: The identity of a capability specification SHALL be stated in the top-level member named `uniqueId`.

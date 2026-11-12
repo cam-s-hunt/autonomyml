@@ -1,9 +1,9 @@
-# PROPOSED, EMPTY. The identifier /req/core is the one named in ogcspec.gate.toml. The owner has not yet decided
-# what the core class is about, so `subject` is a placeholder and must be replaced; the class lists no requirements yet.
+# PROPOSED, EMPTY. The identifier /req/core is the one named in ogcspec.gate.toml. The subject was chosen by the owner
+# on 2026-11-12 ("Implementation of the standard"); the term "implementation" is not yet defined. No requirements yet.
 kind: requirements_class
 id: /req/core
 title: Core
 status: proposed
-subject: TO BE DECIDED BY THE OWNER
+subject: Implementation of the standard
 inherit: []
 requirements: []

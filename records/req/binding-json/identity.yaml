@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/binding-json/identity
+status: proposed
+statement: The identity of a capability binding SHALL be stated in the top-level member named `uniqueId`.

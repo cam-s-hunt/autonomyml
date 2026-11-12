@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/binding-json/system
+status: proposed
+statement: A capability binding SHALL state the system it is for, as a URI as defined by RFC 3986, in the top-level member named `system`.

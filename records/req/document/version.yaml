@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/document/version
+status: proposed
+statement: A document SHALL state its version as a text value.

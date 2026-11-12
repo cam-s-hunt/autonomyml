@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/document/identity
+status: proposed
+target: /req/document/identity
+purpose: Verify that a document states its identity as a URI as defined by RFC 3986.
+steps:
+  - Locate the statement of the identity in the document.
+  - Check that the document states an identity.
+  - Check that the identity is a URI as defined by RFC 3986.

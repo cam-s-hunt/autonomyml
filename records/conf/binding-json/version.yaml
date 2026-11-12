@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/binding-json/version
+status: proposed
+target: /req/binding-json/version
+purpose: Verify that the version of a capability binding is stated in the top-level member named `version`.
+steps:
+  - Locate the top-level member named `version` of the capability binding.
+  - Check that the member is present.

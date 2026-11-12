@@ -1,0 +1,11 @@
+# PROPOSED. Identifier /req/document is the Architect's proposal; none is assigned. The term "document" is not yet defined.
+kind: requirements_class
+id: /req/document
+title: Document
+status: proposed
+subject: Document
+inherit:
+  - /req/core
+requirements:
+  - /req/document/identity
+  - /req/document/version

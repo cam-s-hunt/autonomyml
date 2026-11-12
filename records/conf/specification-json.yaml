@@ -1,0 +1,9 @@
+kind: conformance_class
+id: /conf/specification-json
+title: Capability specification in JSON
+status: proposed
+target: /req/specification-json
+tests:
+  - /conf/specification-json/json-text
+  - /conf/specification-json/identity
+  - /conf/specification-json/version

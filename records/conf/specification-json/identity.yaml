@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification-json/identity
+status: proposed
+target: /req/specification-json/identity
+purpose: Verify that the identity of a capability specification is stated in the top-level member named `uniqueId`.
+steps:
+  - Locate the top-level member named `uniqueId` of the capability specification.
+  - Check that the member is present.
