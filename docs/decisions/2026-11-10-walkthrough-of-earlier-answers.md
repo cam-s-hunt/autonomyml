@@ -323,3 +323,574 @@ Asked how an invariant counts on state entry when no observation has arrived yet
 
 - **Decided:** an invariant whose inputs have no observation yet is treated as broken, so its declared response happens.
 - **Not decided (still open):** what counts as "no observation" for an input that has reported before but has gone silent (a stale-data rule: not decided here); how a specification can enter a state that depends on a slow-starting sensor (for example by declaring a response that tolerates it, or by entering the state only after the sensor reports); whether CEL's handling of missing values needs a rule; names and wording. This, together with the timing and entry decisions above, completes the invariant evaluation rules in outline. Nothing normative is drafted.
+
+## Draft wording for "state" chosen, 2026-11-10 (later)
+
+Asked which of two drafts to take forward as the proposed wording for the definition of **state** (decision 3.6, direction: control mode of an automaton). The owner chose **draft A, definition plus two notes** (recommendation followed). This is the chosen **draft**; it has **not been marked accepted as final wording** (see "How to read this" below).
+
+> **state**: control mode of an automaton, declared by a capability specification, in which an executor performs the behavior that the kind of the state prescribes.
+>
+> NOTE 1  A state is not the condition of a system or of its environment (system state), and is not the status returned by a behavior-tree node.
+>
+> NOTE 2  The kinds of state are defined in the requirements class for capability specifications. *(Kinds not yet decided.)*
+
+- **Not decided (still open):** which kinds of state exist (the six example types, plus whatever the halt and invariant decisions add); how many states can be active at once (nested or parallel states); whether "executor" and "capability specification" are defined first, since this definition depends on both; final acceptance of the wording; its mapping to the ontology (control mode of an automaton; the ontology notes section 3 says wording is the owner's).
+- **How to read this:** the Architect proposes wording and the owner picks; a definition counts as accepted only when the owner says so in these terms. Terms this draft depends on: capability specification, executor, automaton (not yet defined).
+
+## "state" wording accepted for now, 2026-11-10 (later)
+
+Asked whether draft A is accepted as the final wording. The owner chose **accept for now** (recommendation followed): the wording above is **accepted**, **subject to** the terms it depends on (capability specification, executor, automaton) being defined; if any of them changes, the definition comes back to the owner. It is recorded here only; no normative file contains it.
+
+- **Still open for this term:** the kinds of state; how many states are active at once; the ontology mapping.
+
+## Draft wording for "capability specification" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **capability specification** (decisions 3.3 and 3.4: a specification is a document; a capability is a behavior defined by a specification). The owner chose **draft A** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **capability specification**: document that defines a behavior as a state machine or a behavior tree.
+>
+> NOTE 1  The behavior defined by a capability specification is the capability. *(Depends on whether bare "capability" is defined; undecided.)*
+>
+> NOTE 2  A capability specification is not tied to a particular system; a capability binding ties it to one.
+
+- **Not decided (still open):** what the document must contain (interface, postconditions, other content: left to the requirements, and reported as a gap); whether bare "capability" is defined; the definition of "capability binding" that Note 2 relies on; the "state machine" and "behavior tree" terms; final acceptance.
+
+## "capability specification" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept for now** for draft A of **capability specification** (recommendation followed). Accepted wording, recorded here only, **subject to** "capability binding", "state machine", "behavior tree" and bare "capability" being defined; it comes back to the owner if one of them changes. No normative file contains it.
+
+## Draft wording for "executor" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **executor** (decision 3.5: defined by what it does, not where it runs). The owner chose **draft A** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **executor**: system that runs a capability specification, by entering and leaving its states or by evaluating its behavior tree.
+>
+> NOTE 1  The definition says nothing about where an executor runs.
+>
+> NOTE 2  Requirements on how an executor runs a capability specification are in the requirements class for executors.
+
+- **Not decided (still open):** acceptance; the ontology mapping (software and virtual systems count as systems; behavior as information carried by the executing system); whether the "system" in the wording needs its own definition (SOSA/SSN `System` is the working approach); what an executor must do (state changes, halt, provenance: executor requirements class, nearly empty for now).
+
+## "executor" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept for now** for draft A of **executor** (recommendation followed). Accepted wording, recorded here only, **subject to** "system", "state machine" and "behavior tree" being defined. No normative file contains it.
+
+## "automaton" replaced by "state machine" in the definitions, 2026-11-10 (later)
+
+Asked how to handle the word "automaton", on which the accepted "state" wording depends. The owner chose **replace it with "state machine"** (recommendation followed): the standard's definitions use "state machine", which the document kinds already use; "automaton" stays as the mapping term in the ontology notes only.
+
+- **Decided (direction):** no term "automaton" in the standard's definitions. The accepted wording of **state** is therefore reopened: it is to say "control mode of a state machine", and **state machine** needs a definition. Neither new wording is drafted or accepted yet.
+- **Status of "state":** the accepted wording above stands only until the revised wording is accepted.
+
+## Draft wording for "state" (revised) and "state machine" chosen, 2026-11-10 (later)
+
+Asked whether to take forward a pair: "state" with "automaton" replaced, and a new draft for "state machine". The owner chose the **pair as offered (recommended option, with the initial-state wording included)**. Chosen drafts, **not yet accepted as final**:
+
+> **state**: control mode of a state machine, declared by a capability specification, in which an executor performs the behavior that the kind of the state prescribes.
+>
+> NOTE 1  A state is not the condition of a system or of its environment (system state), and is not the status returned by a behavior-tree node.
+>
+> NOTE 2  The kinds of state are defined in the requirements class for capability specifications. *(Kinds not yet decided.)*
+>
+> **state machine**: behavior defined as a set of states and the transitions between them, of which exactly one state is active at the start of a run, and which ends in a terminal state.
+>
+> NOTE  A state machine is one of the two kinds of behavior a capability specification can define; the other is a behavior tree.
+
+**Flagged by the Architect:** the phrase "exactly one state is active at the start of a run" is **the Architect's guess**; the owner never decided an initial-state rule, and it may conflict with nested or parallel states (undecided). The owner chose the offer that includes it, so it stands here as a draft, to be confirmed or removed when accepting.
+
+- **Not decided (still open):** acceptance of both wordings; "transition" and "terminal state" definitions (the latter now has three endings); the initial-state rule; nested and parallel states; the ontology wording.
+
+## "state" and "state machine" wordings accepted for now, 2026-11-10 (later)
+
+The owner chose **accept, without the guessed phrase** (recommendation followed). Accepted wording, recorded here only (no normative file contains it); it replaces the earlier accepted "state" wording that used "automaton":
+
+> **state**: control mode of a state machine, declared by a capability specification, in which an executor performs the behavior that the kind of the state prescribes.
+>
+> NOTE 1  A state is not the condition of a system or of its environment (system state), and is not the status returned by a behavior-tree node.
+>
+> NOTE 2  The kinds of state are defined in the requirements class for capability specifications. *(Kinds not yet decided.)*
+>
+> **state machine**: behavior defined as a set of states and the transitions between them, which ends in a terminal state.
+>
+> NOTE  A state machine is one of the two kinds of behavior a capability specification can define; the other is a behavior tree.
+
+The phrase "of which exactly one state is active at the start of a run" is **removed**; the initial-state rule is still open. Accepted **subject to** "transition", "terminal state" and "behavior tree" being defined (the first two are used here but not yet defined); the wording comes back to the owner if one of them changes.
+
+**Accepted definitions so far (all recorded in this file only):** capability specification, executor, state, state machine. **Not yet drafted:** behavior tree, capability binding, transition, terminal state (three endings), postcondition, observation, bare "capability", halt action, authority and delegation terms.
+
+## Third ending named "halted", 2026-11-10 (later)
+
+Asked what to call the third ending (a run stopped from outside whose halt clean-up completed). The owner chose **halted** (recommendation followed; alternatives were "cancelled" and "stopped"). The three endings are **succeed, fail, halted**. Reason given: the action and its ending share the word "halt".
+
+- **Risks noted:** BehaviorTree.CPP uses "halt" for resetting a node to idle with no recorded ending; the Connected Systems API's matching status is CANCELED, so the standard has to state the mapping.
+- **Not decided (still open):** the exact identifier or spelling of the ending as it appears in documents (the earlier example type names are `succeed` and `fail`; whether the third is `halted` or `halt` is not decided); the definition wording; the CS API mapping. Nothing normative is drafted.
+
+## Draft wording for "terminal state" chosen, 2026-11-10 (later)
+
+Asked whether to take forward a draft for **terminal state** with the three endings. The owner chose the **draft with Notes 1 to 3** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **terminal state**: state in which a run of a state machine ends, and from which no transition leaves.
+>
+> NOTE 1  A terminal state has one ending: succeed, fail or halted.
+>
+> NOTE 2  Halted is reached only by a halt that has completed the exit actions of the active states; a halt whose exit actions fail or overrun ends in fail.
+>
+> NOTE 3  Whether a halted or failed run may be restarted is not defined here.
+
+- **Flagged by the Architect:** the definition uses the word "run", which is not yet defined; "transition" is also undefined; Note 2 repeats a requirement-like rule inside a note (the halt decisions above), so it may need moving to the requirements when they are drafted.
+- **Not decided (still open):** acceptance; "run"; "transition"; ending identifiers as they appear in documents; the restart question.
+
+## "terminal state" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept for now** for the **terminal state** draft with Notes 1 to 3 (recommendation followed). Accepted wording, recorded here only, **subject to** "run" and "transition" being defined, and coming back to the owner if either changes or if Note 2 moves into a requirement. No normative file contains it.
+
+**Accepted definitions so far (this file only):** capability specification, executor, state, state machine, terminal state. **Not yet drafted:** transition, run, behavior tree, capability binding, postcondition, observation, bare "capability", halt action, authority and delegation terms.
+
+## Draft wording for "transition" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **transition**. The owner chose **draft A, followed when its condition holds** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **transition**: directed connection from a source state to a target state of a state machine that the executor follows when a condition holds.
+>
+> NOTE 1  The condition is an expression in the language required by this standard for conditions (CEL).
+>
+> NOTE 2  Leaving the source state runs its exit actions, and entering the target state runs its entry actions. *(Order not decided.)*
+
+- **Flagged by the Architect:** the definition says every transition has a condition; whether a transition may be unconditional (for example, on completion of a state's behavior) was not decided. Note 2 states a rule inside a note and uses "runs", whose order relative to the transition and to the invariant check on entry is not decided. A transition named as the response to a broken invariant is not stated in the wording.
+- **Not decided (still open):** acceptance; unconditional transitions; events versus conditions as triggers; ordering of exit actions, the transition and entry actions; the "run" definition.
+
+## "transition" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept without Note 2** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **transition**: directed connection from a source state to a target state of a state machine that the executor follows when a condition holds.
+>
+> NOTE  The condition is an expression in the language required by this standard for conditions (CEL).
+
+Exit and entry action behavior on a transition is left to the requirements. **Still open:** whether a transition may be unconditional (if so, this wording is reopened); events versus conditions as triggers; ordering of exit actions, the transition and entry actions.
+
+**Accepted definitions so far (this file only):** capability specification, executor, state, state machine, terminal state, transition. **Not yet drafted:** run, behavior tree, capability binding, postcondition, observation, bare "capability", halt action, authority and delegation terms.
+
+## Draft wording for "run" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **run**. The owner chose **draft A, one execution from start to ending** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **run**: one execution of a capability specification by an executor, from its start until it reaches an ending.
+>
+> NOTE  An ending is succeed, fail or halted for a state machine. *(The endings of a behavior tree are not decided.)*
+
+- **Not decided (still open):** acceptance; what starts a run; whether a run can be paused, resumed or restarted; the endings of a behavior tree (the bracketed part of the note is not wording); what a run record contains (ties to the provenance requirement and the open execution-record contents).
+
+## "run" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept for now** for **run** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **run**: one execution of a capability specification by an executor, from its start until it reaches an ending.
+>
+> NOTE  An ending is succeed, fail or halted for a state machine.
+
+The behavior-tree reminder stays in this record only. **Still open:** the endings of a behavior tree; what starts a run; pause, resume and restart.
+
+**Accepted definitions so far (this file only):** capability specification, executor, state, state machine, terminal state, transition, run. **Not yet drafted:** behavior tree, capability binding, postcondition, observation, bare "capability", halt action, authority and delegation terms. Every word used in the accepted definitions is now defined except "behavior tree" (used in capability specification, executor, state and the state machine note) and "system".
+
+## Draft wording for "behavior tree" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **behavior tree** (decision 4.6: document-level shape only; no node semantics). The owner chose **draft A, rooted tree of nodes returning a status** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **behavior tree**: behavior defined as a rooted tree of nodes, each of which returns a status when the executor evaluates it.
+>
+> NOTE  The node types, the statuses and the rules for evaluating a tree are not defined by this standard.
+
+**Flagged by the Architect:** the note says these are "not defined by this standard", which is stronger than the record supports. The behavior-tree dialect is **open** (an earlier answer says a dialect, if the standard has one, is the owner's to write; decision 4.6 gives document-level shape only). As normative text the note would rule a dialect out. The bracketed "dialect not decided" in the offer was a reminder, not wording.
+
+- **Not decided (still open):** acceptance; whether the note stays, is reworded to "not yet defined", or is dropped; the dialect; the endings of a behavior tree; halting a behavior tree.
+
+## "behavior tree" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept the definition, drop the note** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **behavior tree**: behavior defined as a rooted tree of nodes, each of which returns a status when the executor evaluates it.
+
+The behavior-tree dialect (node types, statuses, evaluation rules), the endings of a behavior tree and halting a behavior tree **remain open**; the definition rules none of them out.
+
+**Accepted definitions so far (this file only):** capability specification, executor, state, state machine, terminal state, transition, run, behavior tree. **Not yet drafted:** system, capability binding, postcondition, observation, bare "capability", halt action, authority and delegation terms. Words used in accepted definitions and still undefined: "system" (in executor), "behavior" (used throughout), "condition" (transition), "status" (behavior tree).
+
+## Draft wording for "capability binding" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **capability binding** (decisions 3.4 and 4.3, and the kept requirement that a specification names its stream resources symbolically). The owner chose **draft A, ties a specification to a system by mapping names** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **capability binding**: document that references a capability specification and ties it to a particular system by mapping the resources that the specification names symbolically to resources of that system.
+>
+> NOTE  A capability specification is not tied to a particular system; a capability binding ties it to one.
+
+**Flagged by the Architect:** the mapping of symbolic names to a system's resources is the Architect's **inference** from two earlier answers; the owner never stated it in these words. The word "system" is not yet defined.
+
+- **Not decided (still open):** acceptance; whether the mapping is the whole of what a binding does (for example, whether it also carries the halt contract for a control stream, which the research placed in the binding and the owner's decisions placed in the specification); how the reference to the specification is resolved; the kind of "resources" (Connected Systems API resources are the working assumption, not recorded as decided).
+
+## "capability binding" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept for now** for draft A of **capability binding** (recommendation followed), which also **confirms the mapping of symbolic names to a system's resources** as part of what a binding is. Accepted wording, recorded here only (no normative file contains it), **subject to** "system" being defined:
+
+> **capability binding**: document that references a capability specification and ties it to a particular system by mapping the resources that the specification names symbolically to resources of that system.
+>
+> NOTE  A capability specification is not tied to a particular system; a capability binding ties it to one.
+
+**Accepted definitions so far (this file only):** capability specification, capability binding, executor, state, state machine, terminal state, transition, run, behavior tree. **Not yet drafted:** system, behavior, condition, status, postcondition, observation, bare "capability", halt action, authority and delegation terms.
+
+## Draft wording for "system" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **system** (decision 3.1; working approach: SOSA/SSN `System`). The owner chose **draft A, adopt the SOSA/SSN term by reference** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **system**: system as defined in SOSA/SSN [W3C SOSA/SSN, 2017].
+>
+> NOTE 1  Software and virtual systems are systems.
+>
+> NOTE 2  A system may have other systems as components.
+
+**Checked by the Architect against the pinned text** (W3C SOSA/SSN Recommendation, 2017-10-19, `https://www.w3.org/TR/2017/REC-vocab-ssn-20171019/`, section 4.9.2.4, fetched 2026-11-10): `ssn:System` (IRI `http://www.w3.org/ns/ssn/System`) is defined as "a unit of abstraction for pieces of infrastructure that implement Procedures. A System may have components, its subsystems, which are other Systems." So Note 2 matches the source. For Note 1, the Recommendation's introductory text says the new SSN and SOSA "address this issue by allowing all major classes to be virtual" (virtual sensors, including software and simulations); the section 4.9.2.4 definition itself does not mention software. Note 1 is therefore the owner's decision 3.1, supported by that introductory text, not a statement made by the System definition. The term is `ssn:System`; `sosa:System` is the 2023 draft's IRI, per the ontology notes.
+
+- **Not decided (still open):** acceptance; whether "system as defined in SOSA/SSN" should name the class `ssn:System` explicitly; the precise citation form; the 2023 draft's differences (informative only).
+
+## "system" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept, naming `ssn:System`** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **system**: system, as defined by `ssn:System` in SOSA/SSN [W3C SOSA/SSN, 2017].
+>
+> NOTE 1  Software and virtual systems are systems.
+>
+> NOTE 2  A system may have other systems as components.
+
+Note 1 is the owner's decision 3.1, not a statement of the cited definition. This closes the dependency of **executor** and **capability binding** on an undefined "system".
+
+**Accepted definitions so far (this file only):** capability specification, capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree. **Not yet drafted:** behavior, condition, status, postcondition, observation, bare "capability", halt action, authority and delegation terms.
+
+## Draft wording for "behavior" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **behavior**. The owner chose **draft A, what a specification defines and an executor performs** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **behavior**: what a capability specification defines and an executor performs.
+
+**Flagged by the Architect (found after the offer was made):**
+- **Circularity.** The accepted wording of *capability specification* is "document that defines a behavior", and this draft defines behavior as "what a capability specification defines". Each term is explained by the other, so neither tells a reader anything new. The Architect should have flagged this in the offer. The same applies to *run*, *state* and *executor* only indirectly (they rely on "behavior" and "capability specification"), but the pair is circular as it stands.
+- **The ontology note** shown in the offer ("a behavior is information carried by the executing system") was the owner's working approach, not drafted wording, and sits uneasily next to "performs".
+
+- **Not decided (still open):** acceptance; how to break the circle (define behavior independently, or reword capability specification so it does not use "behavior", or accept a primitive term and say so); the ontology wording.
+
+## "behavior": research requested before any wording, 2026-11-10 (later)
+
+Asked which of two independent wordings for **behavior** to take forward (A: responds to observations to achieve an outcome; B: actions and the decisions that select them). The owner chose **neither**, and asked for **a deep recon research agent to identify the best definition for behavior, given the literature of autonomy and independent verification and validation (IV&V) assessments**.
+
+- **Decided:** no wording for *behavior* is proposed or accepted until the research is in. The circularity with *capability specification* (see above) stays unresolved until then; the earlier choice to "give behavior its own meaning" stands as the direction.
+- **Status of dependent wording:** the accepted definitions that use the word "behavior" (capability specification, executor, state, state machine, behavior tree) are unchanged, and are accepted **subject to** this term being defined.
+- **Research brief (to be run):** read-only public sources; put no project information in requests; write one report under `_bmad-output/`; do not commit.
+
+## "behavior" research delivered, 2026-11-10 (later)
+
+The research the owner asked for is in `_bmad-output/research-behavior-definition/research-behavior-definition.md` (agent-written, git-ignored; digests and a memlog sit beside it). Not yet reviewed by the owner. Three rounds of public-source reading (standards and IV&V bodies; formal methods and robotics; ontologies); claims are evidence-tagged. **No wording for "behavior" is chosen or accepted.**
+
+- **Findings that matter for the choice:** the literature uses "behavior" in two opposite senses, specified (UML 2.5.1: "a specification of events that may occur dynamically over time"; ISO/IEC 10746-2) and performed (Lamport: a sequence of states; IEEE 982:2024: "observable sequence of inputs and outputs"); the sources avoid circularity by fixing which side the word names. **CCO 2.2 has a class Behavior (`ont00001347`) and it is an occurrent (an Act)**, opposite to the owner's working approach (behavior as information); an earlier research line that said CCO had no such class was wrong. The report ranks four candidate wordings; rank 1 is the specified-side wording, which leaves all accepted definitions unchanged.
+- **Gaps stated in the report:** ISO 8373, SAE J3016, IEEE 1872 and 1012, IEC 61508, ISO 26262, ISO 21448, the DoDD 3000.09 glossary, NASA IV&V guidance, SysML v2, SOMA, UFO-B were not read.
+- **Open:** which wording, if any, the owner takes; the ontology notes (`docs/ontology/autonomy-ontology-notes.md`) do not yet mention CCO's Behavior class.
+
+## "behavior": specified side chosen, 2026-11-10 (later)
+
+Asked which side of the specified/performed split "behavior" should name. The owner chose **the specified side, UML-style** (recommendation followed): behavior is the specification of what a system may do over time and when; the performed thing stays "run". The report's rank-1 wording is the starting draft; it is **not yet accepted**.
+
+- **Decided (direction):** "behavior" names the specified thing, independent of "capability specification". The accepted definitions that use the word are unchanged.
+- **Consequences noted:** nothing observable attaches to "behavior" itself, so tests attach to a *run* (its trace checked against the behavior); the ontology must map the standard's "behavior" to CCO's Plan, Algorithm or Performance Specification family and the standard's "run" to CCO's Act, not "behavior" to CCO's Behavior class (an occurrent), and this collision is to be documented.
+- **Not decided (still open):** the exact wording; whether "run" gains a note about its observable trace; whether the redundancy "a document that defines a (specification)" in *capability specification* is acceptable.
+
+## Draft wording for "behavior" chosen, 2026-11-10 (later)
+
+The owner chose to take **the draft with both notes** forward (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **behavior**: specification of the actions that a system may take over time, and of the conditions that govern when they may occur.
+>
+> NOTE 1  An executor carries out a behavior in a run; the observable sequence of actions and observations during a run is not itself the behavior.
+>
+> NOTE 2  *(Informative, for the ontology notes, not the standard's text.)* Not the same as the class Behavior in the Common Core Ontologies, which is an occurrent.
+
+**Flagged by the Architect:** Note 2 is a remark about another ontology and the offer itself labelled it "not the standard's text"; it does not belong in a definition and should live in `docs/ontology/autonomy-ontology-notes.md`. Sources for the wording: OMG UML 2.5.1 13.4.2.1; ISO/IEC 10746-2:2009 8.7 (via IEEE SEVOCAB). The word "run" in Note 1 relies on the accepted definition of *run*; "conditions" is not yet defined.
+
+- **Not decided (still open):** acceptance; where Note 2 goes; whether "conditions" needs its own definition (it is also used in *transition* and the postcondition and invariant decisions).
+
+## "behavior" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept definition and Note 1; Note 2 to the ontology notes** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **behavior**: specification of the actions that a system may take over time, and of the conditions that govern when they may occur.
+>
+> NOTE  An executor carries out a behavior in a run; the observable sequence of actions and observations during a run is not itself the behavior.
+
+Note 2 (the Common Core Ontologies' class Behavior is an occurrent, not the same thing) is **not part of the standard's text**. It is to be carried by `docs/ontology/autonomy-ontology-notes.md`; **that file has not been edited yet** (the Architect did not take the choice as a request to edit it, and will do so only if asked).
+
+This removes the circularity with *capability specification*. **Accepted definitions so far (this file only):** capability specification, capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree, behavior. **Not yet drafted:** condition, status, postcondition, observation, bare "capability", halt action, authority and delegation terms. "condition" is now used in *behavior* and *transition* and is undefined.
+
+## Draft wording for "condition" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **condition** (used in *behavior* and *transition*). The owner chose **draft B, true-or-false expression** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **condition**: expression, in the language required by this standard for conditions, that evaluates to true or false.
+>
+> NOTE  A condition holds when it evaluates to true.
+
+**Flagged by the Architect (after the offer):** the phrase "in the language required by this standard for conditions" is **self-referential**, since it defines "condition" through "conditions". The CEL decision allows naming the language directly (CEL, pinned release `v0.26.0`, a normative reference). Also, a CEL expression can fail to evaluate (error or missing value); how that counts is **not decided** here (the "no data counts as broken" rule covers only invariants).
+
+- **Not decided (still open):** acceptance; naming CEL directly; evaluation failures; what a transition's condition may read (the "over observations" rule is for postconditions and invariants only).
+
+## "condition" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept, naming CEL directly** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **condition**: expression in CEL that evaluates to true or false.
+>
+> NOTE  A condition holds when it evaluates to true.
+
+CEL is the owner's chosen language and a normative reference (pin: `v0.26.0`, commit `21ec6f4e52e8d694687ff9ed7408d3eccbb955d7`); the definition cites it, it does not add a decision. **Knock-on for earlier wording (not changed, for the owner to decide):** the accepted *transition* note says "The condition is an expression in the language required by this standard for conditions (CEL)", which now repeats the definition; it can be shortened or dropped when the wording is next reviewed.
+
+**Accepted definitions so far (this file only):** capability specification, capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree, behavior, condition. **Not yet drafted:** status, postcondition, observation, bare "capability", halt action, authority and delegation terms. **Still open for *condition*:** what happens when a CEL expression fails to evaluate (error or missing value), beyond the invariant "no data counts as broken" rule.
+
+## Draft wording for "observation" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **observation** (decisions 3.7 and the invariant and postcondition decisions). The owner chose **draft A, adopt SOSA/SSN by reference** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **observation**: observation as defined by `sosa:Observation` in SOSA/SSN [W3C SOSA/SSN, 2017].
+>
+> NOTE  A condition reads the results of observations.
+
+**Checked by the Architect against the pinned text** (W3C SOSA/SSN Recommendation, 2017-10-19, `https://www.w3.org/TR/2017/REC-vocab-ssn-20171019/`, fetched 2026-11-10): `sosa:Observation` is "Act of carrying out an (Observation) Procedure to estimate or calculate a value of a property of a FeatureOfInterest." `sosa:Result` is "The Result of an Observation, Actuation, or act of Sampling. To store an observation's simple result value one can use the hasSimpleResult property." `sosa:hasResult` links an Observation to a Result "which contains a value representing the value associated with the observed Property". So the Note's "results of observations" matches SOSA's own terms, and the Observation itself is an act (occurrent), the Result is what a condition reads.
+
+- **Not decided (still open):** acceptance; whether "a new observation arrives" (invariant timing) means a new result; time of an observation (when the value applies, when produced); the stale-data rule; ordering and batching; the use of SOSA's Result versus the Connected Systems API's observation resource and SWE Common's data record in the encodings.
+
+## "observation" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept for now** (recommendation followed). Accepted wording, recorded here only (no normative file contains it), **subject to** SOSA/SSN 2017 remaining the pin:
+
+> **observation**: observation as defined by `sosa:Observation` in SOSA/SSN [W3C SOSA/SSN, 2017].
+>
+> NOTE  A condition reads the results of observations.
+
+**Accepted definitions so far (this file only):** capability specification, capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree, behavior, condition, observation. **Not yet drafted:** status, postcondition, bare "capability", halt action, authority and delegation terms, invariant. **Still open:** timing of observations; the stale-data rule; what "a new observation arrives" means (a new result, by the check above).
+
+## Draft wording for "postcondition" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **postcondition** (decision 3.7: a condition over observations). The owner chose **draft B, condition over observations, meaning left to requirements** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **postcondition**: condition that reads observations.
+>
+> NOTE  What a postcondition is declared for, and when it is evaluated, are specified in the requirements class for capability specifications.
+
+**Flagged by the Architect:** the wording gives no sense of "post" (after something), so it does not separate a postcondition from any other condition that reads observations (an invariant, a transition's condition might read them too); the distinction is carried only by the requirements. Earlier notes (not decisions): command nodes in a behavior tree carry a postcondition; a separate "intended effect" idea may be added later; a postcondition time limit was dropped.
+
+- **Not decided (still open):** acceptance; what a postcondition is declared for; when it is evaluated; its relation to the endings (succeed, fail, halted).
+
+## "postcondition" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept for now** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **postcondition**: condition that reads observations.
+>
+> NOTE  What a postcondition is declared for, and when it is evaluated, are specified in the requirements class for capability specifications.
+
+The wording comes back to the owner if the requirements need the definition to say more.
+
+## Draft wording for "invariant" chosen, 2026-11-10 (later)
+
+Asked which draft to take forward for **invariant** (the invariant decisions above). The owner chose **draft A, condition that must hold while a state is active** (recommendation followed). Chosen draft, **not yet accepted as final**:
+
+> **invariant**: condition, declared for a state, that reads observations and that is required to hold while the state is active.
+>
+> NOTE  When an invariant is evaluated, what a broken invariant causes, and the response that every invariant declares are specified in the requirements class for capability specifications.
+
+**Flagged by the Architect:** (1) the term name is **not decided**; the owner's design question said "mode invariants", and the draft uses "invariant" (a state, not a "mode", is the accepted term, so "invariant" follows the accepted vocabulary). (2) "is required to hold" puts a requirement-like statement inside a definition. (3) The Note says what a broken invariant "causes", while the decision is that each invariant declares its own response; the wording matches the decision only loosely.
+
+- **Not decided (still open):** acceptance; the term name; the list of permitted responses.
+
+## "invariant" wording accepted for now, 2026-11-10 (later)
+
+The owner chose **accept, with the note reworded** (recommendation followed). Accepted wording, recorded here only (no normative file contains it); it also accepts **"invariant" as the standard's term** (not "mode invariant"):
+
+> **invariant**: condition, declared for a state, that reads observations and that is required to hold while the state is active.
+>
+> NOTE  When an invariant is evaluated, and the response that every invariant declares to its being broken, are specified in the requirements class for capability specifications.
+
+"is required to hold" stays in the definition as accepted; the Architect's flag about it being rule-like is noted, not resolved.
+
+**Accepted definitions so far (this file only):** capability specification, capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree, behavior, condition, observation, postcondition, invariant. **Not yet drafted:** status, bare "capability", halt action, authority and delegation terms, entry action and exit action, the three endings as terms (succeed, fail, halted), action.
+
+## JPL Autonomica paper listed as an informative reference, 2026-11-10 (later)
+
+The owner asked for a comparison of the JPL paper *Autonomica: Ontological Modeling and Analysis of Autonomous Behavior* (Elaasar et al., INCOSE International Symposium 2023, DOI 10.1002/iis2.13099) with the work so far, and then said: **list it as an informative reference**. It is listed in `docs/references/README.md` under "Informative references", by DOI and URL only. The PDF is **not stored** in the repository: the copy read says "Permission granted to INCOSE to publish and use" and states no open licence. Nothing normative depends on it, and no gate or pin changed.
+
+What the comparison found (research summary and comparison note in the git-ignored `_bmad-output/research-candela-autonomica-incose-2023-paper/`; the owner's verdict: it added little, and neither of the two points below worries them):
+- The paper never defines "behavior", "capability", "state" or "specification"; it defines only "autonomy" (taken from Fong et al. 2018). It has no halt, authority, delegation or IV&V content and no upper-ontology alignment.
+- Its pre, maintenance and post conditions on a task line up with this standard's transition conditions, invariants and postconditions. It uses "state" for the condition of the physical system, the sense the accepted "state" Note 1 excludes.
+- Points kept for later drafting, no decision: the paper uses "capability" for an invocable function, not a document (relevant to the open question of bare "capability"); it uses "action" for something done to the controlled system (relevant when "action" is drafted); it covers planning and replanning, which nothing accepted covers (a scope statement may be wanted); whether a condition may read an estimate rather than a raw observation sits with the open stale-data rule.
+
+**Accepted definitions so far (this file only):** unchanged (fifteen). **Not yet drafted:** status, bare "capability", halt action, authority and delegation terms, entry action and exit action, the three endings as terms (succeed, fail, halted), action.
+
+## Draft wording for "action" chosen, 2026-11-11
+
+Asked which draft to take forward for **action**. The owner chose **draft A, operation the executor performs as directed** (recommendation followed; the alternatives were an operation on a named resource, and leaving the word undefined). Chosen draft, **not yet accepted as final**. The Architect adjusted the Note from what the card described: it now says the executor performs the action (the point about the JPL paper's different use), and it no longer names the halt action (see the flag below):
+
+> **action**: operation that an executor performs as directed by a capability specification.
+>
+> NOTE  An action is performed by the executor. Sending a command to a system is an action, and so are the entry actions and exit actions of a state.
+
+**Flagged by the Architect:** (1) "operation" is itself undefined; it is used in its ordinary sense. (2) The halt action is left out of the Note on purpose: who may issue a halt is still open, and a halt issued from outside the specification is a request, not an action the specification directs, so naming it here could settle that by accident. (3) Entry actions and exit actions are not yet defined as terms; the Note uses them in their plain sense. (4) The JPL paper uses "action" for something done to the controlled system (a different sense); the Note's first sentence is the guard against that reading.
+
+- **Not decided (still open):** acceptance; whether the halt action is an action in this sense; what an action may act on (left to the requirements).
+
+## "action" wording accepted for now, 2026-11-11
+
+The owner chose **accept for now** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **action**: operation that an executor performs as directed by a capability specification.
+>
+> NOTE  An action is performed by the executor. Sending a command to a system is an action, and so are the entry actions and exit actions of a state.
+
+The halt action is not named in the Note; whether it is an action in this sense stays open with the question of who may issue a halt.
+
+**Accepted definitions so far (this file only):** capability specification, capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree, behavior, condition, observation, postcondition, invariant, action (sixteen). **Not yet drafted:** status, bare "capability", halt action, authority and delegation terms, entry action and exit action, the three endings as terms (succeed, fail, halted).
+
+## Draft wording for "entry action" and "exit action" chosen, 2026-11-11
+
+Asked which draft to take forward for **entry action** and **exit action**. The owner chose **draft A, two short definitions with the halt link in the Note** (recommendation followed; the alternatives were the same pair without the halt Note, and a single term "state action"). Chosen draft, **not yet accepted as final**:
+
+> **entry action**: action that an executor performs when it enters a state.
+>
+> **exit action**: action that an executor performs when it leaves a state.
+>
+> NOTE  The exit actions of the active states are the clean-up when a run is halted.
+
+**Flagged by the Architect:** (1) The Note restates the halt decision (clean-up is the exit actions of the active states; a failed or overrunning clean-up ends in fail). If the halt design changes, the Note changes. (2) The Note is attached to "exit action" only; entry actions have no halt role. (3) Nothing here says which actions a state declares or in what order they run; both are left to the requirements class for capability specifications. (4) "Leaves a state" covers leaving by a transition and leaving because of a halt; the draft does not distinguish them. (5) Nested or parallel states are still undecided, so "the active states" (plural) in the Note presumes that more than one state can be active at once; that follows the earlier halt decision, but is not settled.
+
+- **Not decided (still open):** acceptance; ordering and timing of actions; whether more than one state can be active at once.
+
+## "entry action" and "exit action" wording accepted for now, 2026-11-11
+
+The owner chose **accept for now** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **entry action**: action that an executor performs when it enters a state.
+>
+> **exit action**: action that an executor performs when it leaves a state.
+>
+> NOTE  The exit actions of the active states are the clean-up when a run is halted.
+
+The plural "active states" stays as the halt decision had it; whether more than one state can be active at once (nested or parallel states) remains open.
+
+**Accepted definitions so far (this file only):** capability specification, capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree, behavior, condition, observation, postcondition, invariant, action, entry action, exit action (eighteen). **Not yet drafted:** status, bare "capability", halt action, authority and delegation terms, the three endings as terms (succeed, fail, halted).
+
+## Draft wording for "ending" chosen, 2026-11-11
+
+Asked which draft to take forward for the three endings (succeed, fail, halted). The owner chose **draft A, one term "ending" with the three meanings in a Note** (recommendation followed; the alternatives were four terms, and leaving "ending" undefined). The reason for one term: "succeed" and "fail" are also two of the six state types in the examples, which are to become kinds of state, so defining them here as terms would give one word to an ending and a kind of state. Chosen draft, **not yet accepted as final**:
+
+> **ending**: outcome of a run, which is one of succeed, fail or halted.
+>
+> NOTE  A run ends in succeed when it has completed the behavior, in fail when it could not, and in halted when a halt stopped it and the clean-up completed.
+
+**Flagged by the Architect:** (1) "completed the behavior" and "could not" are loose; what counts as completing is left to the requirements (which terminal states are declared as which ending). (2) The Note says "a halt", and the halt action is not yet defined. (3) A halt whose clean-up fails or overruns ends in fail; the Note's "in fail when it could not" covers that only loosely, and the exact rule is in the accepted "terminal state" Note 2. (4) Endings are defined for state machines only (the accepted "run" Note); the behavior-tree endings are deferred with the behavior-tree halting question. (5) How a document names an ending (identifiers) is still open. (6) The words "succeed", "fail" and "halted" stay free for other uses, such as kinds of state.
+
+- **Not decided (still open):** acceptance; behavior-tree endings; ending identifiers in documents.
+
+## "ending" wording accepted for now, 2026-11-11
+
+The owner chose **accept for now** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **ending**: outcome of a run, which is one of succeed, fail or halted.
+>
+> NOTE  A run ends in succeed when it has completed the behavior, in fail when it could not, and in halted when a halt stopped it and the clean-up completed.
+
+"succeed", "fail" and "halted" are not separate terms. The Note's use of "halt" depends on the halt action, which is drafted next and may send the Note back to the owner.
+
+**Accepted definitions so far (this file only):** capability specification, capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree, behavior, condition, observation, postcondition, invariant, action, entry action, exit action, ending (nineteen). **Not yet drafted:** status, bare "capability", halt action, authority and delegation terms.
+
+## Draft wording for "halt" chosen, 2026-11-11
+
+Asked which draft to take forward for the halt (the owner's "explicit halt action" decision above). The owner chose **draft A, define "halt" as an instruction from outside** (recommendation followed; the alternatives were defining "halt action" as an action, and leaving the halt undefined). Reason: the accepted "action" is performed by the executor as directed by a capability specification, while a halt arrives from outside and the executor responds to it, so calling it an action would pull against the accepted wording. Chosen draft, **not yet accepted as final**:
+
+> **halt**: instruction, issued to an executor from outside a run, that the run stop.
+>
+> NOTE  On a halt, the executor leaves the active states, performing their exit actions; the run ends in halted if that completes, and in fail if it does not.
+
+**Flagged by the Architect:** (1) The earlier decision says the document format has an explicit halt **action**, "a named step an authority can issue". This draft names the **halt** and does not call it an action; how a document declares or names the halt (the "explicit halt action" in the format) is left to the requirements. If the owner wants the format's construct to be called a "halt action", that name is still free. (2) Who may issue a halt is not in the wording ("from outside a run" decides nothing about authority). (3) The Note restates three earlier decisions (clean-up is the exit actions; completion gives halted; failure or overrun gives fail) and overlaps the accepted "terminal state" Note 2 and the "exit action" Note; the duplication may need removing when requirements are drafted. (4) Halting a behavior tree is deferred; the Note speaks of "active states" and so covers state machines only. (5) The clean-up time limit, a second halt arriving during clean-up, the recorded cause, and restart or resume are not in the wording. (6) The Connected Systems API cancel command and CANCELED status map to this; the mapping is still to be stated.
+
+- **Not decided (still open):** acceptance; the name of the format's construct; who may issue a halt; the time limit; second halt; recorded cause; behavior-tree halting; the Connected Systems API mapping.
+
+## "halt" wording accepted for now, 2026-11-11
+
+The owner chose **accept for now** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **halt**: instruction, issued to an executor from outside a run, that the run stop.
+>
+> NOTE  On a halt, the executor leaves the active states, performing their exit actions; the run ends in halted if that completes, and in fail if it does not.
+
+The accepted "ending" Note and "exit action" Note, which use "halt", now have a definition behind them. The name of the document construct (the "explicit halt action" of the earlier decision), who may issue a halt, the clean-up time limit, a second halt during clean-up, the recorded cause, restart or resume, behavior-tree halting and the Connected Systems API mapping stay open.
+
+**Accepted definitions so far (this file only):** capability specification, capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree, behavior, condition, observation, postcondition, invariant, action, entry action, exit action, ending, halt (twenty). **Not yet drafted:** status, bare "capability", authority and delegation terms.
+
+## Draft wording for "status" chosen, 2026-11-11
+
+Asked which draft to take forward for **status** (the value a behavior-tree node returns). The owner chose **draft A, generic, values left to the requirements** (recommendation followed; the alternatives were the same with the common values as an example, and leaving the word undefined). Chosen draft, **not yet accepted as final**:
+
+> **status**: value that a node of a behavior tree returns when the executor evaluates it, reporting how that evaluation went.
+>
+> NOTE  The values that a status can take are specified in the requirements class for capability specifications. A status is not an ending.
+
+**Flagged by the Architect:** (1) The behavior-tree dialect (node types, status values, evaluation rules) is still open, so the values are not named; the Note defers them to a requirements class that does not exist yet. (2) "A status is not an ending" keeps a node's status apart from a run's endings (succeed, fail, halted); the words overlap in ordinary use (a node's success and a run's succeed). (3) "reporting how that evaluation went" is loose by design. (4) Behavior-tree tools differ on the value set (for example the common success, failure and running, with BehaviorTree.CPP adding more); the definition rules none of them out. (5) The accepted "state" Note 1 and "behavior tree" definition already use "status" and now have a definition behind them.
+
+- **Not decided (still open):** acceptance; the behavior-tree dialect and its status values.
+
+## "status" wording accepted for now, 2026-11-11
+
+The owner chose **accept for now** (recommendation followed). Accepted wording, recorded here only (no normative file contains it):
+
+> **status**: value that a node of a behavior tree returns when the executor evaluates it, reporting how that evaluation went.
+>
+> NOTE  The values that a status can take are specified in the requirements class for capability specifications. A status is not an ending.
+
+The status values stay open with the behavior-tree dialect.
+
+**Accepted definitions so far (this file only):** capability specification, capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree, behavior, condition, observation, postcondition, invariant, action, entry action, exit action, ending, halt, status (twenty-one). **Not yet drafted:** bare "capability", authority and delegation terms.
+
+## Bare "capability" not defined; Note 1 of "capability specification" reworded (draft), 2026-11-11
+
+Asked whether the standard defines the bare word "capability". The owner chose **draft A, do not define it and reword Note 1** (recommendation followed; the alternatives were defining it as the behavior, and defining it as an ability). Reasons: the Common Core Ontologies use "capability" for an ability borne by a physical thing (which the ontology notes keep as a separate notion carried by the executing system), and the JPL Autonomica paper uses it for a function one layer offers another, so defining it as the behavior would put one word on two things. Chosen draft, **not yet accepted as final**. The definition of **capability specification** keeps its accepted wording; Note 1 changes and Note 2 stays:
+
+> **capability specification**: document that defines a behavior as a state machine or a behavior tree.
+>
+> NOTE 1  The standard does not define "capability" on its own; "capability specification" and "capability binding" are the names of documents.
+>
+> NOTE 2  A capability specification is not tied to a particular system; a capability binding ties it to one.
+
+**Flagged by the Architect:** (1) Note 1 says what the name is not; it does not say why the name contains "capability". A reader may still ask. (2) Note 1 would also speak for "capability binding", whose own definition has no such Note; it names the term and does not change its wording. (3) The old Note 1 ("The behavior defined by a capability specification is the capability") is withdrawn, so nothing in the standard now identifies a capability with a behavior. (4) Whether the identifier's type segment becomes `capability-specification` is a separate open item and is not touched.
+
+- **Not decided (still open):** acceptance; whether any other place in the standard will need the bare word (a later requirement may force a definition).
+
+## Bare "capability" decision accepted for now, 2026-11-11
+
+The owner chose **accept for now** (recommendation followed). Recorded here only (no normative file contains it). The standard does **not** define bare "capability". Accepted wording of **capability specification**, with Note 1 replaced:
+
+> **capability specification**: document that defines a behavior as a state machine or a behavior tree.
+>
+> NOTE 1  The standard does not define "capability" on its own; "capability specification" and "capability binding" are the names of documents.
+>
+> NOTE 2  A capability specification is not tied to a particular system; a capability binding ties it to one.
+
+This supersedes the earlier Note 1 ("The behavior defined by a capability specification is the capability"), which is withdrawn. A later requirement that needs the bare word comes back to the owner for a definition.
+
+**Accepted definitions so far (this file only):** capability specification (with the reworded Note 1), capability binding, executor, system, state, state machine, terminal state, transition, run, behavior tree, behavior, condition, observation, postcondition, invariant, action, entry action, exit action, ending, halt, status (twenty-one). Bare "capability" is deliberately not defined. **Not yet drafted:** authority and delegation terms.
+
+## Who may issue a halt: the standard says nothing, 2026-11-11
+
+Asked where to start on authority and delegation. The owner chose **decide who may issue a halt first** (recommendation followed; the alternatives were leaving authority to the requirements and ontology, and drafting a small set of authority terms now). None of the twenty-one accepted definitions uses an authority word; the only live question was who may issue a halt.
+
+Then asked who may issue a halt to an executor. The owner chose **A, the standard says nothing about who** (recommendation followed; the alternatives were that the capability binding names who may halt, and that only a party holding a stated authority may).
+
+- **Decided:** the standard does not say who may issue a halt. Access control stays with the platform (for example the Connected Systems API's own security). The standard says only what an executor does with a halt it accepts: it runs the exit actions of the active states, then the run ends in halted, or in fail if the clean-up fails or overruns (the accepted "halt" Note).
+- **Consequence:** no authority term is needed for the halt. The accepted "halt" wording ("issued to an executor from outside a run") stands unchanged.
+- **Risks noted by the Architect:** (1) The standard will not say whether an executor should refuse a halt from the wrong party, so a safety reviewer may ask. (2) The choice is additive: a binding-level list of permitted parties (draft B) or an authority concept (draft C) can be added later without changing what a halt does. (3) The wider authority and delegation terms in the ontology notes (delegation within boundaries, human-authority gates, custody leases) are **not** settled by this; they remain candidates for requirements and ontology terms, to be drafted when a requirement needs one. (4) "authority" in the identifiers question (the naming authority) is a different meaning and is untouched.
+- **Not decided (still open):** the clean-up time limit and how it is set; a second halt during clean-up; the recorded cause; restart or resume; behavior-tree halting; the Connected Systems API mapping; the delegation, boundary, human-authority gate and custody lease terms.
+
+**Accepted definitions so far (this file only):** unchanged (twenty-one). **Not yet drafted:** authority and delegation terms beyond the halt, which no accepted text needs yet.
