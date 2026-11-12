@@ -894,3 +894,96 @@ Then asked who may issue a halt to an executor. The owner chose **A, the standar
 - **Not decided (still open):** the clean-up time limit and how it is set; a second halt during clean-up; the recorded cause; restart or resume; behavior-tree halting; the Connected Systems API mapping; the delegation, boundary, human-authority gate and custody lease terms.
 
 **Accepted definitions so far (this file only):** unchanged (twenty-one). **Not yet drafted:** authority and delegation terms beyond the halt, which no accepted text needs yet.
+
+## Active states: nested only, 2026-11-12
+
+Asked whether more than one state can be active at once. The owner chose **nested only** (recommendation followed; alternatives were one flat state at a time, and nested plus parallel).
+
+- **Decided (direction):** a state may sit inside a parent state, so one innermost state is active together with its parents. There are no parallel sections in the first version. This fits the accepted halt wording ("the exit actions of the active states"). Parallel states remain a possible later extension.
+- **Consequence for accepted wording:** the accepted **state machine** and **state** definitions do not mention parents or children; whether they need a Note is not decided.
+- **Not decided (still open):** how a parent relates to its children in the documents (the name of the construct); order of exit and entry actions across parent and child (this joins the existing ordering question); which invariants apply when a child is active (a parent's invariants as well as the child's is the likely reading, not decided); the initial-state rule for a parent (which child starts); how a transition leaving a parent behaves; whether a terminal state can sit inside a parent. Nothing normative is drafted.
+
+## Initial state: declared, one per level, 2026-11-12
+
+Asked how a state machine says which state it starts in, now that states can nest. The owner chose **declared, one per level** (recommendation followed; alternatives were the first state listed, and chosen at run time).
+
+- **Decided (direction):** the state machine names exactly one initial state at its top level, and every parent state names exactly one initial child. A document that omits one, or names more than one, does not conform. Nothing is inferred from list order or chosen at run time.
+- **Consequence:** this is the initial-state rule that was removed from the accepted "state machine" wording as a guess (2026-11-10); it is now an owner decision, but it is recorded as a rule for the requirements, not added to the definition. Whether the definition gets a Note is not decided.
+- **Not decided (still open):** the name of the field; whether the initial state of a parent may itself be a parent (the rule then applies recursively; likely yes, not confirmed); what happens on a restart (restart is still open); the nested-state questions listed under "Active states". Nothing normative is drafted.
+
+## Order of actions on a transition: exit, enter, then check, 2026-11-12
+
+Asked in what order exit actions, entry actions and the invariant check happen when a transition fires. The owner chose **exit, then enter, then check** (recommendation followed; alternatives were exit, check, then enter, and leaving the order to each specification).
+
+- **Decided (direction):** on a transition, the executor runs the exit actions of the states being left, innermost first; then the entry actions of the states being entered, outermost first; and only after the entry actions have finished checks the invariants of the states now active. A parent that is neither left nor entered is untouched. This is the SCXML order (SCXML is a pinned reference).
+- **Amends an earlier decision:** "Invariant checked on entry" (2026-11-10) said the check happens "before the state does anything else". It was flagged then as not confirmed. That wording is **superseded**: the check now follows the entry actions. The decision to check on entry, and the "no observation yet counts as broken" rule, stand.
+- **Risk noted:** entry actions can run in a state whose invariant is already broken, and a broken invariant is then answered by its declared response. A specification that must not act in an unsafe condition has to put that guard in a transition condition, not rely on the entry check.
+- **Not decided (still open):** whether exit actions of the states being left also run when a broken-invariant response is itself a transition (likely yes, the same order); what happens if an entry action fails; the interaction with the open halt details (a halt during entry actions); names and wording. Nothing normative is drafted.
+
+## Transitions: condition required, 2026-11-12
+
+Asked whether every transition must have a condition. The owner chose **condition required** (recommendation followed; alternatives were an optional condition meaning "on completion", and a required condition plus a built-in "completed" value).
+
+- **Decided (direction):** every transition has a CEL condition; a document with a transition that has none does not conform. The accepted "transition" wording ("follows when a condition holds") stands unchanged.
+- **Consequence:** a state whose work simply finishes needs something a condition can read to know it has finished. How a state's completion (or any observation) is exposed to a condition is **not decided** and is now a more pressing open question; it is the same question as "how observations are exposed to a condition" listed under the CEL decisions.
+- **Not decided (still open):** how several transitions out of one state are ordered when more than one condition holds at once (a tie-break rule); how observations and a state's completion are exposed to conditions; when conditions are evaluated (the invariant rule is "each new observation"; transitions not decided). Nothing normative is drafted.
+
+## Condition data follows the Connected Systems API, 2026-11-12
+
+Asked how a condition reads the data it depends on. The three offered options were named inputs holding the latest value (recommended), the whole observation record, and leaving it to the capability binding. The owner chose **none of them as offered** and answered in their own words: **"Data has to conform to the CS API and how that data is expressed through the CS API."**
+
+- **Decided (direction):** the data a condition reads must conform to the Connected Systems API (Parts 1 and 2, both pinned), and to how the API expresses that data. The standard does not invent its own data shape for conditions.
+- **Not decided (the owner's words do not settle these; they are open, not assumed):** whether a condition sees the whole API observation (value, times, datastream) or only a named value taken from it; how names in a condition are tied to API resources; how freshness and "no observation yet" show up in that shape (the stale-data rule is still open); how a state's completion is exposed, since it is not API data (the earlier question this was meant to settle is **still open**); whether conditions may also read Part 1 static properties.
+- **Not checked in this session:** which exact Connected Systems API resources and fields carry observations; that must be read from the pinned parts (the earlier fact-check report `_bmad-output/research-cs-api-fact-check.md` is the starting point) before any wording.
+
+## Check of the CS API observation form and osh-addons drivers, 2026-11-12
+
+The owner asked to check the actual standard and look at drivers from `osh-addons` to see how their values are expressed in the CS API. Read-only lookups of two public repositories, nothing sent.
+
+**What was read, and its limits.**
+- `opengeospatial/ogcapi-connected-systems`, default-branch clone at commit `fb858be23aa03e2b824ec50b5a97ac2c2a1d3fec` (2026-09-21): Part 2 sources (`api/part2/standard/sections/` clauses 8, 20, 21; `api/part2/openapi/schemas/json/observation.json`; example observations). **This is not the pinned edition.** The pin is v1.0 (published 2025-07-16); the clone was shallow, so whether these files changed after the pin was not checked. Quotes below must be re-read against the published Part 2 before any wording.
+- `opensensorhub/osh-addons` at commit `175ec27f6e0d354edf70ecc3b33f93dee642cb4c` (2026-11-12): the MAVLink driver (`BatteryStatusOutput`), the Vaisala weather driver (`VaisalaWeatherPTUOutput`) and the UxS data model helper (`UxsHelper`). **The drivers do not write CS API JSON.** Each declares a SWE Common data record in Java; the OSH server (a separate repository, not read) turns it into the API form. So how a driver value ends up in an API observation is inferred from the schema text, not seen.
+
+**Findings.**
+1. **Observation (Part 2, JSON):** `id`, `datastream@id`, `resultTime` (required), `phenomenonTime` (defaults to `resultTime`), optional `samplingFeature@id`, `procedure@link`, `parameters`, and either an inline `result` or a `result@link` to external data. `result` "must be valid according to the result schema provided in the datastream metadata". The result may be a bare number (`"result": 23.5`) or a record (`"result": {"position": {...}, "angles": {...}}`).
+2. **One observation can carry several properties** (clause 8: the API "does not restrict Observation resources to have a single observed property"). The datastream lists `observedProperties` (URIs) and, per format, a schema; for the SWE Common JSON format the schema is a SWE Common data component tree.
+3. **Drivers:** each output is a SWE Common record whose first field is a `time` (ISO UTC timestamp), followed by value fields that carry a property definition URI and a unit, for example `level` with the BatteryLevel property and unit `%`, or `pressure` in `inHg` and temperatures in `Fah`.
+4. **Observed hazards for conditions:**
+   - the same property definition can appear twice in one record (Vaisala has `tempExt` and `tempInt`, both AirTemperature), so a property URI alone does not identify a value; the field name does;
+   - units differ between drivers (inHg, Fahrenheit, percent), so a condition's number only means something with the declared unit;
+   - missing values can arrive as `NaN` inside an observation (Vaisala), not as an absent observation, so "no observation yet" and "an observation whose value is missing" are different cases;
+   - a driver puts a `time` field inside the result while the API observation also has `resultTime` and `phenomenonTime`, so there are two places a time can come from;
+   - a state's completion is not API data (still open).
+
+**Status:** findings only. Nothing is decided from them; the question of what a condition sees is asked next.
+
+## Naming a value in a condition: datastream plus field path, 2026-11-12
+
+After the check above, asked how a condition picks out one value. The owner chose **datastream plus field path** (recommendation followed; alternatives were the observed property URI, and letting the author use either).
+
+- **Decided (direction):** a condition reads a value by naming a datastream and the path of a field in that datastream's result record, as the API's result schema defines the field. The observation's own times (result time, phenomenon time) are available to the condition. The value is in the unit the schema declares.
+- **Not decided (still open):** how a specification's datastream names are resolved to real datastreams (the capability binding's job is the likely home, not decided); whether the condition language syntax for this is plain CEL names or a declared-inputs list; unit conversion (none assumed); how "no observation yet" and a `NaN` or missing value inside an observation appear to a condition; the stale-data rule (the times are now readable, so a rule can be written; not decided); whether a result that is a link (`result@link`) is allowed in conditions; how a state's completion is exposed (not API data; the earlier question is **still open**); whether the Part 2 text read (a 2026-09-21 clone, not the pinned edition) matches the pin. Nothing normative is drafted.
+
+## Stale data: declared maximum age, 2026-11-12
+
+Asked what happens when a sensor that used to report goes silent. The owner chose **declared maximum age** (recommendation followed; alternatives were the author writing freshness in the condition, and no rule yet).
+
+- **Decided (direction):** each datastream a specification reads declares a maximum age. If the latest observation is older than that, the executor treats the input as having no observation, which the earlier rule ("invariant with no observation counts as broken") already covers for invariants. Conditions stay plain CEL with the built-in functions only; no current-time value is added to CEL.
+- **Closes:** the stale-data question left open under "Invariant with no data counts as broken" (2026-11-10).
+- **Not decided (still open):** the field name; how age is measured (the observation's own time, which of its two times, against the executor's clock; clock source and its accuracy); what a transition condition sees when an input is stale (likely the same as no observation; not decided); whether the maximum age is required or optional (the wording above reads as required; not confirmed); how a `NaN` or missing value inside a fresh observation is treated. Nothing normative is drafted.
+
+## State completion: read the command status, 2026-11-12
+
+Asked how a condition knows a state's work has finished. The owner chose **read the command status** (recommendation followed; alternatives were a standard-defined "done" value, and no completion signal in the first version).
+
+- **Decided (direction):** completion of a state's work is not a special value. A state that sends a command to a system finishes when the command's status report from the API says so, read by a condition like any other API data. No built-in "done" is added to CEL.
+- **Source seen (not the pinned edition):** in the Part 2 clone at commit `fb858be` (2026-09-21), a command status report has a required `statusCode` with codes that include PENDING, EXECUTING, COMPLETED, CANCELED, REJECTED and FAILED (only these were seen; the full list was not read), plus `executionTime`, `percentCompletion` and `message`. The exact list and wording must be re-read against the pinned v1.0 text before any wording.
+- **Closes:** the "how a state's completion is exposed" question left open under the transition and observation decisions (2026-11-12).
+- **Not decided (still open):** how a specification refers to a command's status (the same naming question as for datastreams: probably a control stream and the command it sent; the binding's role is not decided); what a state that sends no command uses to end (an ordinary condition on observations is assumed, not decided); how the API's CANCELED code maps to the ending "halted" (still the Connected Systems API mapping question under the halt decisions); what a state does while its command is rejected or fails (a transition condition on REJECTED or FAILED is assumed, not decided). Nothing normative is drafted.
+
+## Name resolution: the binding resolves names, 2026-11-12
+
+Asked who connects the names in a specification (datastreams, command status) to the real streams of one system. The owner chose **the binding resolves names** (recommendation followed; alternatives were the specification naming real streams, and leaving it to later).
+
+- **Decided (direction):** the capability specification uses its own local names for the data it reads (with the field path and maximum age declared next to each) and for the commands it sends; the capability binding maps each local name to a real datastream or control stream of one system. This keeps the accepted "capability specification" Note 2 (not tied to a particular system) true, and the accepted "capability binding" wording (which ties a specification to a system) is its home.
+- **Not decided (still open):** that a binding must supply every name a specification declares, and what a missing or mismatched one means (conformance rules); whether a binding may also override or add anything else (maximum age, for example); whether the accepted "capability binding" wording needs a Note on this; the names of the fields. Nothing normative is drafted.
