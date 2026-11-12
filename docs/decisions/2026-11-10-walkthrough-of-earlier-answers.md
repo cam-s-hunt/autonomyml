@@ -1199,3 +1199,25 @@ Asked, from Choice 3 of the draft mapping table, how units are handled in condit
 - **Decided (direction):** each declared input in the specification that reads a quantity also states the unit the author means. At start, the executor rejects the start (REJECTED) if the binding's datastream schema declares a different unit. No conversion is done. This extends the start checks above.
 - **Consequence:** a system that reports in another unit needs a different specification or a datastream in the right unit (consistent with "a binding changes no behavior"). The standard must say how two unit references (a UCUM code or a URI) are compared; this is not decided, and the same unit can have several spellings.
 - **Not decided (still open):** the comparison rule for unit references; whether a unit is required for every quantity input or only where the author states one (assumed required; not decided); units on ranges, vectors and times (a time unit is a duration unit; not decided); the field name. Nothing normative is drafted.
+
+## Simple rows of the mapping accepted, typed from the schema, 2026-11-12
+
+Asked, from Choice 1 of the draft mapping table, how to take the simple rows. The owner chose **accept, typed from the schema** (recommendation followed; alternatives were accepting with records checked at run time, and changing a row).
+
+- **Decided (direction):** the rows Boolean (true or false), Count (whole number), Text (string), DataRecord (named fields) and Vector (named numbers) are accepted as drafted. The executor builds the CEL type environment from the datastream's result schema, so every field of a record or vector has its real type at start; a mistyped field name or a wrong-typed comparison is rejected at start. A type that the schema allows and the mapping does not cover is rejected at start.
+- **Not decided (still open):** how the executor learns the result schema (the datastream's schema resource is assumed; not worked out); the Quantity and Time rows (Choices 4 and 5 and the Quantity detail); the remaining choices (4 to 9) in the draft table; nil values inside composites; the unit comparison rule. Nothing normative is drafted.
+
+## Time values: a timestamp when it can be one, 2026-11-12
+
+Asked, from Choice 5 of the draft mapping table, how a condition sees a time. The owner chose **timestamp when it can be one** (recommendation followed; alternatives were ISO date-time only, and always a number plus unit).
+
+- **Decided (direction):** a Time is a CEL timestamp if its value is an ISO date-time, or a number with a schema-given reference time (the executor converts it). A numeric time with no reference time cannot be a timestamp, so a condition that reads it as one fails the start check. A TimeRange is a pair of timestamps. CEL's timestamp and duration arithmetic is available.
+- **Source note:** the drivers read earlier send time as a number of seconds; whether their schemas give a reference time was not checked, so such a stream may be unusable in conditions as drafted. Not verified.
+- **Not decided (still open):** the rule for a nil or special time (the nil-value decision covers a nil time; the special values "now" or an infinity were not read in detail); time zone handling (CEL's own rules; not compared with SWE Common); the unit rule for relative times; the other choices in the draft table (4, 6 to 9). Nothing normative is drafted.
+
+## Arrays, matrices and streams: a declared maximum size, 2026-11-12
+
+Asked, from Choice 7 of the draft mapping table, how to bound the reading of arrays, matrices and streams. The owner chose **the specification declares a maximum size** (recommendation followed; alternatives were one maximum fixed by the standard, and no limit).
+
+- **Decided (direction):** each input that reads an array, matrix or stream declares the largest number of elements it will read. At start, the executor rejects the start (REJECTED) if the result schema's declared element count is larger; at run time a value that turns out larger counts as no observation. Values held out of band (a link, an external `values`) are not readable in a condition. The standard sets no number itself. DataArray, Matrix and DataStream are readable as lists of their element type, within this limit.
+- **Not decided (still open):** the field name; how the size of an array with no declared element count (a variable-length array or an open stream) is judged at start (assumed: rejected unless a maximum is declared and enforced at run time; not decided); how an encoded stream block (text or binary) is decoded for reading (JSON form assumed); nested arrays (a list of lists, a matrix) and how their sizes count; the remaining choices (4, 6, 8, 9). Nothing normative is drafted.
