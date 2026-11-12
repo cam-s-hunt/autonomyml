@@ -1221,3 +1221,28 @@ Asked, from Choice 7 of the draft mapping table, how to bound the reading of arr
 
 - **Decided (direction):** each input that reads an array, matrix or stream declares the largest number of elements it will read. At start, the executor rejects the start (REJECTED) if the result schema's declared element count is larger; at run time a value that turns out larger counts as no observation. Values held out of band (a link, an external `values`) are not readable in a condition. The standard sets no number itself. DataArray, Matrix and DataStream are readable as lists of their element type, within this limit.
 - **Not decided (still open):** the field name; how the size of an array with no declared element count (a variable-length array or an open stream) is judged at start (assumed: rejected unless a maximum is declared and enforced at run time; not decided); how an encoded stream block (text or binary) is decoded for reading (JSON form assumed); nested arrays (a list of lists, a matrix) and how their sizes count; the remaining choices (4, 6, 8, 9). Nothing normative is drafted.
+
+## DataChoice shape: a one-key map tested with has(), 2026-11-12
+
+Asked, from Choice 8 of the draft mapping table, how a condition sees a DataChoice. The owner chose **a one-key map tested with has()** (recommendation followed; alternatives were the chosen name as a string only, and not readable).
+
+- **Decided (direction):** a condition sees a choice as a map with exactly one entry, named after the chosen alternative, and tests which alternative is present with CEL's `has()` (for example `has(pos.latlon)`), then reads that alternative's fields. The type environment from the schema gives each alternative its own type. Reading a field of an alternative that is not chosen is an evaluation error and counts as no observation, under the decided rule.
+- **Note:** this is the one mapping the standard invents; it is not in CEL or SWE Common. The standard must state it, and a test needs a conforming example.
+- **Not decided (still open):** how the chosen alternative is read from the data (the schema's `choiceValue` category names it; mapping from that to the map's key is not worked out); the remaining choices (4, 6, 9). Nothing normative is drafted.
+
+## Geometry: readable as numbers, limits stated, 2026-11-12
+
+Asked, from Choice 9 of the draft mapping table, what the first version says about geometry. The owner chose **readable as numbers, state the limits** (recommendation followed; alternatives were requiring a matching reference system, and not readable until the function set exists).
+
+- **Decided (direction):** a geometry is readable as a map holding its GeoJSON content (type and coordinates) and its reference system. The standard states that built-in CEL cannot test spatial relations, so a condition on a geometry can only compare coordinate numbers, and that numbers in different reference systems are not comparable (not enforceable in CEL; a Note). Spatial tests are left to the planned function-set extension.
+- **Risk noted:** a condition may compare coordinates in the wrong reference system with no warning; nothing in the first version checks it.
+- **Not decided (still open):** whether the reference system is declared and checked later (the "require a matching reference system" option, which needs a comparison rule like the unit one); the remaining choices (4 and 6). Nothing normative is drafted.
+
+## Categories: plain text, no ordering, 2026-11-12
+
+Asked, from Choices 4 and 6 of the draft mapping table (taken together; both concern category values), what a condition sees for a Category and a CategoryRange. The owner chose **plain text, no ordering** (recommendation followed; alternatives were plain text with a start-time check of codes, and not readable).
+
+- **Decided (direction):** a Category is a CEL string and a CategoryRange is a pair of strings. CEL does not check that a code belongs to the schema's list or that a range makes sense. A Note says that conditions must not use ordering (`<`, `>`) on categories, because string order is not the codespace's order. Equality on a code works as expected.
+- **Risk noted:** the start check does not catch a code written in a condition that is not in the codespace; a typo is a string comparison that is simply false.
+- **Closes:** Choices 4 and 6 of the draft table. **All nine choices of the draft table are now decided.**
+- **Not decided (still open):** nil values inside composite components; the unit-reference comparison rule; whether a reference system is declared and checked later; how the executor learns the result schema; verifying every mapping against the pinned SWE Common 3.0 text (the table was drafted from the API repository's JSON schemas); then converting the table into requirement records (not begun). Nothing normative is drafted.
