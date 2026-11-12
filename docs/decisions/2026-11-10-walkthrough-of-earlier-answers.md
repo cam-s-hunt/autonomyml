@@ -1059,3 +1059,35 @@ Asked which kinds of state the first version defines. The examples used six type
 - **Consequences:** `succeed` and `fail` stop being state types and become the two endings a terminal state can declare; the example documents will need changing to match. The accepted "state" Note 2 ("kinds not yet decided") is now answerable; whether it is reworded is not decided.
 - **Risk noted:** this is the Architect's reading, not tested; a use for a choice kind not seen here (a branch that does nothing before choosing) would need an empty command state. The "wait" case is not given its own kind.
 - **Not decided (still open):** the names of the kinds; how a state that only waits for a condition is written; whether a terminal state may sit inside a mode (assumed to be allowed, not decided); what a mode's invariants cover (the parent/child rules remain open); the ontology mapping of the kinds. Nothing normative is drafted.
+
+## Start checks: check everything, reject if wrong, 2026-11-12
+
+Asked what an executor must check before beginning a run. The owner chose **check everything, reject if wrong** (recommendation followed; alternatives were checking references only, and no checks).
+
+- **Decided (direction):** before the run begins, the executor resolves both references in the start command and confirms that the binding supplies every name the specification declares. If anything is missing, the start command is rejected (the API's REJECTED status, with a message) and no run begins. This also settles that a binding must supply every name a specification declares (left open under "Name resolution").
+- **Limit noted:** the check is against the binding's contents, not the live system; whether a named datastream actually exists or is reporting is not part of this check (not decided; the stale-data and no-observation rules cover it at run time).
+- **Not decided (still open):** what else is checked at start (for example that the specification is valid against the standard, that conditions type-check in CEL; the CEL type-checking question is still open); the message or error content; whether a run counts as active from acceptance of the start command. Nothing normative is drafted.
+
+## CEL type check: required at start, 2026-11-12
+
+Asked whether conditions must be type-checked before a run begins. The owner chose **required at start** (recommendation followed; alternatives were recommended but not required, and checked when written only).
+
+- **Decided (direction):** at start, the executor type-checks every condition against the types the binding's datastreams declare (their result schemas). A condition that fails the check rejects the start (REJECTED), like a missing name. This closes "whether CEL's own type checking is required before a run" (left open under the CEL decisions) and extends the start checks above.
+- **Consequence:** executors need a CEL implementation that can check as well as evaluate, and the standard must say how a SWE Common result schema maps to CEL types. That mapping is a sizeable piece and is **not decided**; neither is how units are treated in the check (no conversion assumed).
+- **Not decided (still open):** the schema-to-CEL type mapping; how `NaN` and missing values appear to the type check; the CEL features and extensions the check may assume (built-in only, per the CEL functions decision); what other start checks exist (specification validity). Nothing normative is drafted.
+
+## Missing values: treated as no observation, 2026-11-12
+
+Asked what a condition sees when a fresh observation carries a missing value (for example `NaN`, which the Vaisala driver sends inside an observation that did arrive). The owner chose **treat as no observation** (recommendation followed; alternatives were passing NaN through, and treating it as no observation for invariants only).
+
+- **Decided (direction):** a field whose value is `NaN`, or is otherwise marked missing by its schema, counts exactly like no observation for that field. The earlier rules therefore apply: for an invariant it counts as broken and its declared response happens; stale data and never-reported data are handled the same way. One rule covers silent, never-reported and unusable data.
+- **Consequence:** an author cannot read a `NaN` itself. This closes the "`NaN` or missing value inside a fresh observation" items left open under the stale-data and condition-data decisions.
+- **Not decided (still open):** what counts as missing for each type the result schema allows (for example a text field, a missing-value marker in the schema); what a transition condition sees for such a field (the wording above says "no observation"; what a transition does with "no observation" is not decided; the invariant meaning, broken, is). Nothing normative is drafted.
+
+## No data in a transition condition: not met, 2026-11-12
+
+Asked what happens when a transition's condition reads an input with no observation (never reported, too old, or missing). The owner chose **condition is not met** (recommendation followed; alternatives were failing the run, and not met plus a way for the author to test for missing data).
+
+- **Decided (direction):** a transition condition that reads an input with no observation is treated as not holding, so the transition is not followed and the executor stays in the state. The state's invariants, which count missing data as broken, still respond. This completes the no-data rules: invariants count it as broken; transition conditions count it as not met.
+- **Risk noted:** a state waiting on a sensor that never reports waits for ever unless the author adds another transition or an invariant on that sensor. A timeout would need a way to express elapsed time, which is **not decided** (plain CEL has no current time and none was added).
+- **Not decided (still open):** how a timeout is written (a time-based transition or invariant; not decided); a way for a condition to test for missing data (not added; "built-in CEL only" stands). Nothing normative is drafted.
