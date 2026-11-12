@@ -1,0 +1,7 @@
+# PROPOSED, EMPTY. Conformance class for /req/core; it lists no tests because the requirements class has no requirements.
+kind: conformance_class
+id: /conf/core
+title: Core
+status: proposed
+target: /req/core
+tests: []

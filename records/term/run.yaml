@@ -1,0 +1,6 @@
+kind: term
+id: /term/run
+status: proposed
+term: run
+definition: one execution of a capability specification by an executor, from its start until it reaches an ending.
+note: NOTE  An ending is succeed, fail or halted for a state machine.

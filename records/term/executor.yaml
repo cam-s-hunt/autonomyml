@@ -1,0 +1,8 @@
+kind: term
+id: /term/executor
+status: proposed
+term: executor
+definition: system that runs a capability specification, by entering and leaving its states or by evaluating its behavior tree.
+note: 'NOTE 1  The definition says nothing about where an executor runs.
+
+  NOTE 2  Requirements on how an executor runs a capability specification are in the requirements class for executors.'

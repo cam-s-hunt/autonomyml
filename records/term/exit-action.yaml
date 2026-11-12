@@ -1,0 +1,6 @@
+kind: term
+id: /term/exit-action
+status: proposed
+term: exit action
+definition: action that an executor performs when it leaves a state.
+note: NOTE  The exit actions of the active states are the clean-up when a run is halted.

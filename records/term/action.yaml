@@ -1,0 +1,6 @@
+kind: term
+id: /term/action
+status: proposed
+term: action
+definition: operation that an executor performs as directed by a capability specification.
+note: NOTE  An action is performed by the executor. Sending a command to a system is an action, and so are the entry actions and exit actions of a state.

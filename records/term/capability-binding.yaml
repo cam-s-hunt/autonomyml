@@ -1,0 +1,6 @@
+kind: term
+id: /term/capability-binding
+status: proposed
+term: capability binding
+definition: document that references a capability specification and ties it to a particular system by mapping the resources that the specification names symbolically to resources of that system.
+note: NOTE  A capability specification is not tied to a particular system; a capability binding ties it to one.

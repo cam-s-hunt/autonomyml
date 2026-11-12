@@ -1,0 +1,6 @@
+kind: term
+id: /term/halt
+status: proposed
+term: halt
+definition: instruction, issued to an executor from outside a run, that the run stop.
+note: NOTE  On a halt, the executor leaves the active states, performing their exit actions; the run ends in halted if that completes, and in fail if it does not.

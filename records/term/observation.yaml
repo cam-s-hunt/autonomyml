@@ -1,0 +1,6 @@
+kind: term
+id: /term/observation
+status: proposed
+term: observation
+definition: observation as defined by `sosa:Observation` in SOSA/SSN [W3C SOSA/SSN, 2017].
+note: NOTE  A condition reads the results of observations.

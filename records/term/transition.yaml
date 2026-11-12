@@ -1,0 +1,6 @@
+kind: term
+id: /term/transition
+status: proposed
+term: transition
+definition: directed connection from a source state to a target state of a state machine that the executor follows when a condition holds.
+note: NOTE  The condition is an expression in the language required by this standard for conditions (CEL).

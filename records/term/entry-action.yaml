@@ -1,0 +1,5 @@
+kind: term
+id: /term/entry-action
+status: proposed
+term: entry action
+definition: action that an executor performs when it enters a state.

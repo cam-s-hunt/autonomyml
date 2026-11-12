@@ -1,0 +1,6 @@
+kind: term
+id: /term/behavior
+status: proposed
+term: behavior
+definition: specification of the actions that a system may take over time, and of the conditions that govern when they may occur.
+note: NOTE  An executor carries out a behavior in a run; the observable sequence of actions and observations during a run is not itself the behavior.

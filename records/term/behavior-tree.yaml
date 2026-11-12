@@ -1,0 +1,5 @@
+kind: term
+id: /term/behavior-tree
+status: proposed
+term: behavior tree
+definition: behavior defined as a rooted tree of nodes, each of which returns a status when the executor evaluates it.

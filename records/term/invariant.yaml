@@ -1,0 +1,6 @@
+kind: term
+id: /term/invariant
+status: proposed
+term: invariant
+definition: condition, declared for a state, that reads observations and that is required to hold while the state is active.
+note: NOTE  When an invariant is evaluated, and the response that every invariant declares to its being broken, are specified in the requirements class for capability specifications.

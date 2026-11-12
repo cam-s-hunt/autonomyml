@@ -1,0 +1,6 @@
+kind: term
+id: /term/condition
+status: proposed
+term: condition
+definition: expression in CEL that evaluates to true or false.
+note: NOTE  A condition holds when it evaluates to true.

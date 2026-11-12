@@ -1,0 +1,8 @@
+kind: term
+id: /term/capability-specification
+status: proposed
+term: capability specification
+definition: document that defines a behavior as a state machine or a behavior tree.
+note: 'NOTE 1  The standard does not define "capability" on its own; "capability specification" and "capability binding" are the names of documents.
+
+  NOTE 2  A capability specification is not tied to a particular system; a capability binding ties it to one.'

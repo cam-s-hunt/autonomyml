@@ -1,0 +1,8 @@
+kind: term
+id: /term/state
+status: proposed
+term: state
+definition: control mode of a state machine, declared by a capability specification, in which an executor performs the behavior that the kind of the state prescribes.
+note: 'NOTE 1  A state is not the condition of a system or of its environment (system state), and is not the status returned by a behavior-tree node.
+
+  NOTE 2  The kinds of state are defined in the requirements class for capability specifications.'

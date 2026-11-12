@@ -1,0 +1,6 @@
+kind: term
+id: /term/status
+status: proposed
+term: status
+definition: value that a node of a behavior tree returns when the executor evaluates it, reporting how that evaluation went.
+note: NOTE  The values that a status can take are specified in the requirements class for capability specifications. A status is not an ending.

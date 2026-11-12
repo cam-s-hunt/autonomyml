@@ -1,0 +1,6 @@
+kind: term
+id: /term/postcondition
+status: proposed
+term: postcondition
+definition: condition that reads observations.
+note: NOTE  What a postcondition is declared for, and when it is evaluated, are specified in the requirements class for capability specifications.

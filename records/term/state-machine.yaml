@@ -1,0 +1,6 @@
+kind: term
+id: /term/state-machine
+status: proposed
+term: state machine
+definition: behavior defined as a set of states and the transitions between them, which ends in a terminal state.
+note: NOTE  A state machine is one of the two kinds of behavior a capability specification can define; the other is a behavior tree.
