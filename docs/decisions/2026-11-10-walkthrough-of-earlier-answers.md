@@ -1125,3 +1125,28 @@ Asked what an invariant's declared response may be. The owner chose **go to a na
 - **Closes:** "the list of permitted responses" (left open under "Invariant must declare a response", 2026-11-10).
 - **Consequence:** an author who wants "fail now" must declare a terminal fail state to point at. A response whose target is missing from the specification, or lies inside the state that breaks, does not conform (assumed; not decided).
 - **Not decided (still open):** whether a target inside the parent that owns the invariant is allowed (assumed not); what happens if the target's own invariants are already broken on entry (a loop between states is possible; a rule against it is not decided); whether the response's transition counts as a transition for the "condition or time limit" wording (assumed it does not need one; not decided); the field name. Nothing normative is drafted.
+
+## Postconditions: checked when the run would succeed, 2026-11-12
+
+Asked what a postcondition is for. The owner chose **checked when the run would succeed** (recommendation followed; alternatives were a postcondition on a command state, and no separate construct).
+
+- **Decided (direction):** a specification may declare postconditions for the whole behavior: conditions that must hold for the run to count as a success. When the run reaches a terminal state with ending succeed, the executor checks them against the observations, under the no-observation rule (no data, stale data or missing values count as broken). If any fails, the run ends in fail instead, with that postcondition as the recorded cause. This answers "what a postcondition is declared for" and "when it is evaluated", left open under the accepted "postcondition" wording; that wording stands unchanged.
+- **Consequence for accepted wording:** a succeed ending is not final until the check passes. The accepted "terminal state" ("no transition leaves") and "ending" wordings may need a Note; not decided. The cause record already points at named items, so a postcondition needs a name (names must be unique; that rule is undecided).
+- **Not decided (still open):** whether postconditions are optional (assumed yes); whether they are checked once, at that moment, or must hold for some time; what happens to the exit actions or any state work (the run has already reached the terminal state); how the API status reports the change from succeed to fail (the mapping gives FAILED); the field name; postconditions inside behavior-tree commands (deferred with behavior trees). Nothing normative is drafted.
+
+## Specification contents: what the decisions imply, 2026-11-12
+
+Asked what a capability specification must contain at minimum. The owner chose **what the decisions imply** (recommendation followed; alternatives were adding a declared interface, and deciding while drafting).
+
+- **Decided (direction):** required: identity and version (what a start command refers to); the kind (state machine); the declared inputs (datastream, field path and maximum age) and commands under local names; and the states, with one initial state per level and a terminal state for each ending the author uses (succeed or fail). Within the states: exit-action time limits, and for each invariant a response naming a target state. Optional: postconditions, timeouts and descriptive text. No interface (what the specification offers, or reports on completion) is required in the first version.
+- **Closes:** "what the document must contain" (left open when the "capability specification" wording was chosen, 2026-11-10); the accepted wording stands unchanged.
+- **Risk noted:** the specification does not say what it offers to other specifications or operators, so choosing or composing specifications is left to catalogue tools outside the standard.
+- **Not decided (still open):** field names; the encoding of identity and version (the `urn:autonomyml` identifier question is unresolved); whether the kind is a field or follows from the content; the contents of a capability binding (its own required list: not yet asked); the behavior-tree kind (optional class). Nothing normative is drafted.
+
+## Binding contents: reference, system and name mappings, 2026-11-12
+
+Asked what a capability binding must contain at minimum. The owner chose **reference, system and name mappings** (recommendation followed; alternatives were adding overrides for timing values, and deciding while drafting).
+
+- **Decided (direction):** a binding names the specification it applies to (identity and version), the system it is for, and one mapping for every local name the specification declares (checked at start, as decided). A binding changes nothing about behavior: maximum ages, time limits, invariants and responses stay in the specification, so the specification alone decides how a run behaves. This answers "whether a binding may also override or add anything else" (left open under "Name resolution"): it may not.
+- **Risk noted:** a system that is slower or faster than the specification assumes needs a different specification, not just a different binding.
+- **Not decided (still open):** field names; how a mapping refers to a datastream or control stream (an API link or identifier; the same open link-or-identifier question as the start command); whether one binding may serve several versions of a specification; whether the accepted "capability binding" wording needs a Note. Nothing normative is drafted.
