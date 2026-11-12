@@ -1150,3 +1150,20 @@ Asked what a capability binding must contain at minimum. The owner chose **refer
 - **Decided (direction):** a binding names the specification it applies to (identity and version), the system it is for, and one mapping for every local name the specification declares (checked at start, as decided). A binding changes nothing about behavior: maximum ages, time limits, invariants and responses stay in the specification, so the specification alone decides how a run behaves. This answers "whether a binding may also override or add anything else" (left open under "Name resolution"): it may not.
 - **Risk noted:** a system that is slower or faster than the specification assumes needs a different specification, not just a different binding.
 - **Not decided (still open):** field names; how a mapping refers to a datastream or control stream (an API link or identifier; the same open link-or-identifier question as the start command); whether one binding may serve several versions of a specification; whether the accepted "capability binding" wording needs a Note. Nothing normative is drafted.
+
+## Reference form: any URI the executor can resolve, 2026-11-12
+
+Asked how a start command and a binding point at a specification (or binding). The owner chose **any URI the executor can resolve** (recommendation followed; alternatives were an API link only, and `urn:autonomyml` names only).
+
+- **Decided (direction):** a reference is a URI (an API link, a web address, or later a registered `urn:autonomyml` name) that the executor must be able to resolve to the document, as the start check requires. The document's own identity and version must match what the reference was meant to point at. This does not depend on the URN registration; `urn:autonomyml` stays the intended scheme for the standard's own identifiers but is not required in references.
+- **Closes:** "link or identifier" left open under the start command, binding contents and specification contents decisions.
+- **Risk noted:** two documents at different addresses can claim the same identity and version; a mismatch rejects the start, and which copy wins is left to the platform. The mechanism for "meant to point at" (the reference carrying an expected identity and version, or only the retrieved document's own claim) is not decided.
+- **Not decided (still open):** the encoding of identity and version in the document; whether the reference carries an expected identity and version; resolution rules (redirects, authentication, retrieval failure; the start check treats failure as REJECTED, assumed); the `urn:autonomyml` segment structure and the type segment (unchanged). Nothing normative is drafted.
+
+## Identity and version: URI plus version string, 2026-11-12
+
+Asked how a specification states its identity and version. The owner chose **URI plus version string** (recommendation followed; alternatives were a semantic version, and a version inside the URI only).
+
+- **Decided (direction):** a specification (and a binding, by the same rule; not asked separately) has an identity, a URI, and a version, a text value, both required. The standard prescribes no numbering scheme. Two documents with the same identity and version are the same document; a changed document gets a new version.
+- **Risk noted:** the standard cannot say which of two versions is newer or whether a change is compatible, and cannot test that an author changed the version when they changed the document (an identical identity and version with different content cannot be detected by the standard).
+- **Not decided (still open):** whether a binding uses the same rule (assumed yes); field names; whether the reference in a start command carries an expected version (the start check compares the retrieved document's own claim with it; the mechanism is undecided); whether a binding names a specific version of its specification or a range (a binding "may serve several versions" is open). Nothing normative is drafted.
