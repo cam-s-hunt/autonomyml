@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/mode-members
+status: proposed
+target: /req/specification-json/mode-members
+purpose: Verify that each state of kind mode states its child states and its initial state in the same form as the top level.
+steps:
+  - Identify each state of kind mode.
+  - For each, locate its member named `states` and its member named `initial`.
+  - Check that they are in the same form as the top-level members of the same names.

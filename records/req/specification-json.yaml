@@ -1,5 +1,5 @@
 # PROPOSED. Identifier /req/specification-json is the Architect's proposal; none is assigned.
-# Inherits /req/core directly because ogcspec.gate.toml sets core_dependency = "direct" (M012), and /req/document for the shared rule.
+# Inherits /req/core directly because ogcspec.gate.toml sets core_dependency = "direct" (M012), /req/document for the shared rule, and /req/specification for the abstract rules this class encodes.
 kind: requirements_class
 id: /req/specification-json
 title: Capability specification in JSON
@@ -8,7 +8,13 @@ subject: Capability specification encoded as JSON
 inherit:
   - /req/core
   - /req/document
+  - /req/specification
 requirements:
   - /req/specification-json/json-text
   - /req/specification-json/identity
   - /req/specification-json/version
+  - /req/specification-json/states
+  - /req/specification-json/kind
+  - /req/specification-json/mode-members
+  - /req/specification-json/ending
+  - /req/specification-json/transitions

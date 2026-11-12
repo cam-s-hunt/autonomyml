@@ -7,3 +7,8 @@ tests:
   - /conf/specification-json/json-text
   - /conf/specification-json/identity
   - /conf/specification-json/version
+  - /conf/specification-json/states
+  - /conf/specification-json/kind
+  - /conf/specification-json/mode-members
+  - /conf/specification-json/ending
+  - /conf/specification-json/transitions

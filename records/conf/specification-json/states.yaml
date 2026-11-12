@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/specification-json/states
+status: proposed
+target: /req/specification-json/states
+purpose: Verify that a capability specification states its states in the top-level member named `states` and names its initial state in the top-level member named `initial`.
+steps:
+  - Locate the top-level member named `states` of the capability specification.
+  - Check that its value is an object.
+  - Check that each member of the object is a state and is named with the name of that state.
+  - Locate the top-level member named `initial`.
+  - Check that it names the initial state.

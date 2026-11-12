@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/kind
+status: proposed
+statement: A state SHALL state its kind in its member named `kind`, whose value is one of `command`, `mode`, `behaviorTree` or `terminal`.

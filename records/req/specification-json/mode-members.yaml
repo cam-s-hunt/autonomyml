@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/mode-members
+status: proposed
+statement: A state of kind mode SHALL state its child states in its member named `states` and name its initial state in its member named `initial`, in the same form as the top level.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/states
+status: proposed
+statement: A capability specification SHALL state its states in the top-level member named `states`, an object whose members are the states, each member named with the name of its state, and SHALL name its initial state in the top-level member named `initial`.

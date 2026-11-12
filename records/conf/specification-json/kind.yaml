@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/kind
+status: proposed
+target: /req/specification-json/kind
+purpose: Verify that each state states its kind in its member named `kind`, with one of the permitted values.
+steps:
+  - Identify each state.
+  - For each, locate its member named `kind`.
+  - Check that its value is one of `command`, `mode`, `behaviorTree` or `terminal`.

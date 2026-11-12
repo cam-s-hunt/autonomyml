@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/ending
+status: proposed
+statement: A state of kind terminal SHALL state its ending in its member named `ending`, whose value is `succeed` or `fail`.

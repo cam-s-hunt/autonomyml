@@ -1,0 +1,12 @@
+kind: abstract_test
+id: /conf/specification-json/transitions
+status: proposed
+target: /req/specification-json/transitions
+purpose: Verify that each state that has transitions states them in its member named `transitions` in the stated form.
+steps:
+  - Identify each state that has transitions.
+  - For each, locate its member named `transitions`.
+  - Check that its value is an array of objects.
+  - For each object, check that it has a member named `condition` whose value is a string.
+  - For each object, check that it has a member named `target` whose value is a string.
+  - Check that the value of `target` is the name of a state.

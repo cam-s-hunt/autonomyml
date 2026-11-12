@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/ending
+status: proposed
+target: /req/specification-json/ending
+purpose: Verify that each state of kind terminal states its ending in its member named `ending`.
+steps:
+  - Identify each state of kind terminal.
+  - For each, locate its member named `ending`.
+  - Check that its value is `succeed` or `fail`.

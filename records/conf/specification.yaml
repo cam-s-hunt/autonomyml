@@ -11,3 +11,4 @@ tests:
   - /conf/specification/terminal-exit
   - /conf/specification/condition
   - /conf/specification/target
+  - /conf/specification/state-names

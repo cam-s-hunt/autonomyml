@@ -17,3 +17,4 @@ requirements:
   - /req/specification/terminal-exit
   - /req/specification/condition
   - /req/specification/target
+  - /req/specification/state-names

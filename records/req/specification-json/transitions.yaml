@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/transitions
+status: proposed
+statement: A state that has transitions SHALL state them, in the order in which they are to be considered, in its member named `transitions`, an array of objects each having a member named `condition`, whose value is a string, and a member named `target`, whose value is a string that is the name of a state.
