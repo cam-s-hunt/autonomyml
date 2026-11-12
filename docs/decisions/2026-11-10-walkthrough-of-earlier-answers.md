@@ -1167,3 +1167,35 @@ Asked how a specification states its identity and version. The owner chose **URI
 - **Decided (direction):** a specification (and a binding, by the same rule; not asked separately) has an identity, a URI, and a version, a text value, both required. The standard prescribes no numbering scheme. Two documents with the same identity and version are the same document; a changed document gets a new version.
 - **Risk noted:** the standard cannot say which of two versions is newer or whether a change is compatible, and cannot test that an author changed the version when they changed the document (an identical identity and version with different content cannot be detected by the standard).
 - **Not decided (still open):** whether a binding uses the same rule (assumed yes); field names; whether the reference in a start command carries an expected version (the start check compares the retrieved document's own claim with it; the mechanism is undecided); whether a binding names a specific version of its specification or a range (a binding "may serve several versions" is open). Nothing normative is drafted.
+
+## Type mapping: every SWE Common type, with defined shapes, 2026-11-12
+
+Asked which SWE Common types a condition can read, given that conditions are type-checked at start. The Architect recommended scalars and records. The owner **chose a different option: everything, with defined shapes**.
+
+- **Decided (direction):** every SWE Common 3.0 component type that can appear in a result schema is mapped to a CEL type with a defined shape, so a condition may read any of them. The types seen in the schema files of the API repository clone (not checked against the pinned SWE Common 3.0 text): Boolean, Count, Quantity, Text, Category, Time, CategoryRange, CountRange, QuantityRange, TimeRange, Vector, DataRecord, DataArray, Matrix, DataChoice, DataStream, Geometry.
+- **Risks noted by the Architect (not accepted or rejected by the owner beyond the choice):** this is the largest piece of the standard so far: each mapping needs rules and tests; most types are used by no decision yet; geometry needs coordinate reference system and unit rules, which the "own function set" decision deferred (built-in CEL has no geometry functions, so a geometry could be read but not meaningfully tested); `DataStream` and `Matrix` are large or block-structured and may need limits; a defined shape for `DataChoice` (which alternative is present) is an invention not in CEL.
+- **Not decided (still open):** the CEL type and shape for each component type (none drafted: for example Quantity as a decimal number, Time as a CEL timestamp, a range as a pair, an array as a list, a choice as a tagged value, are the Architect's guesses, not decisions); how units and coordinate reference systems are treated in the check (no conversion assumed); the per-type missing-value markers; whether the standard defines the mapping fully or takes it by reference from a pinned SWE Common JSON schema; the order of work (all types at once, or as a table the owner reviews type by type). Nothing normative is drafted.
+
+## Mapping work: the Architect drafts a table, the owner reviews, 2026-11-12
+
+Asked how to work through the many type mappings. The owner chose **the Architect drafts a table; the owner reviews** (recommendation followed; alternatives were deciding type by type, and taking the mapping by reference).
+
+- **Done:** the draft is `docs/decisions/2026-11-12-draft-swe-common-to-cel-mapping.md`. It is **proposals only, not normative, nothing accepted**. Sources: CEL `v0.26.0` at the pinned commit (read at the pin), and the SWE Common JSON schemas from the API repository clone at `fb858be` (**not the pinned SWE Common 3.0 text**).
+- **Findings that change earlier assumptions:** (1) CEL's type check needs exact types, so a condition such as `level < 20` against a decimal field fails the start-time check and the author must write `20.0` (this follows from the decision to type-check at start); (2) SWE Common already defines its own missing-value markers (`nilValues`, with a reason URI) and special values (`NaN`, infinities), so "missing" has a schema-defined form per component, which answers part of the open per-type missing-marker question.
+- **Not decided:** every row of the table; nine choices are listed in the draft for the owner.
+
+## Missing values per type: NaN and declared nil values, 2026-11-12
+
+Asked, from Choice 2 of the draft mapping table, which values count as "no observation". The owner chose **NaN and declared nil values** (recommendation followed; alternatives were adding infinities, and NaN only).
+
+- **Decided (direction):** a value counts as no observation if it is NaN, or equals one of the component's own declared nil values (the `nilValues` list in the result schema), or, for a time, is a nil time. Infinity and minus infinity are real numbers and stay readable. This extends the earlier "missing values" decision (NaN or schema-marked) and closes the per-type missing-marker question for the simple components.
+- **Consequence:** an executor reads the nil values from the result schema, not only the value. A value that equals a declared nil value is treated as no data by design.
+- **Not decided (still open):** nil values for composite components (a record or array with some missing fields: whether the whole read is no observation or only that field; not decided); the other eight choices in the draft table. Nothing normative is drafted.
+
+## Units: declared in the specification and checked at start, 2026-11-12
+
+Asked, from Choice 3 of the draft mapping table, how units are handled in conditions. The owner chose **declare the unit in the specification** (recommendation followed; alternatives were converting automatically, and no unit check).
+
+- **Decided (direction):** each declared input in the specification that reads a quantity also states the unit the author means. At start, the executor rejects the start (REJECTED) if the binding's datastream schema declares a different unit. No conversion is done. This extends the start checks above.
+- **Consequence:** a system that reports in another unit needs a different specification or a datastream in the right unit (consistent with "a binding changes no behavior"). The standard must say how two unit references (a UCUM code or a URI) are compared; this is not decided, and the same unit can have several spellings.
+- **Not decided (still open):** the comparison rule for unit references; whether a unit is required for every quantity input or only where the author states one (assumed required; not decided); units on ranges, vectors and times (a time unit is a duration unit; not decided); the field name. Nothing normative is drafted.
