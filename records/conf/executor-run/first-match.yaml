@@ -1,0 +1,13 @@
+kind: abstract_test
+id: /conf/executor-run/first-match
+status: proposed
+target: /req/executor-run/first-match
+purpose: Verify that an executor takes the first transition, across enclosing modes and the current state, whose condition is met.
+steps:
+  - Use a capability specification with a state that has several transitions whose conditions are all met by the same observation.
+  - Cause the executor to evaluate them.
+  - Check that the executor takes the transition stated first.
+  - Use a capability specification with a mode that has a transition and a child state, current, that has a transition, both with conditions met by the same observation.
+  - Cause the executor to evaluate them.
+  - Check that the executor takes the transition of the mode.
+  - Use a mode whose transition condition is not met while the child's is met, and check that the executor takes the child's transition.

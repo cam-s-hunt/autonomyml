@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/command-on-entry
+status: proposed
+target: /req/executor-run/command-on-entry
+purpose: Verify that an executor sends the command of a command state when it enters that state.
+steps:
+  - Use a capability specification with a state of kind command.
+  - Cause the executor to enter that state.
+  - Check that the executor sends the state's command, with the stated parameters, on the bound control stream.

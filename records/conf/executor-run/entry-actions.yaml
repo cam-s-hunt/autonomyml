@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/entry-actions
+status: proposed
+target: /req/executor-run/entry-actions
+purpose: Verify that an executor performs each entry action of a state when it enters the state.
+steps:
+  - Use a capability specification with a state that has entry actions.
+  - Cause the executor to enter that state.
+  - Check that the executor sends the command of each entry action.

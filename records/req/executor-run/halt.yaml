@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/halt
+status: proposed
+statement: "An executor SHALL treat the cancel of a run's command as a halt, perform the exit actions of the states it is in, innermost first, and then end the run as halted."

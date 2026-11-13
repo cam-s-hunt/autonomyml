@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/invariant-response
+status: proposed
+statement: An executor SHALL, when an invariant is broken, take a transition to the response state that the invariant names.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/second-halt
+status: proposed
+statement: An executor SHALL ignore a halt received while a halt is in progress.

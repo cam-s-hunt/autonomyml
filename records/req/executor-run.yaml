@@ -1,0 +1,37 @@
+# PROPOSED. Identifier /req/executor-run is the Architect's proposal; none is assigned.
+# What an executor does while a run is in progress (decision 2026-11-13: the executor is divided into a start class and a run class).
+# Inherits /req/core directly because ogcspec.gate.toml sets core_dependency = "direct" (M012), and /req/executor-start because a run begins only after the start checks.
+# First half: moving between states. Second half: invariants, endings, halting and clean-up.
+kind: requirements_class
+id: /req/executor-run
+title: Executor run
+status: proposed
+subject: Executor
+inherit:
+  - /req/core
+  - /req/executor-start
+requirements:
+  - /req/executor-run/begin-initial
+  - /req/executor-run/enter-mode
+  - /req/executor-run/command-on-entry
+  - /req/executor-run/entry-actions
+  - /req/executor-run/exit-actions
+  - /req/executor-run/transition-order
+  - /req/executor-run/first-match
+  - /req/executor-run/evaluation
+  - /req/executor-run/no-observation
+  - /req/executor-run/transitions-first
+  - /req/executor-run/timeout
+  - /req/executor-run/invariants-checked
+  - /req/executor-run/invariant-no-observation
+  - /req/executor-run/invariant-response
+  - /req/executor-run/end-on-terminal
+  - /req/executor-run/end-succeed
+  - /req/executor-run/end-fail
+  - /req/executor-run/end-halted
+  - /req/executor-run/cause
+  - /req/executor-run/halt
+  - /req/executor-run/exit-time-limit
+  - /req/executor-run/second-halt
+  - /req/executor-run/action-failure
+  - /req/executor-run/no-resume

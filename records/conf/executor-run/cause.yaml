@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/cause
+status: proposed
+target: /req/executor-run/cause
+purpose: Verify that an executor records a cause with the ending of each run.
+steps:
+  - Complete runs that end by each means the executor supports: by reaching a terminal state, by a halt, and by an action failure.
+  - For each, read the record of the run.
+  - Check that it states the ending and a cause, and that the cause is a name.

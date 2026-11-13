@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/one-run
+status: proposed
+target: /req/executor-start/one-run
+purpose: Verify that an executor rejects a run request while another run is in progress.
+steps:
+  - Start a run and check that it is in progress.
+  - Send a second, valid run request.
+  - Check that the executor rejects the second request.

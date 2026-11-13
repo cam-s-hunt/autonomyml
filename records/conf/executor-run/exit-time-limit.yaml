@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/exit-time-limit
+status: proposed
+target: /req/executor-run/exit-time-limit
+purpose: Verify that an executor stops waiting for an exit action when its time limit has elapsed.
+steps:
+  - Use a capability specification with an exit action that states a time limit.
+  - Arrange that the command of the exit action does not complete within the time limit.
+  - Cause the executor to perform the exit action.
+  - Check that the executor stops waiting when the time limit has elapsed and goes on.

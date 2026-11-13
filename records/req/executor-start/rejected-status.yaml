@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/rejected-status
+status: proposed
+statement: An executor SHALL report a rejected run request with the status code REJECTED.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/binding-complete
+status: proposed
+statement: An executor SHALL reject a run request when the binding does not supply a data stream or control stream for every local name the specification declares.

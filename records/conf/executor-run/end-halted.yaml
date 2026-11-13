@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-run/end-halted
+status: proposed
+target: /req/executor-run/end-halted
+purpose: Verify that a halted run is reported as CANCELED.
+steps:
+  - Start a run.
+  - Cancel the run's command.
+  - Wait for the run to end.
+  - Read the status of the run's command.
+  - Check that the status code is CANCELED.

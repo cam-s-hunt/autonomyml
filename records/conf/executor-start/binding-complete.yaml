@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-start/binding-complete
+status: proposed
+target: /req/executor-start/binding-complete
+purpose: Verify that an executor rejects a run request when the binding leaves a declared local name without a data stream or control stream.
+steps:
+  - Prepare a capability specification that declares data streams and control streams.
+  - Prepare a binding that omits one declared local name.
+  - Send a run request that names them and check that the executor rejects it.
+  - Repeat with a binding that omits a different declared local name, once for a data stream and once for a control stream.

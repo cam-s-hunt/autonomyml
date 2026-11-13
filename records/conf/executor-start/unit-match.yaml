@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/unit-match
+status: proposed
+target: /req/executor-start/unit-match
+purpose: Verify that an executor rejects a run request when a bound data stream's unit differs from the declared unit.
+steps:
+  - Prepare a capability specification that declares a unit for a field.
+  - Prepare a binding to a data stream whose result schema gives a different unit for that field.
+  - Send a run request that names them and check that the executor rejects it.

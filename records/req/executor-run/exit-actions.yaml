@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/exit-actions
+status: proposed
+statement: An executor SHALL perform each exit action of a state when it leaves that state.

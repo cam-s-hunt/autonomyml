@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/invariants-checked
+status: proposed
+statement: "An executor SHALL check the invariants of its current state and of the modes that enclose it when it enters a state and on each new observation or command status on a stream that an invariant's condition reads."

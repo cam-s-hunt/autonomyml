@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/no-early-entry
+status: proposed
+target: /req/executor-start/no-early-entry
+purpose: Verify that an executor enters no state of a run until the start checks have passed.
+steps:
+  - Send a run request that the executor must reject.
+  - Observe the commands the executor sends on the control streams of the specification.
+  - Check that the executor sent none and entered no state.

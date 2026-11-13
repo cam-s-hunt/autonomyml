@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/constants-valid
+status: proposed
+target: /req/executor-start/constants-valid
+purpose: Verify that an executor rejects a run request when a command's constant parameters do not fit the bound control stream's parameters schema.
+steps:
+  - Prepare a capability specification with a command whose constant parameters do not conform to the parameters schema of the bound control stream.
+  - Send a run request that names it and a binding for it.
+  - Check that the executor rejects the request.

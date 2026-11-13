@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/enter-mode
+status: proposed
+statement: An executor SHALL, on entering a mode, enter the initial state of that mode.

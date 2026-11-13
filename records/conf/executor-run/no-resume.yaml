@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/no-resume
+status: proposed
+target: /req/executor-run/no-resume
+purpose: Verify that an executor does not resume a run that has ended.
+steps:
+  - End a run by each means the executor supports.
+  - Send commands that name the same specification and binding again, and attempt to continue the ended run.
+  - Check that the executor makes no transition in the ended run and treats any new request as a new run.

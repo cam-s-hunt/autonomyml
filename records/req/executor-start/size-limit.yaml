@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/size-limit
+status: proposed
+statement: An executor SHALL reject a run request when the declared size of an array, matrix or stream exceeds the maximum size the specification declares.

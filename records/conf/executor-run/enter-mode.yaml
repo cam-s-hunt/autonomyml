@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/enter-mode
+status: proposed
+target: /req/executor-run/enter-mode
+purpose: Verify that an executor enters the initial state of a mode when it enters the mode.
+steps:
+  - Use a capability specification with a mode that declares an initial state.
+  - Cause the executor to enter the mode.
+  - Check that the executor then enters the initial state the mode declares.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/end-on-terminal
+status: proposed
+statement: An executor SHALL end a run when it enters a terminal state.

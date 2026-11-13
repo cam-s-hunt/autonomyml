@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/invariant-response
+status: proposed
+target: /req/executor-run/invariant-response
+purpose: Verify that an executor takes the transition to the response state when an invariant is broken.
+steps:
+  - Use a capability specification with an invariant that names a response state.
+  - Break the invariant.
+  - Check that the executor takes a transition to the response state, leaving and entering states in the order of the transition rule.

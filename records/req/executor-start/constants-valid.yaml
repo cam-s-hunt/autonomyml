@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/constants-valid
+status: proposed
+statement: "An executor SHALL reject a run request when a command's constant parameters do not validate against the bound control stream's parameters schema."

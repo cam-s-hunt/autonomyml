@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/evaluation
+status: proposed
+statement: An executor SHALL evaluate the transitions that apply to its current state when it enters a state and on each new observation or command status on a stream that a condition reads.

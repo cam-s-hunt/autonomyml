@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/end-fail
+status: proposed
+target: /req/executor-run/end-fail
+purpose: Verify that a run that ends with the ending fail is reported as FAILED.
+steps:
+  - Use a capability specification with a terminal state whose ending is fail.
+  - Cause the run to enter it.
+  - Read the status of the run's command.
+  - Check that the status code is FAILED.

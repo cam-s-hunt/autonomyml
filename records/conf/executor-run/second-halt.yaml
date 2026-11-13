@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/second-halt
+status: proposed
+target: /req/executor-run/second-halt
+purpose: Verify that an executor ignores a second halt.
+steps:
+  - Start a run and cancel its command.
+  - While the exit actions are in progress, cancel the command again.
+  - Check that the executor takes no further action because of the second cancel and that the run ends once.

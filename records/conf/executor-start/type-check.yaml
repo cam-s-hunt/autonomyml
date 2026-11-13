@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-start/type-check
+status: proposed
+target: /req/executor-start/type-check
+purpose: Verify that an executor rejects a run request when a condition does not pass the CEL type check.
+steps:
+  - Prepare a capability specification with a condition that compares a double-valued field to an integer literal.
+  - Send a run request that names it and a binding for it.
+  - Check that the executor rejects the request.
+  - Repeat with a condition that reads a field the result schema does not define.

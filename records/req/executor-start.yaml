@@ -1,0 +1,23 @@
+# PROPOSED. Identifier /req/executor-start is the Architect's proposal; none is assigned.
+# What an executor does when a run is requested (decision 2026-11-13: the executor is divided into a start class and a run class).
+# Inherits /req/core directly because ogcspec.gate.toml sets core_dependency = "direct" (M012).
+kind: requirements_class
+id: /req/executor-start
+title: Executor start
+status: proposed
+subject: Executor
+inherit:
+  - /req/core
+requirements:
+  - /req/executor-start/accept-request
+  - /req/executor-start/retrieve-specification
+  - /req/executor-start/retrieve-binding
+  - /req/executor-start/binding-version
+  - /req/executor-start/binding-complete
+  - /req/executor-start/type-check
+  - /req/executor-start/unit-match
+  - /req/executor-start/size-limit
+  - /req/executor-start/constants-valid
+  - /req/executor-start/rejected-status
+  - /req/executor-start/one-run
+  - /req/executor-start/no-early-entry

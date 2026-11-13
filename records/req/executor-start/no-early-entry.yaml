@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/no-early-entry
+status: proposed
+statement: An executor SHALL NOT enter any state of a run before every check in this class has passed.

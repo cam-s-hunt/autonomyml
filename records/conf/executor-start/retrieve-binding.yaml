@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/retrieve-binding
+status: proposed
+target: /req/executor-start/retrieve-binding
+purpose: Verify that an executor retrieves the capability binding that a run request names.
+steps:
+  - Publish a capability binding at a known location and name it in a run request.
+  - Send the request and observe the requests the executor makes.
+  - Check that the executor retrieves the capability binding from the named location.

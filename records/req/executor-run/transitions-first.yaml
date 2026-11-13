@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/transitions-first
+status: proposed
+statement: An executor SHALL check the transitions of its current state and of the modes that enclose it before the timeout of its current state.

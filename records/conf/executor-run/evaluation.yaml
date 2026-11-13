@@ -1,0 +1,12 @@
+kind: abstract_test
+id: /conf/executor-run/evaluation
+status: proposed
+target: /req/executor-run/evaluation
+purpose: Verify when an executor evaluates the transitions that apply to its current state.
+steps:
+  - Use a capability specification with a state whose transition condition is already met at entry.
+  - Cause the executor to enter the state and check that it evaluates the transitions at once.
+  - Use a state whose condition becomes met only on a later observation on a stream the condition reads.
+  - Deliver that observation and check that the executor evaluates the transitions and takes the transition.
+  - Repeat with a new command status on a control stream the condition reads.
+  - Repeat with a transition of an enclosing mode while a child state is current.

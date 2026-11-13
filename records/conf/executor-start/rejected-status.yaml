@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/rejected-status
+status: proposed
+target: /req/executor-start/rejected-status
+purpose: Verify that an executor reports a rejected run request with the status code REJECTED.
+steps:
+  - Send a run request that the executor must reject, for example one whose binding omits a declared local name.
+  - Read the status of the command.
+  - Check that the status code is REJECTED.

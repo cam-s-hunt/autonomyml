@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/exit-time-limit
+status: proposed
+statement: An executor SHALL stop waiting for an exit action when its time limit has elapsed.

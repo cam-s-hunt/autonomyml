@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/accept-request
+status: proposed
+target: /req/executor-start/accept-request
+purpose: Verify that an executor accepts a request to start a run, sent as a command that names a capability specification and a capability binding.
+steps:
+  - Prepare a valid capability specification and a valid capability binding for it.
+  - Send the executor a command whose parameters name the specification and the binding.
+  - Check that the executor accepts the command as a request to start a run.

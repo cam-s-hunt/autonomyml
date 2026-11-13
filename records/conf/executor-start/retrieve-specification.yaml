@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/retrieve-specification
+status: proposed
+target: /req/executor-start/retrieve-specification
+purpose: Verify that an executor retrieves the capability specification that a run request names.
+steps:
+  - Publish a capability specification at a known location and name it in a run request.
+  - Send the request and observe the requests the executor makes.
+  - Check that the executor retrieves the capability specification from the named location.

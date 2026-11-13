@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/end-succeed
+status: proposed
+statement: An executor SHALL report a run that ends in a terminal state with the ending succeed as COMPLETED.

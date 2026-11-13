@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/command-on-entry
+status: proposed
+statement: An executor SHALL send the command of a state of kind command when it enters that state.

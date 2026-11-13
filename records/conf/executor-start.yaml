@@ -1,0 +1,18 @@
+kind: conformance_class
+id: /conf/executor-start
+title: Executor start
+status: proposed
+target: /req/executor-start
+tests:
+  - /conf/executor-start/accept-request
+  - /conf/executor-start/retrieve-specification
+  - /conf/executor-start/retrieve-binding
+  - /conf/executor-start/binding-version
+  - /conf/executor-start/binding-complete
+  - /conf/executor-start/type-check
+  - /conf/executor-start/unit-match
+  - /conf/executor-start/size-limit
+  - /conf/executor-start/constants-valid
+  - /conf/executor-start/rejected-status
+  - /conf/executor-start/one-run
+  - /conf/executor-start/no-early-entry

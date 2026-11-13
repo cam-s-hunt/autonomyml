@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/first-match
+status: proposed
+statement: An executor SHALL take the first transition whose condition is met, checking the transitions of the modes that enclose its current state from the outermost inward, and then the transitions of its current state, each list in the order stated.

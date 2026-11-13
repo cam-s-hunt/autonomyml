@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/end-halted
+status: proposed
+statement: An executor SHALL report a halted run as CANCELED.

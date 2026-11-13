@@ -1,0 +1,30 @@
+kind: conformance_class
+id: /conf/executor-run
+title: Executor run
+status: proposed
+target: /req/executor-run
+tests:
+  - /conf/executor-run/begin-initial
+  - /conf/executor-run/enter-mode
+  - /conf/executor-run/command-on-entry
+  - /conf/executor-run/entry-actions
+  - /conf/executor-run/exit-actions
+  - /conf/executor-run/transition-order
+  - /conf/executor-run/first-match
+  - /conf/executor-run/evaluation
+  - /conf/executor-run/no-observation
+  - /conf/executor-run/transitions-first
+  - /conf/executor-run/timeout
+  - /conf/executor-run/invariants-checked
+  - /conf/executor-run/invariant-no-observation
+  - /conf/executor-run/invariant-response
+  - /conf/executor-run/end-on-terminal
+  - /conf/executor-run/end-succeed
+  - /conf/executor-run/end-fail
+  - /conf/executor-run/end-halted
+  - /conf/executor-run/cause
+  - /conf/executor-run/halt
+  - /conf/executor-run/exit-time-limit
+  - /conf/executor-run/second-halt
+  - /conf/executor-run/action-failure
+  - /conf/executor-run/no-resume

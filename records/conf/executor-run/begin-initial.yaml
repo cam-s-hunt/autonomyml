@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/begin-initial
+status: proposed
+target: /req/executor-run/begin-initial
+purpose: Verify that an executor begins a run in the initial state of the capability specification.
+steps:
+  - Start a run of a valid capability specification.
+  - Observe the first state the executor enters.
+  - Check that it is the initial state the specification declares at its top level.

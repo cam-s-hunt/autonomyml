@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/timeout
+status: proposed
+target: /req/executor-run/timeout
+purpose: Verify that an executor takes the timeout target when the timeout duration has elapsed.
+steps:
+  - Use a capability specification with a state that has a timeout and no transition whose condition is met.
+  - Cause the executor to enter the state and wait for the duration to elapse.
+  - Check that the executor then takes the timeout's target.

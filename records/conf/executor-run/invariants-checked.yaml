@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-run/invariants-checked
+status: proposed
+target: /req/executor-run/invariants-checked
+purpose: Verify when an executor checks invariants.
+steps:
+  - Use a capability specification with a mode that has an invariant and a child state, current, that has an invariant.
+  - Cause the executor to enter the child state with both conditions holding.
+  - Break the invariant of the mode by a new observation on a stream its condition reads, and check that the executor detects it.
+  - Repeat for the invariant of the child state.
+  - Use a state entered by a transition whose invariant is already broken and check that the executor detects it on entry.

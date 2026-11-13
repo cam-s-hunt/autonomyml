@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/begin-initial
+status: proposed
+statement: An executor SHALL begin a run in the initial state of the capability specification.

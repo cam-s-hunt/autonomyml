@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/no-observation
+status: proposed
+target: /req/executor-run/no-observation
+purpose: Verify that a condition that reads a value counted as no observation is treated as not met.
+steps:
+  - Use a capability specification with a transition whose condition would be met by a valid value.
+  - Supply a value that is stale, then a stream that has never reported, then a NaN, then a declared nil value.
+  - For each, check that the executor treats the condition as not met and takes no transition.

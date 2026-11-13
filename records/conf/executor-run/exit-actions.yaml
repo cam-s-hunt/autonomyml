@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/exit-actions
+status: proposed
+target: /req/executor-run/exit-actions
+purpose: Verify that an executor performs each exit action of a state when it leaves the state.
+steps:
+  - Use a capability specification with a state that has exit actions.
+  - Cause the executor to leave that state by a transition.
+  - Check that the executor sends the command of each exit action.

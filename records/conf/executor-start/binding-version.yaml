@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-start/binding-version
+status: proposed
+target: /req/executor-start/binding-version
+purpose: Verify that an executor rejects a run request when the binding and the specification do not agree on identity and version.
+steps:
+  - Prepare a binding whose specification object states a uniqueId that differs from the uniqueId of the retrieved capability specification.
+  - Send a run request that names them and check that the executor rejects it.
+  - Prepare a binding whose specification object states a version that differs from the version of the retrieved capability specification.
+  - Send a run request that names them and check that the executor rejects it.

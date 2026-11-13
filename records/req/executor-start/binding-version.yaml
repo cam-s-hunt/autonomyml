@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/binding-version
+status: proposed
+statement: "An executor SHALL reject a run request when the uniqueId or version in the binding's specification object differs from that of the retrieved capability specification."

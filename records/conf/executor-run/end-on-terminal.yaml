@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/end-on-terminal
+status: proposed
+target: /req/executor-run/end-on-terminal
+purpose: Verify that an executor ends a run when it enters a terminal state.
+steps:
+  - Use a capability specification with a terminal state.
+  - Cause the executor to enter the terminal state.
+  - Check that the run has ended and that the executor makes no further transition.

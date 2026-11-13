@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/transition-order
+status: proposed
+target: /req/executor-run/transition-order
+purpose: Verify the order in which an executor leaves and enters states when a transition is taken.
+steps:
+  - Use a capability specification in which a transition leaves a state nested in a mode and enters a state nested in another mode, each with entry or exit actions.
+  - Cause the transition to be taken.
+  - Check that the exit actions run innermost state first.
+  - Check that the entry actions then run outermost state first.

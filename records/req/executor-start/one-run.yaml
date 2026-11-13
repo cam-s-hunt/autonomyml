@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/one-run
+status: proposed
+statement: An executor SHALL reject a run request while another run is in progress.

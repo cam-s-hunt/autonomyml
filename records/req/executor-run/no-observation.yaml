@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/no-observation
+status: proposed
+statement: An executor SHALL treat a condition that reads a stale, never-reported, NaN or nil value as not met.

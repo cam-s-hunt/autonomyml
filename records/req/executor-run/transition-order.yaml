@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/transition-order
+status: proposed
+statement: When a transition is taken, an executor SHALL leave the states being left, innermost first, and then enter the states being entered, outermost first.
