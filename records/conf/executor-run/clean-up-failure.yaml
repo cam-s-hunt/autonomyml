@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-run/clean-up-failure
+status: proposed
+target: /req/executor-run/clean-up-failure
+purpose: Verify that a failure during clean-up does not stop the clean-up or change the ending.
+steps:
+  - Use a capability specification with nested states that have several exit actions.
+  - Bring a run to a nested state and cancel its command.
+  - Make one of the exit actions fail.
+  - Check that the executor performs the remaining exit actions and that the run ends as halted.
+  - Repeat after an action failure and check that the run ends with the ending fail.

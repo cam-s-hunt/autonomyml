@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/postcondition-check
+status: proposed
+statement: An executor SHALL evaluate each postcondition of the capability specification once, when a run enters a terminal state with the ending succeed.

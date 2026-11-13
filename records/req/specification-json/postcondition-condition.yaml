@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/postcondition-condition
+status: proposed
+statement: A postcondition SHALL state its condition in a member named `condition`, a string.

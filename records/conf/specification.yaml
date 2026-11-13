@@ -27,3 +27,5 @@ tests:
   - /conf/specification/invariant-condition
   - /conf/specification/invariant-response
   - /conf/specification/timeout
+  - /conf/specification/postcondition-name
+  - /conf/specification/postcondition-condition

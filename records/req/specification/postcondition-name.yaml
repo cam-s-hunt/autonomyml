@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/postcondition-name
+status: proposed
+statement: A postcondition SHALL state a name.

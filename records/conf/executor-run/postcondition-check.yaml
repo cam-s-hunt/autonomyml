@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/postcondition-check
+status: proposed
+target: /req/executor-run/postcondition-check
+purpose: Verify that an executor evaluates each postcondition once when a run enters a terminal state with the ending succeed.
+steps:
+  - Use a capability specification with postconditions and a terminal state with the ending succeed.
+  - Bring a run to that terminal state with every postcondition holding.
+  - Check that the executor evaluates each postcondition once, at that moment, and that the run ends COMPLETED.

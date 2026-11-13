@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/postconditions
+status: proposed
+statement: A capability specification document SHALL state its postconditions, if any, as an array in a member named `postconditions`.

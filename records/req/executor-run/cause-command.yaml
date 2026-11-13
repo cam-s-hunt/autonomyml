@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/cause-command
+status: proposed
+statement: An executor SHALL record the name of the state as the cause of a run that ends because the command of a state of kind command failed.

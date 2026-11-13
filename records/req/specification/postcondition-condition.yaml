@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/postcondition-condition
+status: proposed
+statement: A postcondition SHALL state a condition.

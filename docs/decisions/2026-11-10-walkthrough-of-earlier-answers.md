@@ -1557,3 +1557,86 @@ Asked for the wording of the second half. The owner chose **thirteen atomic requ
 - **Written (all `status: proposed`; identifiers are the Architect's proposals, none assigned):** added to `/req/executor-run`, each with an abstract test listed in `/conf/executor-run`: `invariants-checked`, `invariant-no-observation`, `invariant-response`, `end-on-terminal`, `end-succeed`, `end-fail`, `end-halted`, `cause`, `halt`, `exit-time-limit`, `second-halt`, `action-failure`, `no-resume`. The class now has 24 requirements. Gate stage 1 over the 236 records: no findings.
 - **Open questions these requirements do not decide (not settled by the Architect):** (1) which cause a halt records (a halt has no declared name, since `halted` is never declared), and what the cause is for a run that ends by entering a terminal state (the terminal state's name is the natural choice but is not decided); (2) what happens when several invariants break at once; (3) what a failing postcondition does (postconditions are optional and have no run behavior; no requirement mentions them); (4) whether exit actions run when a terminal state is entered by a normal transition (the terminal-state restrictions on actions are not decided); (5) what "an action fails" means: command status FAILED or REJECTED, no status in time, or a command that cannot be sent; (6) what an exit action's time limit leaves behind: the command's own status after the executor stops waiting; (7) `exit-time-limit` and `halt` say nothing about an action failing during clean-up (the clean-up could loop); (8) the cause requirement says "a cause that is a name" without saying where the name is recorded or how it is read; (9) `no-resume` is testable only as the absence of behavior, so the abstract test has limited repeatability; (10) `end-succeed`, `end-fail` and `end-halted` repeat the status mapping from the decision on runs; (11) `invariant-no-observation` and `no-observation` repeat the list of no-observation values and should point at one defined term when the definitions are written.
 - **Now written for the executor:** the start class (12) and the run class (24). Not written: the behavior-tree optional class, terminal-state restrictions, definitions of new terms (implementation, document, datastream, control stream, and others), the normative references clause, the examples, stage 2.
+
+## Cause recorded for a halt, 2026-11-13
+
+Asked what cause a halted run records. The owner chose **the name of the current state** (recommendation followed; alternatives were a name reserved by the standard, and no cause for a halt).
+
+- **Decided (direction):** the cause of a halt is the name of the innermost state the run was in when the halt arrived. No reserved word is added. This closes open question (1) of the second-half section for halts only.
+- **Cost recorded:** the cause says where the run was stopped, not why; the API's cancel carries no reason, so who or what canceled it is not recorded.
+- **Not decided:** the cause for a run that ends by entering a terminal state, and for an action failure (next cards); where the cause is recorded and how it is read; the requirement wording. `/req/executor-run/cause` still says only "a cause that is a name" and is not changed.
+
+## Cause recorded for a terminal state and for an action failure, 2026-11-13
+
+Asked what cause a run records when it ends by entering a terminal state and when it ends because an action failed. The owner chose **the terminal state's name; the failing action's name** (recommendation followed; alternatives were also recording an invariant's name when it triggered the ending, and always the terminal state's name).
+
+- **Decided (direction):** a run that enters a terminal state records that state's name as its cause; a run that ends because an action failed records the failing action's name; a halt records the innermost current state's name (previous section). Every cause is a name from the specification's one name list, so no reserved word exists.
+- **Cost recorded:** when an invariant's response leads to a terminal state, the cause is the terminal state's name, so the invariant that fired is not recorded; authors can name the response state to say why.
+- **Not decided:** where the cause is recorded and how it is read; the requirement wording (the written `/req/executor-run/cause` is not yet changed); what the cause is when a run ends in a terminal state while an action is also failing.
+
+## Cause requirement reworded and split, 2026-11-13
+
+Asked whether to replace the vague `cause` requirement. The owner chose **reword and split into three** (recommendation followed; alternatives were one reworded requirement, and leaving it as written).
+
+- **Written (`status: proposed`, identifiers are proposals):** `/req/executor-run/cause` reworded in place to the terminal-state case; new `/req/executor-run/cause-action` and `/req/executor-run/cause-halt`; each with a rewritten or new abstract test; both listed in `/req/executor-run` and `/conf/executor-run`. The run class now has 26 requirements. Gate stage 1 over the 240 records: no findings.
+- **Not decided:** where the cause is recorded and how it is read ("record" is as undefined as for the ending); a run that ends in a terminal state while an action is also failing; `/req/executor-run/halt` and `action-failure` do not mention the cause (the cause rules cover it).
+
+## Several invariants broken at once, 2026-11-13
+
+Asked which response the executor takes when several invariants are broken at the same moment. The owner chose **first, in the same order as transitions** (recommendation followed; alternatives were the current state's first then outward, and leaving it undefined).
+
+- **Decided (direction):** the executor takes the response of the first broken invariant, checking enclosing modes from the outermost inward and then the current state, each list in the order stated. After the response transition the other invariants are checked again in the new state. This closes open question (2) of the second-half section.
+- **Cost recorded:** an outer invariant always wins over an inner one; the author orders a state's own list to prioritise within it.
+- **Not decided:** the requirement wording (next card); whether an invariant list is ordered in the abstract class (the JSON arrays are, the abstract rules do not say so).
+
+## Invariant-order requirement written, 2026-11-13
+
+Asked for wording of the invariant-order rule. The owner chose **add it as worded** (recommendation followed; alternatives were folding it into `invariant-response`, and the owner wording it).
+
+- **Written (`status: proposed`, identifier is the Architect's proposal):** `/req/executor-run/invariant-order` with an abstract test, listed in `/req/executor-run` and `/conf/executor-run`. The run class now has 27 requirements. Gate stage 1 over the 242 records: no findings.
+- **Open:** the wording relies on the invariant list being ordered, which the abstract class does not say (the JSON arrays are ordered); "first broken invariant" after a response transition re-checks the other invariants only through `invariants-checked`.
+
+## What counts as an action failing, 2026-11-13
+
+Asked what counts as an action failing. The owner chose **REJECTED, FAILED or not sendable** (recommendation followed; alternatives were also counting a missing status within a time limit, and only FAILED).
+
+- **Decided (direction):** an action fails when its command comes back with the status REJECTED or FAILED, or when the executor cannot send the command. This closes open question (5) of the second-half section.
+- **Cost recorded:** a command that never answers is not a failure; only an exit action has a time limit, so an entry action can wait on an unresponsive stream until a transition, a timeout or a halt ends the wait.
+- **Not decided:** whether a command CANCELED by someone else counts; whether an action must be COMPLETED before the run goes on (this affects what "wait" means in the entry rules); whether the same rule applies to the command of a command state (a state's command is not an action in the written rules); the requirement wording (`/req/executor-run/action-failure` still says only "when an action fails").
+
+## Action-failure requirement reworded and command-failure added, 2026-11-13
+
+Asked for wording of the failure rules. The owner chose **cover actions and state commands, as two requirements** (recommendation followed; alternatives were actions only, and one requirement for both).
+
+- **Written (`status: proposed`, identifiers are proposals):** `/req/executor-run/action-failure` reworded in place ("…when the command of an entry action or an exit action is rejected, fails or cannot be sent…") with a rewritten test; new `/req/executor-run/command-failure` for the command of a state of kind command, with a test; both listed in the class and the conformance class. The run class now has 29 requirements. Gate stage 1 over the 244 records: no findings.
+- **Open (not settled by the Architect):** (1) `cause-action` says "the failing action", but a failed state command is not an action, so the cause for a command failure is unwritten (the natural cause is the command state's name; to be asked); (2) a failure during clean-up (the exit actions run after a failure) is not covered, so clean-up could loop or the clean-up command's failure could change the ending; (3) whether a command CANCELED by someone else counts; (4) whether an action must be COMPLETED before the run goes on; (5) the "cannot be sent" case is hard to test repeatably.
+
+## A failure during clean-up, 2026-11-13
+
+Asked what happens when an exit action fails during clean-up (after a halt or a failure). The owner chose **carry on with the rest; ending unchanged** (recommendation followed; alternatives were stopping and ending as fail, and leaving it undefined).
+
+- **Decided (direction):** a failing exit action during clean-up is skipped; the executor performs the remaining exit actions, then ends the run with the ending already decided (halted stays halted, fail stays fail). No second clean-up starts. This closes open question (2) of the previous section.
+- **Cost recorded:** a failed clean-up is not shown by the status or the cause.
+- **Not decided:** recording that a clean-up action failed; the requirement wording (nothing written yet: `halt`, `action-failure` and `command-failure` do not mention it); whether the same applies to an exit action that fails during an ordinary transition (not clean-up; today that is an action failure and ends the run with the ending fail).
+
+## Clean-up failure and command-failure cause written, 2026-11-13
+
+Asked for wording of both rules. The owner chose **add both as worded** (recommendation followed; alternatives were the clean-up rule only, and the owner wording them). The card's first requirement text contained a stray drafting line ("Hmm, precisely:") before the final wording; the final wording after it is what was written, and the slip is recorded here.
+
+- **Written (`status: proposed`, identifiers are proposals):** `/req/executor-run/clean-up-failure` and `/req/executor-run/cause-command`, each with an abstract test, listed in the class and the conformance class. The run class now has 31 requirements. Gate stage 1 over the 248 records: no findings.
+- **Open:** recording that a clean-up action failed (not decided); `cause-action` ("the failing action") and `cause-command` ("the state") are now separate and consistent; a command CANCELED by someone else; whether an action must be COMPLETED before the run goes on; postconditions (no requirement); the mode's own timeout; terminal-state restrictions.
+
+## Postconditions are checked once, 2026-11-13
+
+Asked whether a postcondition is checked once or must hold for some time. The owner chose **checked once, at that moment** (recommendation followed; alternatives were holding for a stated duration, and not supporting postconditions in version 1).
+
+- **Decided (direction):** when a run enters a terminal state with the ending succeed, the executor evaluates each postcondition once, against the observations it holds at that moment, under the no-observation rule. If any is broken the run ends with the ending fail (FAILED) and the cause is that postcondition's name. This closes open question (3) of the second-half section and the "checked once" part of the 2026-11-12 postcondition decision.
+- **Cost recorded:** a reading that is briefly right passes; a slow sensor that has not yet reported fails the run (an author can make the last state wait with a transition condition).
+- **Not decided:** the member name (`postconditions` is the proposal); that postconditions share the one name list (would reword `state-names` again); whether postconditions are optional (assumed yes); what happens to the terminal state's exit actions; wording of every requirement (the specification's abstract and JSON rules and the executor rule; none written).
+
+## Postcondition rules written, 2026-11-13
+
+Asked for wording of the postcondition rules. The owner chose **write them as worded** (recommendation followed; alternatives were the executor rules only, and the owner wording them).
+
+- **Written (all `status: proposed`; identifiers are the Architect's proposals, none assigned):** in `/req/specification`: `postcondition-name`, `postcondition-condition`, each with a test; the permission `/per/specification/postconditions` ("A capability specification MAY state postconditions.", no test, not listed in a class, like the timeout permission); `state-names` reworded in place to "…two of its states, invariants, actions or postconditions." with its test; in `/req/specification-json`: `postconditions`, `postcondition-name`, `postcondition-condition`; in `/req/executor-run`: `postcondition-check`, `postcondition-fail`, `cause-postcondition`, each with a test. The run class now has 34 requirements, the specification class 25, the specification JSON class 36. Gate stage 1 over the 265 records: no findings.
+- **Open (not settled by the Architect):** (1) several broken postconditions: the cause is not decided (the first in stated order is the natural choice; the JSON array order is not stated in the abstract class); (2) what a terminal state's exit actions do (by the written rules a terminal state has none; the restriction is not written); (3) `postcondition-fail` and `end-succeed` can both apply to a run that reaches a succeed terminal state: the status mapping says COMPLETED, so `end-succeed` would need "unless a postcondition is broken", which is not written and the two requirements currently conflict for that case; (4) the permission's emitter handling is still unchecked; (5) the term "postcondition" Note says the requirements class for capability specifications states when it is evaluated, but the evaluation rule is in the run class.

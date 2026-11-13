@@ -1,0 +1,5 @@
+# PROPOSED. A permission needs no abstract test.
+kind: permission
+id: /per/specification/postconditions
+status: proposed
+statement: A capability specification MAY state postconditions.

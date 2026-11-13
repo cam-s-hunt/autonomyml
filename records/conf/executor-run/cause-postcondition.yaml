@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/cause-postcondition
+status: proposed
+target: /req/executor-run/cause-postcondition
+purpose: Verify that a run that ends because a postcondition was broken records that postcondition's name as its cause.
+steps:
+  - Use a capability specification with a postcondition.
+  - Bring a run to a succeed terminal state with the postcondition broken.
+  - Read the record of the run.
+  - Check that its cause is the name of the broken postcondition.

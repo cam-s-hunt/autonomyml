@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/postcondition-condition
+status: proposed
+target: /req/specification-json/postcondition-condition
+purpose: Verify that each postcondition states its condition in a member named `condition`.
+steps:
+  - Identify each postcondition.
+  - For each, locate its member named `condition`.
+  - Check that its value is a string.

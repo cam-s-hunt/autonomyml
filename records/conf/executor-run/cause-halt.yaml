@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/cause-halt
+status: proposed
+target: /req/executor-run/cause-halt
+purpose: Verify that a halted run records the name of the innermost state it was in as its cause.
+steps:
+  - Use a capability specification with nested states.
+  - Bring a run to a nested state and cancel its command.
+  - Read the record of the run.
+  - Check that its cause is the name of the innermost state the run was in when the cancel arrived.

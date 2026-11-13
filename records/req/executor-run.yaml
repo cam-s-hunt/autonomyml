@@ -25,13 +25,22 @@ requirements:
   - /req/executor-run/invariants-checked
   - /req/executor-run/invariant-no-observation
   - /req/executor-run/invariant-response
+  - /req/executor-run/invariant-order
   - /req/executor-run/end-on-terminal
   - /req/executor-run/end-succeed
   - /req/executor-run/end-fail
   - /req/executor-run/end-halted
   - /req/executor-run/cause
+  - /req/executor-run/cause-action
+  - /req/executor-run/cause-halt
   - /req/executor-run/halt
   - /req/executor-run/exit-time-limit
   - /req/executor-run/second-halt
   - /req/executor-run/action-failure
+  - /req/executor-run/command-failure
+  - /req/executor-run/clean-up-failure
+  - /req/executor-run/cause-command
   - /req/executor-run/no-resume
+  - /req/executor-run/postcondition-check
+  - /req/executor-run/postcondition-fail
+  - /req/executor-run/cause-postcondition

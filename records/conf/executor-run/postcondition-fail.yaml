@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/postcondition-fail
+status: proposed
+target: /req/executor-run/postcondition-fail
+purpose: Verify that a broken postcondition ends the run with the ending fail.
+steps:
+  - Use a capability specification with a postcondition and a terminal state with the ending succeed.
+  - Bring a run to that terminal state with the postcondition broken.
+  - Check that the run ends with the ending fail and that its status is FAILED.
+  - Repeat with a postcondition that reads a stale, never-reported, NaN or nil value.

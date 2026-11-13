@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-run/command-failure
+status: proposed
+target: /req/executor-run/command-failure
+purpose: Verify that an executor cleans up and ends the run with the ending fail when the command of a command state is rejected, fails or cannot be sent.
+steps:
+  - Use a capability specification with a state of kind command whose command will be rejected.
+  - Start a run and bring it to that state.
+  - Check that the executor performs the exit actions of the states it is in, innermost first.
+  - Check that the run then ends with the ending fail.
+  - Repeat with a command that fails and with a command that cannot be sent.

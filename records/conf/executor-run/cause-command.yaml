@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/cause-command
+status: proposed
+target: /req/executor-run/cause-command
+purpose: Verify that a run that ends because the command of a command state failed records that state's name as its cause.
+steps:
+  - Use a capability specification with a state of kind command whose command will fail.
+  - Cause a run to enter that state and the command to fail.
+  - Read the record of the run.
+  - Check that its cause is the name of that state.

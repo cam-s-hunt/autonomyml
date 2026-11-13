@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/cause-action
+status: proposed
+target: /req/executor-run/cause-action
+purpose: Verify that a run that ends because an action failed records that action's name as its cause.
+steps:
+  - Use a capability specification with an action that will fail.
+  - Cause a run to reach the action and the action to fail.
+  - Read the record of the run.
+  - Check that its cause is the name of the failing action.

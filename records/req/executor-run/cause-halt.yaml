@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/cause-halt
+status: proposed
+statement: An executor SHALL record the name of the innermost state the run was in as the cause of a halted run.

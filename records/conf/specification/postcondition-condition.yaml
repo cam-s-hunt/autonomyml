@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/postcondition-condition
+status: proposed
+target: /req/specification/postcondition-condition
+purpose: Verify that each postcondition states a condition.
+steps:
+  - Identify each postcondition.
+  - For each, check that it states a condition.

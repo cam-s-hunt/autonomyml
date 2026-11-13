@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/cause-action
+status: proposed
+statement: An executor SHALL record the name of the failing action as the cause of a run that ends because an action failed.

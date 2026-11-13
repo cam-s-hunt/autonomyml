@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/cause-postcondition
+status: proposed
+statement: An executor SHALL record the name of the broken postcondition as the cause of a run that ends because a postcondition was broken.

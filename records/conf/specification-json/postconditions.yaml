@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/postconditions
+status: proposed
+target: /req/specification-json/postconditions
+purpose: Verify that a document that has postconditions states them in a member named `postconditions`.
+steps:
+  - Identify a capability specification document that has postconditions.
+  - Locate its member named `postconditions`.
+  - Check that its value is an array of objects.

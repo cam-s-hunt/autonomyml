@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/postcondition-name
+status: proposed
+target: /req/specification/postcondition-name
+purpose: Verify that each postcondition states a name.
+steps:
+  - Identify each postcondition.
+  - For each, check that it states a name.

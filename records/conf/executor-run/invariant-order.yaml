@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/invariant-order
+status: proposed
+target: /req/executor-run/invariant-order
+purpose: Verify the order in which an executor answers several broken invariants.
+steps:
+  - Use a capability specification with a mode that has an invariant and a child state, current, that has an invariant.
+  - Break both invariants at the same moment.
+  - Check that the executor takes the response of the invariant of the mode.
+  - Use a state with two invariants stated in order, break both at the same moment, and check that the executor takes the response of the one stated first.

@@ -33,3 +33,6 @@ tests:
   - /conf/specification-json/timeout
   - /conf/specification-json/timeout-duration
   - /conf/specification-json/timeout-target
+  - /conf/specification-json/postconditions
+  - /conf/specification-json/postcondition-name
+  - /conf/specification-json/postcondition-condition

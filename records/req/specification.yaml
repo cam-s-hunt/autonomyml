@@ -33,3 +33,5 @@ requirements:
   - /req/specification/invariant-condition
   - /req/specification/invariant-response
   - /req/specification/timeout
+  - /req/specification/postcondition-name
+  - /req/specification/postcondition-condition

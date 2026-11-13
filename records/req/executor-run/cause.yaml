@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-run/cause
 status: proposed
-statement: An executor SHALL record, with the ending of each run, a cause that is a name.
+statement: An executor SHALL record the name of a terminal state as the cause of a run that ends by entering that terminal state.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/clean-up-failure
+status: proposed
+statement: An executor SHALL, when the command of an exit action is rejected, fails or cannot be sent during clean-up, perform the remaining exit actions and end the run with the ending it had already decided.

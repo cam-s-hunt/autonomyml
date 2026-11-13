@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/postcondition-fail
+status: proposed
+statement: An executor SHALL end the run with the ending fail when a postcondition is broken.

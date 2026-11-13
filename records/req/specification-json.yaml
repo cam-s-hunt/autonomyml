@@ -39,3 +39,6 @@ requirements:
   - /req/specification-json/timeout
   - /req/specification-json/timeout-duration
   - /req/specification-json/timeout-target
+  - /req/specification-json/postconditions
+  - /req/specification-json/postcondition-name
+  - /req/specification-json/postcondition-condition
