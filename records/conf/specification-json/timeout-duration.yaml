@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/specification-json/timeout-duration
+status: proposed
+target: /req/specification-json/timeout-duration
+purpose: Verify that each timeout states its duration in a member named `duration`.
+steps:
+  - Identify each timeout.
+  - For each, locate its member named `duration`.
+  - Check that its value is a SWE Common Quantity.
+  - Check that the unit of the Quantity is seconds.

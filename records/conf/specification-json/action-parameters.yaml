@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/action-parameters
+status: proposed
+target: /req/specification-json/action-parameters
+purpose: Verify that each action states the parameters of its command in a member named `parameters`.
+steps:
+  - Identify each entry action and each exit action.
+  - For each, locate its member named `parameters`.
+  - Check that it is in the same form as the member named `parameters` of a state of kind command.

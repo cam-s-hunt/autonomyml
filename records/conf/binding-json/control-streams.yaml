@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/binding-json/control-streams
+status: proposed
+target: /req/binding-json/control-streams
+purpose: Verify that a capability binding states the mapping of control streams in the top-level member named `controlStreams`.
+steps:
+  - Locate the top-level member named `controlStreams` of the capability binding.
+  - Check that its value is an object.
+  - Check that the members of the object are named with the local names of the control streams that the capability specification declares.
+  - Check that the value of each member is a URI as defined by RFC 3986.
+  - Check that the URI is that of a control stream.

@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/action-name
+status: proposed
+target: /req/specification/action-name
+purpose: Verify that each entry action and each exit action has a name.
+steps:
+  - Identify each entry action and each exit action.
+  - For each, check that it has a name.

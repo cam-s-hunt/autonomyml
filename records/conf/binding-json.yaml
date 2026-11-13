@@ -9,3 +9,5 @@ tests:
   - /conf/binding-json/version
   - /conf/binding-json/specification
   - /conf/binding-json/system
+  - /conf/binding-json/data-streams
+  - /conf/binding-json/control-streams

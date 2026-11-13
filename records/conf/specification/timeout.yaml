@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/specification/timeout
+status: proposed
+target: /req/specification/timeout
+purpose: Verify that each timeout states a duration and a target that is a state of the same state machine.
+steps:
+  - Identify each timeout.
+  - For each, check that it states a duration.
+  - Check that it states a target.
+  - Check that the target is a state of the same state machine.

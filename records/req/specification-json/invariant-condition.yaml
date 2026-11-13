@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/invariant-condition
+status: proposed
+statement: An invariant SHALL state its condition in a member named `condition`, a string.

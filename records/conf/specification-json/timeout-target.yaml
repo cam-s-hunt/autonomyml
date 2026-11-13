@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/specification-json/timeout-target
+status: proposed
+target: /req/specification-json/timeout-target
+purpose: Verify that each timeout states its target in a member named `target`.
+steps:
+  - Identify each timeout.
+  - For each, locate its member named `target`.
+  - Check that its value is a string.
+  - Check that the string is the name of a state.

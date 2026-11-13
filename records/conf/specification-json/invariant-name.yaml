@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/invariant-name
+status: proposed
+target: /req/specification-json/invariant-name
+purpose: Verify that each invariant states its name in a member named `name`.
+steps:
+  - Identify each invariant.
+  - For each, locate its member named `name`.
+  - Check that its value is a string.

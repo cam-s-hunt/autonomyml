@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/binding/data-streams
+status: proposed
+target: /req/binding/data-streams
+purpose: Verify that a capability binding maps each datastream that its capability specification declares to a datastream of its system.
+steps:
+  - Identify each datastream that the capability specification declares.
+  - Check that the capability binding maps it to a datastream of the system the capability binding is for.

@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/specification/state-names
 status: proposed
-statement: A capability specification SHALL NOT use the same name for two of its states, including states nested in modes.
+statement: A capability specification SHALL NOT use the same name for two of its states, invariants or actions.

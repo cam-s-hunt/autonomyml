@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification/action-command
+status: proposed
+target: /req/specification/action-command
+purpose: Verify that each entry action and each exit action sends a command with parameters stated as constant values.
+steps:
+  - Identify each entry action and each exit action.
+  - For each, check that it sends a command.
+  - Check that the parameters of the command are stated as constant values.

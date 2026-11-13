@@ -1,5 +1,5 @@
 # PROPOSED. Identifier /req/binding-json is the Architect's proposal; none is assigned.
-# Inherits /req/core directly because ogcspec.gate.toml sets core_dependency = "direct" (M012), and /req/document for the shared rule.
+# Inherits /req/core directly because ogcspec.gate.toml sets core_dependency = "direct" (M012), /req/document for the shared rule, and /req/binding for the abstract rules this class encodes.
 kind: requirements_class
 id: /req/binding-json
 title: Capability binding in JSON
@@ -8,9 +8,12 @@ subject: Capability binding encoded as JSON
 inherit:
   - /req/core
   - /req/document
+  - /req/binding
 requirements:
   - /req/binding-json/json-text
   - /req/binding-json/identity
   - /req/binding-json/version
   - /req/binding-json/specification
   - /req/binding-json/system
+  - /req/binding-json/data-streams
+  - /req/binding-json/control-streams

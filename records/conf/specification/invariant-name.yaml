@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/invariant-name
+status: proposed
+target: /req/specification/invariant-name
+purpose: Verify that each invariant has a name.
+steps:
+  - Identify each invariant.
+  - For each, check that it has a name.

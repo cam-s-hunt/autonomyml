@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/specification-json/command-stream
+status: proposed
+target: /req/specification-json/command-stream
+purpose: Verify that each state of kind command states its control stream in its member named `controlStream`.
+steps:
+  - Identify each state of kind command.
+  - For each, locate its member named `controlStream`.
+  - Check that its value is a string.
+  - Check that the string is the local name of a declared control stream.

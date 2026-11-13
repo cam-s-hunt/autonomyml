@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/entry-actions
+status: proposed
+target: /req/specification-json/entry-actions
+purpose: Verify that each state that has entry actions states them in its member named `entryActions`.
+steps:
+  - Identify each state that has entry actions.
+  - For each, locate its member named `entryActions`.
+  - Check that its value is an array of objects.

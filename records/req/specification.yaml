@@ -25,3 +25,11 @@ requirements:
   - /req/specification/control-stream-declared
   - /req/specification/command-stream
   - /req/specification/declared-only
+  - /req/specification/command-parameters
+  - /req/specification/action-command
+  - /req/specification/action-name
+  - /req/specification/exit-time-limit
+  - /req/specification/invariant-name
+  - /req/specification/invariant-condition
+  - /req/specification/invariant-response
+  - /req/specification/timeout

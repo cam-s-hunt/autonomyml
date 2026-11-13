@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/timeout
+status: proposed
+target: /req/specification-json/timeout
+purpose: Verify that each state that has a timeout states it in its member named `timeout`.
+steps:
+  - Identify each state that has a timeout.
+  - For each, locate its member named `timeout`.
+  - Check that its value is an object.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/invariant-condition
+status: proposed
+statement: An invariant SHALL state a condition.

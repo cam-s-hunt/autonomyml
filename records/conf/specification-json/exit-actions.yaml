@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/exit-actions
+status: proposed
+target: /req/specification-json/exit-actions
+purpose: Verify that each state that has exit actions states them in its member named `exitActions`.
+steps:
+  - Identify each state that has exit actions.
+  - For each, locate its member named `exitActions`.
+  - Check that its value is an array of objects.

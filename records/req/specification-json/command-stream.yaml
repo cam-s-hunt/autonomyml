@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/command-stream
+status: proposed
+statement: A state of kind command SHALL state the control stream on which it sends its command in its member named `controlStream`, a string that is the local name of a declared control stream.

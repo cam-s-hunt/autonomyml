@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/invariants
+status: proposed
+target: /req/specification-json/invariants
+purpose: Verify that each state that has invariants states them in its member named `invariants`.
+steps:
+  - Identify each state that has invariants.
+  - For each, locate its member named `invariants`.
+  - Check that its value is an array of objects.

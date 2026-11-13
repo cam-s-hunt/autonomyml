@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification/command-parameters
+status: proposed
+target: /req/specification/command-parameters
+purpose: Verify that each state of kind command states the parameters of its command as constant values.
+steps:
+  - Identify each state of kind command.
+  - For each, check that it states the parameters of its command.
+  - Check that the parameters are constant values.

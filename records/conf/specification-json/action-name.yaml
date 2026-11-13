@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/action-name
+status: proposed
+target: /req/specification-json/action-name
+purpose: Verify that each action states its name in a member named `name`.
+steps:
+  - Identify each entry action and each exit action.
+  - For each, locate its member named `name`.
+  - Check that its value is a string.

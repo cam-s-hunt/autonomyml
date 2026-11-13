@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification-json/invariant-condition
+status: proposed
+target: /req/specification-json/invariant-condition
+purpose: Verify that each invariant states its condition in a member named `condition`.
+steps:
+  - Identify each invariant.
+  - For each, locate its member named `condition`.
+  - Check that its value is a string.

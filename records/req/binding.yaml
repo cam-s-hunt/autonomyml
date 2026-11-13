@@ -1,0 +1,14 @@
+# PROPOSED. Identifier /req/binding is the Architect's proposal; none is assigned.
+# Abstract requirements for a capability binding (decision 4.7: the JSON encoding is a separate class).
+# Inherits /req/core directly because ogcspec.gate.toml sets core_dependency = "direct" (M012), and /req/document for the shared rule.
+kind: requirements_class
+id: /req/binding
+title: Capability binding
+status: proposed
+subject: Capability binding
+inherit:
+  - /req/core
+  - /req/document
+requirements:
+  - /req/binding/data-streams
+  - /req/binding/control-streams

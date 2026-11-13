@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/timeout-duration
+status: proposed
+statement: A timeout SHALL state its duration in a member named `duration`, a SWE Common Quantity whose unit is seconds.

@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/specification/invariant-response
+status: proposed
+target: /req/specification/invariant-response
+purpose: Verify that each invariant states a response that names a state of the same state machine as its target.
+steps:
+  - Identify each invariant.
+  - For each, check that it states a response.
+  - Check that the response names a target.
+  - Check that the target is a state of the same state machine.

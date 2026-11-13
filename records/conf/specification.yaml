@@ -19,3 +19,11 @@ tests:
   - /conf/specification/control-stream-declared
   - /conf/specification/command-stream
   - /conf/specification/declared-only
+  - /conf/specification/command-parameters
+  - /conf/specification/action-command
+  - /conf/specification/action-name
+  - /conf/specification/exit-time-limit
+  - /conf/specification/invariant-name
+  - /conf/specification/invariant-condition
+  - /conf/specification/invariant-response
+  - /conf/specification/timeout

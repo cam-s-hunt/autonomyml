@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/command-parameters
+status: proposed
+statement: A state of kind command SHALL state the parameters of its command in its member named `parameters`, a SWE Common component in full form that has a value.

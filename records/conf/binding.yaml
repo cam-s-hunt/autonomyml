@@ -1,0 +1,8 @@
+kind: conformance_class
+id: /conf/binding
+title: Capability binding
+status: proposed
+target: /req/binding
+tests:
+  - /conf/binding/data-streams
+  - /conf/binding/control-streams

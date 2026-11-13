@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/invariant-response
+status: proposed
+statement: An invariant SHALL state a response, which names a state of the same state machine as its target.

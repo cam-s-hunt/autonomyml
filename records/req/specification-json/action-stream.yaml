@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/action-stream
+status: proposed
+statement: An action SHALL state the control stream on which it sends its command in a member named `controlStream`, a string that is the local name of a declared control stream.

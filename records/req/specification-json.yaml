@@ -24,3 +24,18 @@ requirements:
   - /req/specification-json/field-path
   - /req/specification-json/field-unit-or-size
   - /req/specification-json/control-streams
+  - /req/specification-json/command-stream
+  - /req/specification-json/command-parameters
+  - /req/specification-json/entry-actions
+  - /req/specification-json/exit-actions
+  - /req/specification-json/action-name
+  - /req/specification-json/action-stream
+  - /req/specification-json/action-parameters
+  - /req/specification-json/time-limit
+  - /req/specification-json/invariants
+  - /req/specification-json/invariant-name
+  - /req/specification-json/invariant-condition
+  - /req/specification-json/invariant-response
+  - /req/specification-json/timeout
+  - /req/specification-json/timeout-duration
+  - /req/specification-json/timeout-target

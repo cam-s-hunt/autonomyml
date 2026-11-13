@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/specification/exit-time-limit
+status: proposed
+target: /req/specification/exit-time-limit
+purpose: Verify that each exit action states a time limit, which is a duration.
+steps:
+  - Identify each exit action.
+  - For each, check that it states a time limit.
+  - Check that the time limit is a duration.

@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/specification-json/command-parameters
+status: proposed
+target: /req/specification-json/command-parameters
+purpose: Verify that each state of kind command states the parameters of its command in its member named `parameters`.
+steps:
+  - Identify each state of kind command.
+  - For each, locate its member named `parameters`.
+  - Check that its value is a SWE Common component in full form.
+  - Check that the component has a value.

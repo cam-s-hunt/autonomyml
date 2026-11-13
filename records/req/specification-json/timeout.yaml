@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/timeout
+status: proposed
+statement: A state that has a timeout SHALL state it in its member named `timeout`, an object.

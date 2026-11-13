@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/binding-json/data-streams
+status: proposed
+statement: A capability binding SHALL state the mapping of datastreams in the top-level member named `dataStreams`, an object whose members are named with the local names of the datastreams that the capability specification declares, each having as its value the URI, as defined by RFC 3986, of a datastream.

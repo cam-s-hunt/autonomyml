@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/binding-json/control-streams
+status: proposed
+statement: A capability binding SHALL state the mapping of control streams in the top-level member named `controlStreams`, an object whose members are named with the local names of the control streams that the capability specification declares, each having as its value the URI, as defined by RFC 3986, of a control stream.

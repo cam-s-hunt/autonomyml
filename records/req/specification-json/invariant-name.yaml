@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/invariant-name
+status: proposed
+statement: An invariant SHALL state its name in a member named `name`, a string.

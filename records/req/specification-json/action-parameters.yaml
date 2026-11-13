@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/action-parameters
+status: proposed
+statement: An action SHALL state the parameters of its command in a member named `parameters`, in the same form as in a state of kind command.

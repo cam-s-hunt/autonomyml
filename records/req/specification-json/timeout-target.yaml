@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/timeout-target
+status: proposed
+statement: A timeout SHALL state its target in a member named `target`, a string that is the name of a state.

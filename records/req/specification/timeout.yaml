@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/timeout
+status: proposed
+statement: A timeout SHALL state a duration and a target, which is a state of the same state machine.

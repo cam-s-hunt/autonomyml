@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/command-parameters
+status: proposed
+statement: A state of kind command SHALL state the parameters of its command as constant values.

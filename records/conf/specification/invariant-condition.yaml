@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/invariant-condition
+status: proposed
+target: /req/specification/invariant-condition
+purpose: Verify that each invariant states a condition.
+steps:
+  - Identify each invariant.
+  - For each, check that it states a condition.

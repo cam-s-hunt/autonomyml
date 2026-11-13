@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/exit-time-limit
+status: proposed
+statement: An exit action SHALL state a time limit, which is a duration.

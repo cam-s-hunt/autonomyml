@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/binding/control-streams
+status: proposed
+statement: A capability binding SHALL map each control stream that its capability specification declares to a control stream of the system it is for.

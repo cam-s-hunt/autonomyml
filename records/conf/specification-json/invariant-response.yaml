@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/specification-json/invariant-response
+status: proposed
+target: /req/specification-json/invariant-response
+purpose: Verify that each invariant states its response in a member named `response`.
+steps:
+  - Identify each invariant.
+  - For each, locate its member named `response`.
+  - Check that its value is a string.
+  - Check that the string is the name of a state.

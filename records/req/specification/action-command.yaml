@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/action-command
+status: proposed
+statement: An entry action or an exit action SHALL send a command, with parameters stated as constant values.

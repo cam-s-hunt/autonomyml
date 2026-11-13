@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/invariant-response
+status: proposed
+statement: An invariant SHALL state its response in a member named `response`, a string that is the name of a state.

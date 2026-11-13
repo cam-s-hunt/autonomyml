@@ -18,3 +18,18 @@ tests:
   - /conf/specification-json/field-path
   - /conf/specification-json/field-unit-or-size
   - /conf/specification-json/control-streams
+  - /conf/specification-json/command-stream
+  - /conf/specification-json/command-parameters
+  - /conf/specification-json/entry-actions
+  - /conf/specification-json/exit-actions
+  - /conf/specification-json/action-name
+  - /conf/specification-json/action-stream
+  - /conf/specification-json/action-parameters
+  - /conf/specification-json/time-limit
+  - /conf/specification-json/invariants
+  - /conf/specification-json/invariant-name
+  - /conf/specification-json/invariant-condition
+  - /conf/specification-json/invariant-response
+  - /conf/specification-json/timeout
+  - /conf/specification-json/timeout-duration
+  - /conf/specification-json/timeout-target

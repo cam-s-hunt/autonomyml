@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/binding/data-streams
+status: proposed
+statement: A capability binding SHALL map each datastream that its capability specification declares to a datastream of the system it is for.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/action-name
+status: proposed
+statement: An entry action or an exit action SHALL have a name.

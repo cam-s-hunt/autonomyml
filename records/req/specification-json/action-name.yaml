@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/action-name
+status: proposed
+statement: An action SHALL state its name in a member named `name`, a string.

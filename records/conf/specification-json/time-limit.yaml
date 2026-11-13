@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/specification-json/time-limit
+status: proposed
+target: /req/specification-json/time-limit
+purpose: Verify that each exit action states its time limit in a member named `timeLimit`.
+steps:
+  - Identify each exit action.
+  - For each, locate its member named `timeLimit`.
+  - Check that its value is a SWE Common Quantity.
+  - Check that the unit of the Quantity is seconds.

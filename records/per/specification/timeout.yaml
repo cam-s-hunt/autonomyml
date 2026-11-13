@@ -1,0 +1,5 @@
+# PROPOSED. A permission needs no abstract test.
+kind: permission
+id: /per/specification/timeout
+status: proposed
+statement: A state other than a terminal state MAY state a timeout.

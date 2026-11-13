@@ -2,7 +2,7 @@ kind: abstract_test
 id: /conf/specification/state-names
 status: proposed
 target: /req/specification/state-names
-purpose: Verify that no two states of a capability specification have the same name.
+purpose: Verify that no two states, invariants or actions of a capability specification have the same name.
 steps:
-  - Collect the name of every state of the capability specification, including states nested in modes.
+  - Collect the name of every state, invariant and action of the capability specification, including states nested in modes.
   - Check that no name occurs more than once.

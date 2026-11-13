@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification-json/time-limit
+status: proposed
+statement: An exit action SHALL state its time limit in a member named `timeLimit`, a SWE Common Quantity whose unit is seconds.

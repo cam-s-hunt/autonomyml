@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/binding/control-streams
+status: proposed
+target: /req/binding/control-streams
+purpose: Verify that a capability binding maps each control stream that its capability specification declares to a control stream of its system.
+steps:
+  - Identify each control stream that the capability specification declares.
+  - Check that the capability binding maps it to a control stream of the system the capability binding is for.
