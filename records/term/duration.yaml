@@ -1,0 +1,6 @@
+kind: term
+id: /term/duration
+status: proposed
+term: duration
+definition: length of time, in seconds.
+note: NOTE  The JSON encoding states a duration as a SWE Common Quantity whose unit is seconds.

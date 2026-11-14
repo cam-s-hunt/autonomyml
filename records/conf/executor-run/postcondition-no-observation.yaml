@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/postcondition-no-observation
+status: proposed
+target: /req/executor-run/postcondition-no-observation
+purpose: Verify that a postcondition that reads no observation is treated as broken.
+steps:
+  - Use a capability specification with a postcondition that holds for a valid value and a terminal state with the ending succeed.
+  - Supply each case of no observation: a value that is stale, a stream that has never reported, a NaN, and a declared nil value.
+  - For each, bring a run to that terminal state and check that the executor treats the postcondition as broken and ends the run with the ending fail.

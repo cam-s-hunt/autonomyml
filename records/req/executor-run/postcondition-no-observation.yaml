@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/postcondition-no-observation
+status: proposed
+statement: An executor SHALL treat a postcondition that reads no observation as broken.

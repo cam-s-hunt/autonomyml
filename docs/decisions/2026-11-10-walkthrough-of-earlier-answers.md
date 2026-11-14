@@ -1751,3 +1751,40 @@ Asked whether to reword the two rules that repeat the list. The owner chose **re
 
 - **Reworded in place (`status: proposed`, identifiers unchanged):** `/req/executor-run/no-observation` now reads "An executor SHALL treat a condition that reads no observation as not met."; `/req/executor-run/invariant-no-observation` now reads "An executor SHALL treat an invariant whose condition reads no observation as broken."; both tests reworded (the leading step names each case of no observation). Gate stage 1 over the 306 records: no findings.
 - **Open:** `postcondition-fail`'s test still lists stale, never-reported, NaN and nil values by hand, and the postcondition rule does not use the term (the decided rule treats postconditions under the no-observation rule); a rule saying a postcondition that reads no observation is broken is not written.
+
+## Postcondition reading no observation, 2026-11-13
+
+Asked whether to add the missing rule. The owner chose **add one requirement, tidy the test** (recommendation followed; alternatives were rewording `postcondition-fail`, and leaving it).
+
+- **Written (`status: proposed`, identifier is the Architect's proposal):** `/req/executor-run/postcondition-no-observation` ("An executor SHALL treat a postcondition that reads no observation as broken.") with a test, listed in the class and conformance class; the last step of the `postcondition-fail` test (which listed the cases by hand) was removed. The run class now has 35 requirements. Gate stage 1 over the 308 records: no findings.
+- **Open:** that a postcondition whose condition is false is "broken" is the ordinary meaning and not stated; the three "no observation" rules (condition, invariant, postcondition) are now a family of three near-identical rules.
+
+## "current state" defined, 2026-11-13
+
+Asked which wording of "current state" to take forward. The owner chose **A: the innermost state** (recommendation followed; alternatives were a longer form, and no term).
+
+- **Written (`status: proposed`):** `/term/current-state`: "innermost state that a run is in at a given time." NOTE: "A run is also in each enclosing mode of its current state." Gate stage 1 over the 309 records: no findings.
+- **Open:** "in a state" is not defined; the definition relies on there being one active child per mode (the no-parallel-states decision) which the glossary does not state; a run that has ended is in no state, and the term does not say what the current state is then.
+
+## "duration" defined, 2026-11-13
+
+Asked which wording of "duration" to take forward. The owner chose **A: length of time, in seconds** (recommendation followed; alternatives were no unit, and no term).
+
+- **Written (`status: proposed`):** `/term/duration`: "length of time, in seconds." NOTE: "The JSON encoding states a duration as a SWE Common Quantity whose unit is seconds." Gate stage 1 over the 310 records: no findings.
+- **Consequence recorded:** seconds is now part of the abstract meaning, so an encoding that used another unit would not state a "duration" in this standard's sense.
+- **Open:** the Note names an encoding in a glossary entry; the abstract rules do not say how an encoding states a duration beyond this Note; whether fractions of a second are allowed is not decided.
+
+## "document" defined, 2026-11-13
+
+Asked which wording of "document" to take forward. The owner chose **A: a specification or a binding, as written** (recommendation followed; alternatives were any text that states one, and no term).
+
+- **Written (`status: proposed`):** `/term/document`: "capability specification or capability binding, as written for an executor to read." NOTE: "The requirements that apply to both state them for a document." Gate stage 1 over the 311 records: no findings.
+- **Open:** "as written for an executor to read" is loose; the JSON classes' subjects ("capability specification encoded as JSON") use a different phrase for the same idea; the postcondition JSON rule says "capability specification document", which now reads as "capability specification capability specification" in effect; the Note states what the requirements already do.
+
+## "implementation" defined, 2026-11-13
+
+Asked which wording of "implementation" to take forward. The owner chose **A: a document or an executor under test** (recommendation followed; alternatives were a product that can be tested, and no term with a changed core subject).
+
+- **Written (`status: proposed`):** `/term/implementation`: "document or executor for which conformance to this standard is claimed." NOTE: "The requirements classes name the kind of implementation they apply to as their subject." Gate stage 1 over the 312 records: no findings. This closes the "implementation is not yet defined" note on the core class.
+- **Open:** a document is an unusual thing to call an implementation; the definition does not say who claims conformance; the core class's file comment still says the term is not yet defined (a stale comment; not edited).
+- **Terms now defined beyond the first 21:** command, control stream, data stream, run request, mode, local name, cause, no observation, current state, duration, document, implementation (twelve). Still undefined and used: "reads", "retrieve", "in progress", "references", "child state" and "enclosing mode" (the last in a Note only).

@@ -1,0 +1,6 @@
+kind: term
+id: /term/implementation
+status: proposed
+term: implementation
+definition: document or executor for which conformance to this standard is claimed.
+note: NOTE  The requirements classes name the kind of implementation they apply to as their subject.

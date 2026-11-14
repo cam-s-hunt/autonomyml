@@ -1,0 +1,6 @@
+kind: term
+id: /term/document
+status: proposed
+term: document
+definition: capability specification or capability binding, as written for an executor to read.
+note: NOTE  The requirements that apply to both state them for a document.

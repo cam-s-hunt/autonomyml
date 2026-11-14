@@ -1,0 +1,6 @@
+kind: term
+id: /term/current-state
+status: proposed
+term: current state
+definition: innermost state that a run is in at a given time.
+note: NOTE  A run is also in each enclosing mode of its current state.
