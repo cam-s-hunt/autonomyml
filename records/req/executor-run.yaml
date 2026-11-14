@@ -20,6 +20,7 @@ requirements:
   - /req/executor-run/first-match
   - /req/executor-run/evaluation
   - /req/executor-run/no-wait
+  - /req/executor-run/cancel-on-leave
   - /req/executor-run/no-observation
   - /req/executor-run/transitions-first
   - /req/executor-run/timeout

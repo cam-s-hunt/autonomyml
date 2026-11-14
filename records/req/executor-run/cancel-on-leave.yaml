@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/cancel-on-leave
+status: proposed
+statement: An executor SHALL, when it leaves a state, cancel the command of the state and the command of each entry action of the state that has not completed, before it performs the exit actions of the state.

@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-run/cancel-on-leave
+status: proposed
+target: /req/executor-run/cancel-on-leave
+purpose: Verify that an executor cancels the uncompleted commands of a state, before the exit actions, when it leaves the state.
+steps:
+  - Use a capability specification with a state whose command and an entry action's command do not complete, and with an exit action.
+  - Cause the executor to leave the state by a transition, and check that the executor cancels the command of the state and the entry action's command, and that the cancels are sent before the exit action's command.
+  - Repeat with the state left by a timeout.
+  - Repeat with the run halted while in the state.
+  - Repeat with an entry action whose command has completed, and check that the executor does not cancel it.

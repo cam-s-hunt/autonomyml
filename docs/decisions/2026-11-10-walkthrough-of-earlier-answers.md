@@ -1859,3 +1859,18 @@ Asked for wording of the no-wait rule. The owner chose **add it as worded** (rec
 
 - **Written (`status: proposed`, identifier is the Architect's proposal):** `/req/executor-run/no-wait` ("An executor SHALL begin evaluating the transitions, invariants and timeout of a state when it enters the state, without waiting for the command of the state or of an entry action to complete.") with an abstract test, listed in the class and conformance class. The run class now has 36 requirements (counted from the class record). Gate stage 1 over the 314 records: no findings.
 - **Open:** a command still running when its state is left (cancelled or left running: not decided); the overlap with `evaluation`; "perform" in `entry-actions` still means send.
+
+## A running command is cancelled on leaving its state, 2026-11-13
+
+Asked what the executor does with a state's own command or an entry-action command that is still running when the run leaves the state. The owner chose **cancel it, then do the exit actions** (recommendation followed; alternatives were leaving it running, and cancelling only on a halt or failure).
+
+- **Decided (direction):** on leaving a state the executor first cancels the state's own command and any entry-action command that has not completed (the API cancel), then performs the exit actions. An author who wants a command to outlive its state sends it from an exit action. This closes the "running command" item of the no-wait section.
+- **Cost recorded:** a cancel can itself fail or be ignored by the system, which is not covered; an exit-action command is not cancelled (it is waited for, up to its time limit).
+- **Not decided:** the requirement wording (none written); a late FAILED or REJECTED status after the cancel; whether a halt cancels the commands of every state the run is in or only of the current state (the halt rule performs the exit actions of the states it is in, innermost first; the same order is the natural reading).
+
+## Cancel-on-leave requirement written, 2026-11-13
+
+Asked for wording of the cancel rule. The owner chose **add it as worded** (recommendation followed; alternatives were cancelling without fixing the order, and leaving it in the record only).
+
+- **Written (`status: proposed`, identifier is the Architect's proposal):** `/req/executor-run/cancel-on-leave` ("An executor SHALL, when it leaves a state, cancel the command of the state and the command of each entry action of the state that has not completed, before it performs the exit actions of the state.") with an abstract test, listed in the class and conformance class. The run class now has 37 requirements (counted from the class record). Gate stage 1 over the 316 records: no findings.
+- **Open:** a failed or ignored cancel; "leaves a state" includes a halt and a failure, for which `halt` and `action-failure` say only "perform the exit actions"; whether a halt cancels the commands of every state the run is in (the natural reading is yes, innermost first); a state left because a postcondition is broken (the run is already in a terminal state, which has no commands).
