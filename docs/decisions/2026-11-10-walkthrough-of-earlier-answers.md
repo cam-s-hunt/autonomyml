@@ -1691,3 +1691,63 @@ Asked how much of the optional behavior-tree class to write. The owner chose **s
 - **Deviations from the card, by the Architect (flagged for the owner):** (1) the card's rule 5 ("A node of a type that the standard does not define SHALL NOT make the document nonconforming") was written as a **permission**, because it is a statement about conformance rather than a requirement on a subject; (2) the card's single JSON rule set (rule 6) was written as **three** atomic requirements (`tree`, `node-type`, `node-children`), following the class pattern. Neither changes the meaning; both can be reverted on request.
 - **Not written:** node types, statuses, evaluation, endings and halting; an executor class for behavior trees (so an executor cannot yet claim the optional class); how the start check treats a document with a behavior-tree state on an executor that does not claim the class.
 - **Open:** the core `/req/specification/kind` and `/req/specification-json/kind` rules still list behavior tree as a kind in the core class, although the kind is meant to be available only with this optional class (not reworded; this needs the owner's yes); the member names `tree`, `type`, `children` are proposals; `/req/behavior-tree/node-type` ("a type, which is a name") uses "name", which the one-name-list rule does not cover (node types are not unique); the behavior-tree state's own status and completion are undefined.
+
+## API terms are defined by reference, 2026-11-13
+
+Asked how to define the terms that come from the Connected Systems API (data stream, control stream, command). The owner chose **point at the API's definitions** (recommendation followed; alternatives were defining them in our own words, and starting with our own terms).
+
+- **Decided (direction):** each API term becomes a term record whose definition says it is the API's term, with a source reference to the pinned OGC 23-001 or 23-002. The API stays the authority. Each reference needs a check against the pinned text before it is written (the earlier API reading came from the repository clone).
+- **Terms counted as used but undefined (from the requirement statements):** control stream (10 uses), run request (10), mode (9), local name (9), cause (6), current state (5), duration (4), enclosing mode (4), data stream (3), plus "no observation" (stale, never-reported, NaN or nil) and "implementation"; "document", "retrieve", "in progress" and "reads" are also used. The standard's own terms are to be taken one at a time with two or three draft wordings each.
+- **Not decided:** which API terms exactly (data stream, control stream, command, observation, command status are candidates; observation already has an accepted wording adopting SOSA/SSN); the form of a term's source field (the existing term records have none); the normative references clause.
+
+## Three API terms written (command, control stream, data stream), 2026-11-13
+
+Asked how the three API terms should read. The owner chose **copy the API wording, with a source line** (recommendation followed; alternatives were a pointer only, and the owner wording them).
+
+- **Written (`status: proposed`; no identifier is assigned):** `/term/command` ("message that is sent to a system to trigger an actuation, and that contains the parameters of the actuation."), `/term/control-stream` ("collection of commands targeted at the same system, and sharing the same controlled properties."), `/term/data-stream` (alias "datastream"; "collection of observations acquired by the same system, and sharing the same observed properties."), each with `source: OGC-23-002` and `modified: true` (case and leading article only; the command definition's two sentences were joined). Gate stage 1 over the 301 records: no findings.
+- **Source of the wording:** OGC 23-002 clause 4 as read from the repository clone (`opengeospatial/ogcapi-connected-systems`, commit `fb858be`), **not** the pinned published text. Part 1 (23-001) has no definition of these three terms; they are in Part 2. Each record carries a comment saying so.
+- **Open:** the source key `OGC-23-002` is the Architect's proposal and matches no bibliography entry yet (the normative references clause is not written; the gate's form check passed, a stage 2 build may not); the API's definitions use "system" in the API's sense, while this standard has its own accepted *system* term; "command" here is the API's message, while the standard's requirements also say "the command of a state", which means the same message; the definitions must be checked against the published 23-002.
+- **Not yet defined:** the standard's own terms (run request, mode, local name, cause, current state, enclosing mode, duration, no observation, implementation, document).
+
+## "run request" defined, 2026-11-13
+
+Asked which wording of "run request" to take forward. The owner chose **A: command that names the specification and binding** (recommendation followed; alternatives were a plain request, and no defined term).
+
+- **Written (`status: proposed`):** `/term/run-request`: "command, sent to an executor, that asks it to start a run of a capability specification with a capability binding." NOTE: "The parameters of the command carry only references to the capability specification and the capability binding." Gate stage 1 over the 302 records: no findings. Not marked accepted; the owner has not accepted the wording as final (the usual acceptance step is separate).
+- **Open:** the definition relies on the new, proposed *command* term; the Note repeats part of the start-class rule `accept-request`; "references" is not a defined term.
+
+## "mode" defined, 2026-11-13
+
+Asked how to define "mode", "child state" and "enclosing mode". The owner chose **A: one term, mode, with the others in a Note** (recommendation followed; alternatives were three separate terms, and no definition).
+
+- **Written (`status: proposed`):** `/term/mode`: "state of kind mode, which contains child states." NOTE 1 "A mode has one initial child state, entered when the mode is entered." NOTE 2 "The modes that contain a state, directly or through other modes, are its enclosing modes." NOTE 3 "\"Mode\" here is a kind of state and is narrower than the \"control mode\" in the definition of state." Gate stage 1 over the 303 records: no findings.
+- **Open:** "child state" and "enclosing mode" are not formal terms; Note 1 repeats a rule stated in the requirements; the accepted *state* definition still says "control mode", which Note 3 only explains; "current state" is not yet defined.
+
+## "local name" defined, 2026-11-13
+
+Asked which wording of "local name" to take forward. The owner chose **A: name given in the specification, supplied by the binding** (recommendation followed; alternatives were a short form, and no term).
+
+- **Written (`status: proposed`):** `/term/local-name`: "name that a capability specification gives to a data stream or a control stream, and that a capability binding maps to a data stream or a control stream of a system." NOTE: "A local name is also the name by which a condition reads a data stream or a control stream." Gate stage 1 over the 304 records: no findings.
+- **Open:** the Note states a fact the requirements also decide; the definition rests on the proposed terms *data stream* and *control stream*; whether a local name may be any string (characters, case) is not decided.
+
+## "cause" defined, 2026-11-13
+
+Asked which wording of "cause" to take forward. The owner chose **A: name recorded with the ending** (recommendation followed; alternatives were a short form, and no term).
+
+- **Written (`status: proposed`):** `/term/cause`: "name, recorded with the ending of a run, of the item of the capability specification that ended the run or where it was when halted." NOTE: "The cause is the name of a terminal state, of a failing action, of a state whose command failed, of a broken postcondition, or, for a halt, of the innermost state the run was in." Gate stage 1 over the 305 records: no findings.
+- **Open:** "item of the capability specification" is vague; the Note lists what the cause requirements already say and must be kept in step; a run rejected at start has no cause defined (the start class says nothing); the cause is not said to be a name in the one name list (the rule is on states, invariants, actions and postconditions).
+
+## "no observation" defined, 2026-11-13
+
+Asked which wording of "no observation" to take forward. The owner chose **A: define it, then reword the rules later** (recommendation followed; alternatives were a short form, and no term).
+
+- **Written (`status: proposed`):** `/term/no-observation`: "absence of a usable value on a data stream or control stream, which is the case when the value has never been reported, is older than the maximum age, is not a number, or equals a nil value the schema declares." NOTE: "A condition that reads no observation is not met, and an invariant that reads no observation is broken." Gate stage 1 over the 306 records: no findings.
+- **Not done (needs the owner's yes, a separate card):** rewording the requirements that repeat the list (`/req/executor-run/no-observation`, `/req/executor-run/invariant-no-observation`) to use the term; the data requirements in the specification class that mention it, if any.
+- **Open:** "not a number" is narrower than the earlier decision's "NaN" (a decided NaN rule), though a number that is not a number is NaN by definition; a nil value inside a composite is undecided; "maximum age" is not a defined term; the term is a negative ("no observation"), which is unusual for a glossary entry; "observation" (accepted, SOSA/SSN) is a different thing.
+
+## Two run rules reworded to use "no observation", 2026-11-13
+
+Asked whether to reword the two rules that repeat the list. The owner chose **reword both** (recommendation followed; the alternative was leaving them).
+
+- **Reworded in place (`status: proposed`, identifiers unchanged):** `/req/executor-run/no-observation` now reads "An executor SHALL treat a condition that reads no observation as not met."; `/req/executor-run/invariant-no-observation` now reads "An executor SHALL treat an invariant whose condition reads no observation as broken."; both tests reworded (the leading step names each case of no observation). Gate stage 1 over the 306 records: no findings.
+- **Open:** `postcondition-fail`'s test still lists stale, never-reported, NaN and nil values by hand, and the postcondition rule does not use the term (the decided rule treats postconditions under the no-observation rule); a rule saying a postcondition that reads no observation is broken is not written.

@@ -5,5 +5,5 @@ target: /req/executor-run/invariant-no-observation
 purpose: Verify that an invariant that reads a value counted as no observation is treated as broken.
 steps:
   - Use a capability specification with an invariant that holds for a valid value.
-  - Supply a value that is stale, then a stream that has never reported, then a NaN, then a declared nil value.
+  - Supply each case of no observation: a value that is stale, a stream that has never reported, a NaN, and a declared nil value.
   - For each, check that the executor treats the invariant as broken.

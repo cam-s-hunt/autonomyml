@@ -1,0 +1,6 @@
+kind: term
+id: /term/run-request
+status: proposed
+term: run request
+definition: command, sent to an executor, that asks it to start a run of a capability specification with a capability binding.
+note: NOTE  The parameters of the command carry only references to the capability specification and the capability binding.

@@ -1,0 +1,8 @@
+# PROPOSED. Wording follows OGC 23-002 clause 4 as read from the repository clone (commit fb858be), not the pinned published text; check before acceptance.
+kind: term
+id: /term/command
+status: proposed
+term: command
+definition: message that is sent to a system to trigger an actuation, and that contains the parameters of the actuation.
+source: OGC-23-002
+modified: true

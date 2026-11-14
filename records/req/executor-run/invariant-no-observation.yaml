@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-run/invariant-no-observation
 status: proposed
-statement: An executor SHALL treat an invariant whose condition reads a stale, never-reported, NaN or nil value as broken.
+statement: An executor SHALL treat an invariant whose condition reads no observation as broken.

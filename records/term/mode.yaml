@@ -1,0 +1,10 @@
+kind: term
+id: /term/mode
+status: proposed
+term: mode
+definition: state of kind mode, which contains child states.
+note: 'NOTE 1  A mode has one initial child state, entered when the mode is entered.
+
+  NOTE 2  The modes that contain a state, directly or through other modes, are its enclosing modes.
+
+  NOTE 3  "Mode" here is a kind of state and is narrower than the "control mode" in the definition of state.'

@@ -1,0 +1,6 @@
+kind: term
+id: /term/local-name
+status: proposed
+term: local name
+definition: name that a capability specification gives to a data stream or a control stream, and that a capability binding maps to a data stream or a control stream of a system.
+note: NOTE  A local name is also the name by which a condition reads a data stream or a control stream.

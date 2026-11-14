@@ -1,0 +1,8 @@
+# PROPOSED. Wording follows OGC 23-002 clause 4 as read from the repository clone (commit fb858be), not the pinned published text; check before acceptance.
+kind: term
+id: /term/control-stream
+status: proposed
+term: control stream
+definition: collection of commands targeted at the same system, and sharing the same controlled properties.
+source: OGC-23-002
+modified: true
