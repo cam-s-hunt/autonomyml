@@ -1,0 +1,80 @@
+// STARTING POINT ONLY. This is a master document skeleton for the fragments `emit.py` writes. Every line marked
+// "OWNER" is a decision or a fact that belongs to the standard's author; the values below are placeholders, not
+// proposals. It compiled on the pinned Metanorma image (offline) with the module's worked example; a real document
+// needs a real header, bibliography and terms clause.
+//
+// Use: copy it next to the emitted fragments (the --out folder of emit.py) as doc.adoc and compile it with
+// metanorma.py (see the ogcspec-metanorma skill).
+= OWNER: the title of the standard
+:doctype: standard
+:encoding: utf-8
+:lang: en
+// OWNER: status, committee and docsubtype are OGC document metadata; check them against OGC's current rules.
+:status: swg-draft
+:committee: technical
+:docsubtype: implementation
+// OWNER: the external identifier and the document number are assigned by OGC (never by this tool); these are placeholders.
+:external-id: http://www.opengis.net/doc/IS/CHANGE-ME/1.0
+:docnumber: 00-000
+// OWNER: dates, author and submitting organizations.
+:received-date: 2000-01-01
+:issued-date: 2000-01-01
+:published-date: 2000-01-01
+:fullname: OWNER: author name
+:submitting-organizations: OWNER: organization
+:keywords: ogcdoc, OGC document
+:edition: 1.0.0
+// Tool settings: offline compile to the semantic XML the gate reads. Keep these.
+:mn-document-class: ogc
+:mn-output-extensions: xml
+:local-cache-only:
+:data-uri-image:
+
+[abstract]
+== Abstract
+OWNER: write the abstract.
+
+== Preface
+OWNER: write the preface.
+
+== Scope
+OWNER: write the scope.
+
+== Conformance
+OWNER: describe how conformance to this standard is claimed.
+
+include::conformance-classes.adoc[]
+
+// PROPOSED. The twelve pinned normative references, as recorded in docs/decisions/2026-11-10-walkthrough-of-earlier-answers.md
+// (pins accepted 2026-11-10, and later). Every key used by a record (for example a term's `source`) must exist here.
+// Not checked against the publishers' own pages in this commit: titles are the Architect's wording of the pinned documents.
+// STD numbers for the RFCs are unverified and are not given.
+[bibliography]
+== Normative references
+* [[[OGC-23-001,OGC 23-001]]], OGC API – Connected Systems – Part 1: Feature Resources, version 1.0, approved 2025-06-02, published 2025-07-16
+* [[[OGC-23-002,OGC 23-002]]], OGC API – Connected Systems – Part 2: Dynamic Data, version 1.0, approved 2025-06-02, published 2025-07-16
+* [[[OGC-23-000,OGC 23-000]]], OGC SensorML Encoding Standard, version 3.0, approved 2025-06-02, published 2025-07-16
+* [[[OGC-24-014,OGC 24-014]]], OGC SWE Common Data Model Encoding Standard, version 3.0, approved 2025-06-02, published 2025-07-16
+* [[[W3C-SCXML,W3C SCXML]]], State Chart XML (SCXML): State Machine Notation for Control Abstraction, W3C Recommendation, 2015-09-01
+* [[[W3C-PROV-O,W3C PROV-O]]], PROV-O: The PROV Ontology, W3C Recommendation, 2013-04-30
+* [[[W3C-SOSA-SSN,W3C SOSA/SSN]]], Semantic Sensor Network Ontology, W3C Recommendation, 2017-10-19 (https://www.w3.org/TR/2017/REC-vocab-ssn-20171019/). NOTE: a 2023 Edition working draft is in development and is not cited.
+* [[[ISO-IEC-21838-2,ISO/IEC 21838-2:2021]]], Information technology – Top-level ontologies (TLO) – Part 2: Basic Formal Ontology (BFO), edition 1, 2021-11-30. NOTE: the free BFO file on GitHub differs from the ISO insert; the ISO edition is the one cited.
+* [[[CCO,Common Core Ontologies]]], Common Core Ontologies, release tag v2.2, 2026-08-14, tag commit 0bc7d33e1bc09fd4693366119ab4e03cb0340042. NOTE: the CCO IRIs redirect to a moving branch; the tag commit is the pin.
+* [[[CEL,CEL]]], Common Expression Language specification, release v0.26.0, commit 21ec6f4e52e8d694687ff9ed7408d3eccbb955d7 (https://github.com/google/cel-spec)
+* [[[RFC-3986,IETF RFC 3986]]], Uniform Resource Identifier (URI): Generic Syntax, IETF RFC 3986
+* [[[RFC-8259,IETF RFC 8259]]], The JavaScript Object Notation (JSON) Data Interchange Format, IETF RFC 8259
+
+// The terms clause MUST be marked as below: without `heading=terms and definitions` Metanorma does not recognise it
+// and the compile aborts once term records are emitted. emit.py writes terms.adoc only when there are term records,
+// and there are, so the include below is live.
+[heading=terms and definitions]
+== Terms and definitions
+include::terms.adoc[]
+
+== Requirements
+include::requirements.adoc[]
+
+[appendix,obligation=normative]
+== Abstract test suite
+
+include::abstract-tests.adoc[]
