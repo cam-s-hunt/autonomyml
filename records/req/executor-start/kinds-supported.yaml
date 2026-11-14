@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/kinds-supported
+status: proposed
+statement: An executor SHALL support states of kind command, mode and terminal.

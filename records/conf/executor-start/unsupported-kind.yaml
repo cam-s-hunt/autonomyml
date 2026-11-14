@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/unsupported-kind
+status: proposed
+target: /req/executor-start/unsupported-kind
+purpose: Verify that an executor rejects a run request when the specification has a state of a kind the executor does not support.
+steps:
+  - Use a capability specification with a state of kind behavior tree, for an executor that does not support that kind.
+  - Send a run request that names it and a binding for it.
+  - Check that the executor rejects the request, and enters no state.

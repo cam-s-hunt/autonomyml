@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/unsupported-kind
+status: proposed
+statement: An executor SHALL reject a run request when the capability specification has a state of a kind that the executor does not support.

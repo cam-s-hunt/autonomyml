@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/kinds-supported
+status: proposed
+target: /req/executor-start/kinds-supported
+purpose: Verify that an executor supports states of kind command, mode and terminal.
+steps:
+  - Use a capability specification with states of kind command, mode and terminal.
+  - Start a run of it.
+  - Check that the executor runs the states of each of the three kinds as the run class requires.
