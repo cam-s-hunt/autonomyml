@@ -1945,3 +1945,18 @@ Asked which wording of "in progress" to take forward. The owner chose **A: one t
 - **Written (`status: proposed`):** `/term/in-progress`: "of a run, started and not yet ended." NOTE: "A halt is in progress from the moment it is received until the run has ended." Gate stage 1 over the 330 records: no findings.
 - **Open:** a run is "started" when the executor accepts the request (not stated); a rejected request is never in progress (not stated); the accepted *run* definition says a run goes "from its start until it reaches an ending" and the term relies on it.
 - **Terms now defined beyond the first 21:** fourteen (command, control stream, data stream, run request, mode, local name, cause, no observation, current state, duration, document, implementation, read, in progress). "Retrieve" and "references" are left as ordinary English; "child state" and "enclosing mode" are only in a Note.
+
+## Failed clean-up is recorded, 2026-11-14
+
+Asked whether the run should record that an exit action failed during clean-up. The owner chose **yes: record the names of failed exit actions** (recommendation followed; alternatives were leaving it invisible, and making the ending fail).
+
+- **Decided (direction):** besides the ending and the cause, a run records the names of the exit actions that failed during clean-up (a list, empty when none failed). The ending and the API status are unchanged. This closes the "recording that a clean-up action failed" item.
+- **Cost recorded:** a second recorded item on every run; where and how the record is read is still undefined (as for the ending and the cause).
+- **Not decided:** the requirement wording (none written yet); whether an exit action whose time limit elapsed counts as failed (an overrun); whether it covers exit actions that fail during an ordinary transition (there the action failure ends the run as fail, with that action as the cause).
+
+## Clean-up-record requirement written, 2026-11-14
+
+Asked for wording of the clean-up record rule and whether an overrun counts as failed. The owner chose **add it; an overrun counts as failed** (recommendation followed; alternatives were failures only, and the owner wording it).
+
+- **Written (`status: proposed`, identifier is the Architect's proposal):** `/req/executor-run/clean-up-record` ("An executor SHALL record, with the ending of a run, the name of each exit action that was rejected, failed, was cancelled by a party other than the executor, could not be sent, or reached its time limit, during clean-up.") with an abstract test, listed in the class and conformance class. Counted from the class record, the run class now has 40 requirements. Gate stage 1 over the 332 records: no findings.
+- **Open:** where the record is kept and how it is read; the list of failure cases repeats the failure rules and must be kept in step; "during clean-up" is not defined (clean-up is used for the exit actions performed after a halt or a failure); an exit action that fails during an ordinary transition is not covered here (it ends the run as fail, with that action as the cause).

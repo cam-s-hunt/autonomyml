@@ -1,0 +1,12 @@
+kind: abstract_test
+id: /conf/executor-run/clean-up-record
+status: proposed
+target: /req/executor-run/clean-up-record
+purpose: Verify that an executor records the exit actions that failed or timed out during clean-up.
+steps:
+  - Use a capability specification with nested states that have several exit actions.
+  - Bring a run to a nested state and cancel its command.
+  - Make one exit action fail and another not complete within its time limit.
+  - Read the record of the run.
+  - Check that it lists the names of both of those exit actions.
+  - Repeat with every exit action completing, and check that the record lists no exit action.

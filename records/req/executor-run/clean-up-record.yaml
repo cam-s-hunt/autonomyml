@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/clean-up-record
+status: proposed
+statement: An executor SHALL record, with the ending of a run, the name of each exit action that was rejected, failed, was cancelled by a party other than the executor, could not be sent, or reached its time limit, during clean-up.
