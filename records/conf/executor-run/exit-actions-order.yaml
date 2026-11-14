@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-run/exit-actions-order
+status: proposed
+target: /req/executor-run/exit-actions-order
+purpose: Verify that an executor performs the exit actions of a state in order, each after the previous one has finished or timed out.
+steps:
+  - Use a capability specification with a state that has several exit actions.
+  - Cause the executor to leave the state.
+  - Check that the executor sends the commands of the exit actions in the order stated.
+  - Check that it sends each only after the previous command has completed.
+  - Repeat with a previous command that does not complete, and check that the executor sends the next only when the time limit of the previous has elapsed.

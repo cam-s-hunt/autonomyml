@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/specification-json/exit-actions
 status: proposed
-statement: A state that has exit actions SHALL state them in its member named `exitActions`, an array of objects.
+statement: A state that has exit actions SHALL state them, in the order in which they are to be performed, in its member named `exitActions`, an array of objects.

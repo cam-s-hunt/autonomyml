@@ -41,3 +41,5 @@ requirements:
   - /req/specification/terminal-invariants
   - /req/specification/terminal-entry-actions
   - /req/specification/terminal-exit-actions
+  - /req/specification/entry-action-order
+  - /req/specification/exit-action-order

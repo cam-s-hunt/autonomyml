@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/exit-action-order
+status: proposed
+target: /req/specification/exit-action-order
+purpose: Verify that a capability specification states the exit actions of a state in an order.
+steps:
+  - Identify each state that has exit actions.
+  - For each, check that the specification gives an order for them, which is the order in which they are to be performed.

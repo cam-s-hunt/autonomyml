@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-run/entry-actions-order
+status: proposed
+target: /req/executor-run/entry-actions-order
+purpose: Verify that an executor sends the entry actions of a state in the order stated.
+steps:
+  - Use a capability specification with a state that has several entry actions.
+  - Cause the executor to enter the state.
+  - Check that the executor sends the commands of the entry actions in the order stated.

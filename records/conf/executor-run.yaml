@@ -41,3 +41,5 @@ tests:
   - /conf/executor-run/postcondition-no-observation
   - /conf/executor-run/cause-postcondition
   - /conf/executor-run/postcondition-order
+  - /conf/executor-run/entry-actions-order
+  - /conf/executor-run/exit-actions-order

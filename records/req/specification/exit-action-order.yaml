@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/exit-action-order
+status: proposed
+statement: A capability specification SHALL state the exit actions of a state in the order in which they are to be performed.

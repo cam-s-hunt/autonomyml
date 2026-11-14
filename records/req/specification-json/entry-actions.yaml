@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/specification-json/entry-actions
 status: proposed
-statement: A state that has entry actions SHALL state them in its member named `entryActions`, an array of objects.
+statement: A state that has entry actions SHALL state them, in the order in which they are to be performed, in its member named `entryActions`, an array of objects.

@@ -7,3 +7,4 @@ steps:
   - Identify each state that has exit actions.
   - For each, locate its member named `exitActions`.
   - Check that its value is an array of objects.
+  - Check that the array is in the order in which the exit actions are to be performed.

@@ -35,3 +35,5 @@ tests:
   - /conf/specification/terminal-invariants
   - /conf/specification/terminal-entry-actions
   - /conf/specification/terminal-exit-actions
+  - /conf/specification/entry-action-order
+  - /conf/specification/exit-action-order

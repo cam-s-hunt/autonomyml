@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/entry-actions-order
+status: proposed
+statement: An executor SHALL perform the entry actions of a state in the order stated.

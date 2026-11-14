@@ -1890,3 +1890,18 @@ Asked whether to reword the two timeout rules. The owner chose **reword both** (
 - **Reworded in place (`status: proposed`, identifiers unchanged, tests rewritten):** `/req/executor-run/transitions-first` now reads "…before the timeouts of its current state and of the modes that enclose it."; `/req/executor-run/timeout` now reads "An executor SHALL take the target of the timeout of its current state or of a mode that encloses it, the outermost first, when the timeout's duration has elapsed since that state was entered and no transition has been taken." Each test gained steps for a mode's timeout (a clock that runs from entry to the mode, not from a change of child; two timeouts elapsing together). Gate stage 1 over the 316 records: no findings.
 - **Architect's reading, not decided by the owner:** "the outermost first" for simultaneous timeouts (the card said so and the owner approved the wording).
 - **Open:** the clock of a mode restarts only when the mode is re-entered (stated in the tests, not in a rule); a timeout on a state that has been left by a transition: the rule says the clock runs "since that state was entered", so re-entering a state restarts it (not tested).
+
+## Order of entry and exit actions, 2026-11-14
+
+Asked in what order the executor performs several entry actions or several exit actions. The owner chose **in the stated order, one after another** (recommendation followed; alternatives were order only for exit actions, and leaving all order undefined).
+
+- **Decided (direction):** entry actions are sent in the order the document lists them; exit actions are performed in the listed order, each waited for (up to its time limit) before the next begins. Entry actions are only sent in order, not waited for (no-wait decision), so "in order" for them means the order sent, not the order they finish.
+- **Cost recorded:** a slow exit action delays those after it, up to its limit.
+- **Not decided:** the requirement wording (none written); whether a halt's or failure's clean-up uses the same order within one state (the natural reading is yes, innermost state first).
+
+## Action-order rules written, 2026-11-14
+
+Asked for wording of the action-order rules. The owner chose **write all six** (recommendation followed; alternatives were the executor and JSON rules only, and the owner wording them).
+
+- **Written (all `status: proposed`; identifiers are the Architect's proposals, none assigned):** in `/req/specification`: `entry-action-order` and `exit-action-order`; in `/req/executor-run`: `entry-actions-order` ("An executor SHALL perform the entry actions of a state in the order stated.") and `exit-actions-order` ("…in the order stated, beginning each only when the previous one has completed or its time limit has elapsed."); each with a test; and `/req/specification-json/entry-actions` and `exit-actions` reworded in place to say "in the order in which they are to be performed" (a step added to each test). Counted from the class records: the specification class has 33 requirements and the run class 39. Gate stage 1 over the 324 records: no findings.
+- **Open:** "completed" for an exit action means its command reached a final status, which is not defined; entry actions are only sent in order, not waited for, and the rule says "perform"; whether a halt's or failure's clean-up uses the same order within one state (the natural reading is yes); the identifiers `entry-actions` and `entry-actions-order` in the run class differ by one suffix.
