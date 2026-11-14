@@ -49,6 +49,7 @@ requirements:
   - /req/executor-run/postcondition-check
   - /req/executor-run/postcondition-fail
   - /req/executor-run/postcondition-no-observation
+  - /req/executor-run/composite-no-observation
   - /req/executor-run/cause-postcondition
   - /req/executor-run/postcondition-order
   - /req/executor-run/entry-actions-order

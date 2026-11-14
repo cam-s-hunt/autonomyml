@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/composite-no-observation
+status: proposed
+statement: An executor SHALL treat a condition that reads a record or an array as reading no observation when any field of the record, or any element of the array, has no usable value.

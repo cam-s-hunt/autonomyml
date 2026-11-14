@@ -1975,3 +1975,18 @@ Asked for wording of the rules that fix where the run record is kept. The owner 
 
 - **Written (`status: proposed`; identifiers are the Architect's proposals, none assigned):** `/req/executor-run/result-schema` ("The result schema of the control stream on which an executor accepts run requests SHALL have a member named `cause`, a string, and a member named `failedCleanUp`, an array of strings.") and `/req/executor-run/record-in-result` ("An executor SHALL state the cause of a run and the names of its failed clean-up actions in the members `cause` and `failedCleanUp` of the inline result of the final status report of the run's command."), each with an abstract test, listed in the class and conformance class. Counted from the class record, the run class now has 42 requirements. Gate stage 1 over the 336 records: no findings.
 - **Open:** the first rule's subject is the control stream's schema rather than the executor (a stretch of the class's subject, "Executor"); the seven existing rules still say "record" and now rely on `record-in-result` for the meaning; the result for a REJECTED request; partial results in earlier status reports; the "inline result" is the API's `CommandResult.inline`, whose encoding the API leaves to the control stream's result schema.
+
+## A missing value inside a record: per field, 2026-11-14
+
+Asked what counts as "no observation" when one field of a record result is missing (NaN or a declared nil value) and the others are fine. The owner chose **only what is read: per field** (recommendation followed; alternatives were the whole observation for any missing field, and leaving it undefined).
+
+- **Decided (direction):** a condition that reads a field sees no observation only if that field has no usable value; other fields of the same result do not matter. A condition that reads a whole composite (a record, an array) sees no observation if any field inside it has no usable value. This closes the "nil values inside composites" item for the data rules.
+- **Cost recorded:** a condition reading a whole composite fails more often; "any field inside it" has to be stated for arrays (any element).
+- **Not decided:** the requirement wording (none written); a Note on the *no observation* term; whether a missing field inside a command parameter (constant) matters (parameters are constants and do not read streams).
+
+## Composite no-observation rule written, 2026-11-14
+
+Asked for wording of the per-field rule. The owner chose **one requirement plus a Note sentence** (recommendation followed; alternatives were the requirement only, and the owner wording it).
+
+- **Written (`status: proposed`, identifier is the Architect's proposal):** `/req/executor-run/composite-no-observation` ("An executor SHALL treat a condition that reads a record or an array as reading no observation when any field of the record, or any element of the array, has no usable value.") with an abstract test, listed in the class and conformance class; and a second sentence added to the Note of `/term/no-observation`: "A condition that reads a field reads no observation only if that field has no usable value." Counted from the class record, the run class now has 43 requirements. Gate stage 1 over the 338 records: no findings.
+- **Open:** "usable value" is not a defined term (it is used in the term's definition); "any field of a record" reads through nested records without saying so; the new rule covers conditions but not invariants or postconditions by name (the invariant and postcondition no-observation rules say "reads no observation", which the new rule defines for composites); the Note adds a rule-like sentence to a glossary entry.

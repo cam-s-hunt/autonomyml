@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-run/composite-no-observation
+status: proposed
+target: /req/executor-run/composite-no-observation
+purpose: Verify that a condition that reads a whole record or array reads no observation when any part of it has no usable value.
+steps:
+  - Use a capability specification with a condition that reads a whole record result, and another that reads only one field of it.
+  - Supply a result in which one field is missing, either NaN or a declared nil value, and the others are valid.
+  - Check that the condition that reads the whole record is treated as reading no observation.
+  - Check that the condition that reads only a valid field is not.
+  - Repeat with an array result in which one element is missing, read whole.
