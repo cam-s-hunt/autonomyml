@@ -2,5 +2,9 @@ kind: term
 id: /term/observation
 status: proposed
 term: observation
-definition: observation as defined by `sosa:Observation` in SOSA/SSN [W3C SOSA/SSN, 2017].
+definition: observation as defined by `sosa:Observation` in SOSA/SSN.
 note: NOTE  A condition reads the results of observations.
+source:
+  key: W3C-SOSA-SSN
+  iri: http://www.w3.org/ns/sosa/Observation
+  label: sosa:Observation

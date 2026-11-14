@@ -2,7 +2,11 @@ kind: term
 id: /term/system
 status: proposed
 term: system
-definition: system, as defined by `ssn:System` in SOSA/SSN [W3C SOSA/SSN, 2017].
+definition: system, as defined by `ssn:System` in SOSA/SSN.
 note: 'NOTE 1  Software and virtual systems are systems.
 
   NOTE 2  A system may have other systems as components.'
+source:
+  key: W3C-SOSA-SSN
+  iri: http://www.w3.org/ns/ssn/System
+  label: ssn:System
