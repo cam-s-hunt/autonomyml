@@ -2037,3 +2037,10 @@ Asked whether to reword the unit-match rule for the any-form decision. The owner
 
 - **Reworded in place (`status: proposed`, identifier unchanged):** `/req/executor-start/unit-match` now ends "…, two units being the same only if they share an identical UCUM code or an identical URI, a code never being the same as a URI."; its test gained two steps for a field giving both forms (a shared code, a shared URI, or both: not rejected; no shared form: rejected). Gate stage 1 run after the edit.
 - **Open:** the specification's `uom` member is "a SWE Common unit reference" (`/req/specification-json/field-unit-or-size`), which allows a code, a URI or both, so a specification declaring both forms is covered. "UCUM code" is still not a normative reference.
+
+## An omitted or null optional field is no observation, 2026-11-14
+
+Asked, from item 4 of the check against the pinned SWE Common text, how an optional record field that is omitted or `null` counts. The owner chose **no observation** (recommendation followed; alternatives were an evaluation error with the same result, and rejecting at start unless the condition tests the field with `has()`).
+
+- **Decided (direction):** a field that the schema marks optional and the value omits, or sets to `null`, is no observation. The per-field and whole-composite rules already decided apply to it. The "no observation" definition gains this case.
+- **Not decided:** the wording (the term and its Note are unchanged); whether a missing field that is not optional is a data error or also no observation (SWE Common does not cover it; assumed: no observation, not decided).
