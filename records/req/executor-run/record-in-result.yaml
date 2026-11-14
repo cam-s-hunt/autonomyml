@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/record-in-result
+status: proposed
+statement: An executor SHALL state the cause of a run and the names of its failed clean-up actions in the members `cause` and `failedCleanUp` of the inline result of the final status report of the run's command.

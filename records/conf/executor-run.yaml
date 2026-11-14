@@ -35,6 +35,8 @@ tests:
   - /conf/executor-run/command-failure
   - /conf/executor-run/clean-up-failure
   - /conf/executor-run/clean-up-record
+  - /conf/executor-run/result-schema
+  - /conf/executor-run/record-in-result
   - /conf/executor-run/cause-command
   - /conf/executor-run/no-resume
   - /conf/executor-run/postcondition-check

@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/record-in-result
+status: proposed
+target: /req/executor-run/record-in-result
+purpose: Verify that an executor states the cause and the failed clean-up actions in the inline result of the final status report.
+steps:
+  - Complete a run by reaching a terminal state, another by a halt with a failing exit action, and another by an action failure.
+  - For each, read the final status report of the run's command.
+  - Check that its inline result has a member `cause` that is the cause of the run.
+  - Check that its inline result has a member `failedCleanUp` that lists the names of the failed clean-up actions, and is empty when none failed.

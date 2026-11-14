@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/result-schema
+status: proposed
+statement: The result schema of the control stream on which an executor accepts run requests SHALL have a member named `cause`, a string, and a member named `failedCleanUp`, an array of strings.

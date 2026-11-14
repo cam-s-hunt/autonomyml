@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/result-schema
+status: proposed
+target: /req/executor-run/result-schema
+purpose: Verify that the result schema of the executor's run control stream has the members cause and failedCleanUp.
+steps:
+  - Identify the control stream on which the executor accepts run requests.
+  - Retrieve its result schema.
+  - Check that the schema has a member named `cause` whose value is a string.
+  - Check that the schema has a member named `failedCleanUp` whose value is an array of strings.

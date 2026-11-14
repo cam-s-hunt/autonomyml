@@ -42,6 +42,8 @@ requirements:
   - /req/executor-run/command-failure
   - /req/executor-run/clean-up-failure
   - /req/executor-run/clean-up-record
+  - /req/executor-run/result-schema
+  - /req/executor-run/record-in-result
   - /req/executor-run/cause-command
   - /req/executor-run/no-resume
   - /req/executor-run/postcondition-check
