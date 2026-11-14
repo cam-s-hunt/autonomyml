@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/postcondition-order
+status: proposed
+statement: An executor SHALL, when more than one postcondition is broken, record the name of the first broken postcondition, in the order stated, as the cause of the run.

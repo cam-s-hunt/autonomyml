@@ -35,3 +35,9 @@ requirements:
   - /req/specification/timeout
   - /req/specification/postcondition-name
   - /req/specification/postcondition-condition
+  - /req/specification/transition-order
+  - /req/specification/invariant-order
+  - /req/specification/postcondition-order
+  - /req/specification/terminal-invariants
+  - /req/specification/terminal-entry-actions
+  - /req/specification/terminal-exit-actions

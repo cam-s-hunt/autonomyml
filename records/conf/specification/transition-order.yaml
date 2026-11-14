@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/transition-order
+status: proposed
+target: /req/specification/transition-order
+purpose: Verify that a capability specification states transitions in an order.
+steps:
+  - Identify each place where the capability specification states transitions.
+  - Check that the specification gives an order for them, which is the order in which they are to be considered.

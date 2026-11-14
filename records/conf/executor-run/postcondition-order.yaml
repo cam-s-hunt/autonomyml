@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/postcondition-order
+status: proposed
+target: /req/executor-run/postcondition-order
+purpose: Verify which broken postcondition an executor records as the cause when several are broken.
+steps:
+  - Use a capability specification with two postconditions stated in order and a terminal state with the ending succeed.
+  - Bring a run to that terminal state with both postconditions broken.
+  - Read the record of the run.
+  - Check that its cause is the name of the postcondition stated first.

@@ -44,3 +44,4 @@ requirements:
   - /req/executor-run/postcondition-check
   - /req/executor-run/postcondition-fail
   - /req/executor-run/cause-postcondition
+  - /req/executor-run/postcondition-order

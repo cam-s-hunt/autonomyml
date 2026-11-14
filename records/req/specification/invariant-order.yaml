@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/invariant-order
+status: proposed
+statement: A capability specification SHALL state the invariants of a state in the order in which they are to be considered.

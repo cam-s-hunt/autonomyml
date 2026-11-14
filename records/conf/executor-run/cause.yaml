@@ -2,9 +2,10 @@ kind: abstract_test
 id: /conf/executor-run/cause
 status: proposed
 target: /req/executor-run/cause
-purpose: Verify that a run that ends in a terminal state records that state's name as its cause.
+purpose: Verify that a run that ends in a terminal state with no broken postcondition records that state's name as its cause.
 steps:
   - Use a capability specification with a terminal state.
-  - Cause a run to enter the terminal state.
+  - Cause a run to enter the terminal state with every postcondition holding.
   - Read the record of the run.
   - Check that its cause is the name of that terminal state.
+  - Repeat with a broken postcondition and check that the cause is not the name of the terminal state.

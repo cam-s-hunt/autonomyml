@@ -7,3 +7,4 @@ steps:
   - Identify a capability specification document that has postconditions.
   - Locate its member named `postconditions`.
   - Check that its value is an array of objects.
+  - Check that the array is in the order in which the postconditions are to be considered.

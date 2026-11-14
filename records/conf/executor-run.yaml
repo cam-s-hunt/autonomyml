@@ -37,3 +37,4 @@ tests:
   - /conf/executor-run/postcondition-check
   - /conf/executor-run/postcondition-fail
   - /conf/executor-run/cause-postcondition
+  - /conf/executor-run/postcondition-order

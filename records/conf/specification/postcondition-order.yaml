@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/postcondition-order
+status: proposed
+target: /req/specification/postcondition-order
+purpose: Verify that a capability specification states postconditions in an order.
+steps:
+  - Identify each place where the capability specification states postconditions.
+  - Check that the specification gives an order for them, which is the order in which they are to be considered.

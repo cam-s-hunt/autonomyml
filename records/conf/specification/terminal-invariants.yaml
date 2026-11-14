@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/terminal-invariants
+status: proposed
+target: /req/specification/terminal-invariants
+purpose: Verify that no state of kind terminal has invariants.
+steps:
+  - Identify each state of kind terminal.
+  - For each, check that it has no invariants.

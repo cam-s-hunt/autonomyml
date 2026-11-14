@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/terminal-exit-actions
+status: proposed
+target: /req/specification/terminal-exit-actions
+purpose: Verify that no state of kind terminal has exit actions.
+steps:
+  - Identify each state of kind terminal.
+  - For each, check that it has no exit actions.

@@ -5,6 +5,5 @@ target: /req/executor-run/end-fail
 purpose: Verify that a run that ends with the ending fail is reported as FAILED.
 steps:
   - Use a capability specification with a terminal state whose ending is fail.
-  - Cause the run to enter it.
-  - Read the status of the run's command.
-  - Check that the status code is FAILED.
+  - Cause the run to enter it, read the status of the run's command, and check that the status code is FAILED.
+  - Repeat with a run that ends because an action failed, one that ends because the command of a command state failed, and one that ends because a postcondition was broken.

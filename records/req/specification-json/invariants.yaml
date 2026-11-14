@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/specification-json/invariants
 status: proposed
-statement: A state that has invariants SHALL state them in its member named `invariants`, an array of objects.
+statement: A state that has invariants SHALL state them, in the order in which they are to be considered, in its member named `invariants`, an array of objects.

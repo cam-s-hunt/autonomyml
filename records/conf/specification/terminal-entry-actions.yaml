@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/terminal-entry-actions
+status: proposed
+target: /req/specification/terminal-entry-actions
+purpose: Verify that no state of kind terminal has entry actions.
+steps:
+  - Identify each state of kind terminal.
+  - For each, check that it has no entry actions.

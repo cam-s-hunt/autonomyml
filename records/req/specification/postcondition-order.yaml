@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/postcondition-order
+status: proposed
+statement: A capability specification SHALL state its postconditions in the order in which they are to be considered.

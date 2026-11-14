@@ -3,8 +3,8 @@ id: /term/terminal-state
 status: proposed
 term: terminal state
 definition: state in which a run of a state machine ends, and from which no transition leaves.
-note: 'NOTE 1  A terminal state has one ending: succeed, fail or halted.
+note: 'NOTE 1  A terminal state has one ending: succeed or fail.
 
-  NOTE 2  Halted is reached only by a halt that has completed the exit actions of the active states; a halt whose exit actions fail or overrun ends in fail.
+  NOTE 2  A halted run ends in no terminal state of the document.
 
   NOTE 3  Whether a halted or failed run may be restarted is not defined here.'

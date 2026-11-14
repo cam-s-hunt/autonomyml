@@ -29,3 +29,9 @@ tests:
   - /conf/specification/timeout
   - /conf/specification/postcondition-name
   - /conf/specification/postcondition-condition
+  - /conf/specification/transition-order
+  - /conf/specification/invariant-order
+  - /conf/specification/postcondition-order
+  - /conf/specification/terminal-invariants
+  - /conf/specification/terminal-entry-actions
+  - /conf/specification/terminal-exit-actions

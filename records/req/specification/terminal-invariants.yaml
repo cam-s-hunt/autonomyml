@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/terminal-invariants
+status: proposed
+statement: A state of kind terminal SHALL NOT have invariants.

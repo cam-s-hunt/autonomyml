@@ -2,9 +2,10 @@ kind: abstract_test
 id: /conf/executor-run/end-succeed
 status: proposed
 target: /req/executor-run/end-succeed
-purpose: Verify that a run that ends with the ending succeed is reported as COMPLETED.
+purpose: Verify that a run that ends with the ending succeed and no broken postcondition is reported as COMPLETED.
 steps:
   - Use a capability specification with a terminal state whose ending is succeed.
-  - Cause the run to enter it.
+  - Cause the run to enter it with every postcondition holding.
   - Read the status of the run's command.
   - Check that the status code is COMPLETED.
+  - Repeat with a broken postcondition and check that the status code is not COMPLETED.

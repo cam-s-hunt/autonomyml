@@ -3,4 +3,4 @@ id: /term/ending
 status: proposed
 term: ending
 definition: outcome of a run, which is one of succeed, fail or halted.
-note: NOTE  A run ends in succeed when it has completed the behavior, in fail when it could not, and in halted when a halt stopped it and the clean-up completed.
+note: NOTE  A run ends in succeed when it has completed the behavior, in fail when it could not, and in halted when a halt stopped it.

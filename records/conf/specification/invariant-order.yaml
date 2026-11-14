@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/invariant-order
+status: proposed
+target: /req/specification/invariant-order
+purpose: Verify that a capability specification states invariants in an order.
+steps:
+  - Identify each place where the capability specification states invariants.
+  - Check that the specification gives an order for them, which is the order in which they are to be considered.

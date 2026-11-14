@@ -7,3 +7,4 @@ steps:
   - Identify each state that has invariants.
   - For each, locate its member named `invariants`.
   - Check that its value is an array of objects.
+  - Check that the array is in the order in which the invariants are to be considered.
