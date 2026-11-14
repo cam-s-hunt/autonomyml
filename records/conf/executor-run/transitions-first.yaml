@@ -2,9 +2,10 @@ kind: abstract_test
 id: /conf/executor-run/transitions-first
 status: proposed
 target: /req/executor-run/transitions-first
-purpose: Verify that an executor checks the transitions of the current state and of its enclosing modes before the timeout of the current state.
+purpose: Verify that an executor checks transitions before timeouts, across the current state and its enclosing modes.
 steps:
   - Use a capability specification with a state that has a transition and a timeout.
   - Arrange that the timeout duration has elapsed and the transition condition is met at the same moment.
   - Check that the executor takes the transition and not the timeout.
   - Repeat with the transition on an enclosing mode instead of on the current state.
+  - Repeat with the timeout on an enclosing mode and the transition on the current state, and check that the executor takes the transition.

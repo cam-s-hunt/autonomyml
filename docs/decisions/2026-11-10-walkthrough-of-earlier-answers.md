@@ -1874,3 +1874,19 @@ Asked for wording of the cancel rule. The owner chose **add it as worded** (reco
 
 - **Written (`status: proposed`, identifier is the Architect's proposal):** `/req/executor-run/cancel-on-leave` ("An executor SHALL, when it leaves a state, cancel the command of the state and the command of each entry action of the state that has not completed, before it performs the exit actions of the state.") with an abstract test, listed in the class and conformance class. The run class now has 37 requirements (counted from the class record). Gate stage 1 over the 316 records: no findings.
 - **Open:** a failed or ignored cancel; "leaves a state" includes a halt and a failure, for which `halt` and `action-failure` say only "perform the exit actions"; whether a halt cancels the commands of every state the run is in (the natural reading is yes, innermost first); a state left because a postcondition is broken (the run is already in a terminal state, which has no commands).
+
+## A mode's timeout applies while a child is current, 2026-11-13
+
+Asked whether a mode's own timeout applies while one of its child states is current. The owner chose **yes, from entry to the mode** (recommendation followed; alternatives were only the current state's timeout, and forbidding a timeout on a mode).
+
+- **Decided (direction):** a mode's timeout counts from the moment the mode is entered and keeps counting while any child is current. If it elapses and no transition of the mode, its children or enclosing modes is met, the executor takes the mode's timeout target. This closes the open question "whether an enclosing mode's timeout applies while a child is current".
+- **Cost recorded:** the written `timeout` and `transitions-first` rules speak of the timeout of "a state" and of "its current state" and need rewording to cover enclosing modes.
+- **Not decided:** which timeout wins when several have elapsed at the same moment (outermost first, as for transitions, is the natural reading); whether a transition between two children of the same mode restarts the mode's clock (by the decision it does not: the clock runs from entry to the mode); the requirement wording (nothing changed yet).
+
+## Timeout rules reworded for enclosing modes, 2026-11-14
+
+Asked whether to reword the two timeout rules. The owner chose **reword both** (recommendation followed; alternatives were rewording without an order for simultaneous timeouts, and the owner wording them).
+
+- **Reworded in place (`status: proposed`, identifiers unchanged, tests rewritten):** `/req/executor-run/transitions-first` now reads "…before the timeouts of its current state and of the modes that enclose it."; `/req/executor-run/timeout` now reads "An executor SHALL take the target of the timeout of its current state or of a mode that encloses it, the outermost first, when the timeout's duration has elapsed since that state was entered and no transition has been taken." Each test gained steps for a mode's timeout (a clock that runs from entry to the mode, not from a change of child; two timeouts elapsing together). Gate stage 1 over the 316 records: no findings.
+- **Architect's reading, not decided by the owner:** "the outermost first" for simultaneous timeouts (the card said so and the owner approved the wording).
+- **Open:** the clock of a mode restarts only when the mode is re-entered (stated in the tests, not in a rule); a timeout on a state that has been left by a transition: the rule says the clock runs "since that state was entered", so re-entering a state restarts it (not tested).

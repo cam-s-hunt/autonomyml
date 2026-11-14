@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-run/timeout
 status: proposed
-statement: "An executor SHALL take the target of a state's timeout when the timeout's duration has elapsed since the state was entered and no transition has been taken."
+statement: "An executor SHALL take the target of the timeout of its current state or of a mode that encloses it, the outermost first, when the timeout's duration has elapsed since that state was entered and no transition has been taken."
