@@ -1,0 +1,97 @@
+{
+  "uniqueId": "https://example.org/autonomyml/specifications/waypoint-navigation",
+  "version": "1.0.0",
+  "dataStreams": {
+    "pose": {
+      "maxAge": { "type": "Quantity", "definition": "https://example.org/autonomyml/def/MaximumAge", "uom": { "code": "s" }, "value": 1.0 },
+      "fields": [
+        { "path": "lat", "uom": { "code": "deg" } },
+        { "path": "lon", "uom": { "code": "deg" } }
+      ]
+    },
+    "velocity": {
+      "maxAge": { "type": "Quantity", "definition": "https://example.org/autonomyml/def/MaximumAge", "uom": { "code": "s" }, "value": 1.0 },
+      "fields": [
+        { "path": "groundSpeed", "uom": { "code": "m/s" } }
+      ]
+    }
+  },
+  "controlStreams": ["navigate", "hold"],
+  "initial": "DriveToWaypoint",
+  "states": {
+    "DriveToWaypoint": {
+      "kind": "command",
+      "controlStream": "navigate",
+      "parameters": {
+        "type": "Vector",
+        "definition": "http://www.opengis.net/def/property/OGC/0/PlatformLocation",
+        "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4326",
+        "coordinates": [
+          { "name": "lat", "type": "Quantity", "definition": "http://www.opengis.net/def/axis/OGC/1/lat", "axisID": "Lat", "uom": { "code": "deg" }, "value": 50.0 },
+          { "name": "lon", "type": "Quantity", "definition": "http://www.opengis.net/def/axis/OGC/1/lon", "axisID": "Lon", "uom": { "code": "deg" }, "value": 8.0 }
+        ]
+      },
+      "invariants": [
+        {
+          "name": "PoseValid",
+          "condition": "pose.result.lat >= -90.0 && pose.result.lat <= 90.0",
+          "response": "SafeHold"
+        }
+      ],
+      "exitActions": [
+        {
+          "name": "BrakeOnExit",
+          "controlStream": "hold",
+          "parameters": {
+            "type": "DataRecord",
+            "definition": "https://example.org/autonomyml/def/HoldCommand",
+            "fields": [
+              { "name": "mode", "type": "Text", "definition": "https://example.org/autonomyml/def/HoldMode", "value": "BRAKE_HOLD" }
+            ]
+          },
+          "timeLimit": { "type": "Quantity", "definition": "https://example.org/autonomyml/def/TimeLimit", "uom": { "code": "s" }, "value": 5.0 }
+        }
+      ],
+      "transitions": [
+        { "condition": "navigate.currentStatus.statusCode == 'FAILED' || navigate.currentStatus.statusCode == 'REJECTED'", "target": "SafeHold" },
+        { "condition": "navigate.currentStatus.statusCode == 'COMPLETED'", "target": "Arrived" }
+      ],
+      "timeout": {
+        "duration": { "type": "Quantity", "definition": "https://example.org/autonomyml/def/Timeout", "uom": { "code": "s" }, "value": 120.0 },
+        "target": "SafeHold"
+      }
+    },
+    "SafeHold": {
+      "kind": "command",
+      "controlStream": "hold",
+      "parameters": {
+        "type": "DataRecord",
+        "definition": "https://example.org/autonomyml/def/HoldCommand",
+        "fields": [
+          { "name": "mode", "type": "Text", "definition": "https://example.org/autonomyml/def/HoldMode", "value": "BRAKE_HOLD" }
+        ]
+      },
+      "transitions": [
+        { "condition": "velocity.result.groundSpeed <= 0.1", "target": "SafeHoldTerminated" }
+      ],
+      "timeout": {
+        "duration": { "type": "Quantity", "definition": "https://example.org/autonomyml/def/Timeout", "uom": { "code": "s" }, "value": 30.0 },
+        "target": "SafeHoldTerminated"
+      }
+    },
+    "Arrived": {
+      "kind": "terminal",
+      "ending": "succeed"
+    },
+    "SafeHoldTerminated": {
+      "kind": "terminal",
+      "ending": "fail"
+    }
+  },
+  "postconditions": [
+    {
+      "name": "AtTarget",
+      "condition": "pose.result.lat - 50.0 < 0.00002 && 50.0 - pose.result.lat < 0.00002 && pose.result.lon - 8.0 < 0.00002 && 8.0 - pose.result.lon < 0.00002"
+    }
+  ]
+}
