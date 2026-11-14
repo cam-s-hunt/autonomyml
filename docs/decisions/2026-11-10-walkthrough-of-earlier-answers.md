@@ -2030,3 +2030,10 @@ Asked, from item 7 of the check against the pinned SWE Common text, how the star
 - **Decided (direction):** two units are the same if they share at least one identical UCUM code or at least one identical URI (text identical in each case); they differ, and the run is rejected, if no form is shared. A code is still never equal to a URI. This refines the exact-match decision of 2026-11-14 and rests on the pinned rule that a code and an href given together name the same unit.
 - **Not decided:** the requirement wording (`/req/executor-start/unit-match` still says "both UCUM codes ... or both URIs", which does not cover a field with two forms; its test has no two-form step). Nothing changed in the records yet.
 - **Still open from the check:** DataStream not a component; missing or `null` optional field; numeric time with a frame-implied origin; record and vector array forms; geometry and its `srs`.
+
+## unit-match reworded again for both unit forms, 2026-11-14
+
+Asked whether to reword the unit-match rule for the any-form decision. The owner chose **reword in one sentence** (recommendation followed; alternatives were leaving the wording, and the owner wording it).
+
+- **Reworded in place (`status: proposed`, identifier unchanged):** `/req/executor-start/unit-match` now ends "…, two units being the same only if they share an identical UCUM code or an identical URI, a code never being the same as a URI."; its test gained two steps for a field giving both forms (a shared code, a shared URI, or both: not rejected; no shared form: rejected). Gate stage 1 run after the edit.
+- **Open:** the specification's `uom` member is "a SWE Common unit reference" (`/req/specification-json/field-unit-or-size`), which allows a code, a URI or both, so a specification declaring both forms is covered. "UCUM code" is still not a normative reference.

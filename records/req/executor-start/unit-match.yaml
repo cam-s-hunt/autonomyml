@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-start/unit-match
 status: proposed
-statement: "An executor SHALL reject a run request when the unit of a bound data stream's field differs from the unit the specification declares for it, two units being the same only if both are UCUM codes with identical text or both are URIs with identical text."
+statement: "An executor SHALL reject a run request when the unit of a bound data stream's field differs from the unit the specification declares for it, two units being the same only if they share an identical UCUM code or an identical URI, a code never being the same as a URI."
