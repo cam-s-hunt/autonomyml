@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-run/action-failure
 status: proposed
-statement: An executor SHALL, when the command of an entry action or an exit action is rejected, fails or cannot be sent, perform the exit actions of the states it is in, innermost first, and then end the run with the ending fail.
+statement: An executor SHALL, when the command of an entry action or an exit action is rejected, fails, is cancelled by a party other than the executor, or cannot be sent, perform the exit actions of the states it is in, innermost first, and then end the run with the ending fail.

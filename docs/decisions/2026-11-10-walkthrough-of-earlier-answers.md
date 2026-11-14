@@ -1905,3 +1905,18 @@ Asked for wording of the action-order rules. The owner chose **write all six** (
 
 - **Written (all `status: proposed`; identifiers are the Architect's proposals, none assigned):** in `/req/specification`: `entry-action-order` and `exit-action-order`; in `/req/executor-run`: `entry-actions-order` ("An executor SHALL perform the entry actions of a state in the order stated.") and `exit-actions-order` ("…in the order stated, beginning each only when the previous one has completed or its time limit has elapsed."); each with a test; and `/req/specification-json/entry-actions` and `exit-actions` reworded in place to say "in the order in which they are to be performed" (a step added to each test). Counted from the class records: the specification class has 33 requirements and the run class 39. Gate stage 1 over the 324 records: no findings.
 - **Open:** "completed" for an exit action means its command reached a final status, which is not defined; entry actions are only sent in order, not waited for, and the rule says "perform"; whether a halt's or failure's clean-up uses the same order within one state (the natural reading is yes); the identifiers `entry-actions` and `entry-actions-order` in the run class differ by one suffix.
+
+## A command cancelled from outside the run, 2026-11-14
+
+Asked what the run does when a state's or action's command ends with the status CANCELED because another party cancelled it on the control stream. The owner chose **treat it as a failure** (recommendation followed; alternatives were leaving it to the author's conditions, and treating it as a halt).
+
+- **Decided (direction):** a command that comes back CANCELED when the executor did not cancel it counts as failing, like REJECTED or FAILED: the run performs the exit actions and ends with the ending fail, with the command's state or action as the cause. A cancel that the executor itself sent (on leaving a state, or on a halt) does not count. This closes the "CANCELED by someone else" item.
+- **Cost recorded:** the failure rules widen by one case; an author's own condition on the status still works but the failure rule fires first for a command state's own command.
+- **Not decided:** the requirement wording (nothing changed yet); how an executor tells its own cancel from another party's (it sent the cancel, so it knows; not stated); a command that is CANCELED after the executor's own cancel on leaving the state (covered by "did not cancel it").
+
+## Failure rules reworded for an outside cancel, 2026-11-14
+
+Asked whether to reword the two failure rules. The owner chose **reword both** (recommendation followed; alternatives were also rewording `clean-up-failure`, and the owner wording them).
+
+- **Reworded in place (`status: proposed`, identifiers unchanged):** `/req/executor-run/action-failure` and `/req/executor-run/command-failure` now say "…is rejected, fails, is cancelled by a party other than the executor, or cannot be sent…"; each test gained steps (a command cancelled directly on its control stream is a failure; a cancel the executor sent itself on leaving the state is not). Gate stage 1 over the 324 records: no findings.
+- **Open:** `clean-up-failure` was not changed, so an exit action cancelled from outside during clean-up is not covered; "a party other than the executor" is not a defined term; `cancel-on-leave` and these rules rely on the executor knowing which cancel it sent (not stated).
