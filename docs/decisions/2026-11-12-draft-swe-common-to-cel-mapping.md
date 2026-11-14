@@ -1,3 +1,5 @@
+> Checked against the pinned text on 2026-11-14; differences are listed in the decision record, section "SWE Common mapping checked against the pinned text".
+
 # Draft: SWE Common 3.0 types to CEL types (proposals, not decisions)
 
 Status: **draft, 2026-11-12. Not normative. All nine choices below were decided by the owner on 2026-11-12 (see the decision record); the table rows themselves are still the Architect's proposals except where a choice changed them, and the table has not been checked against the pinned SWE Common 3.0 text.** Every mapping below is the Architect's proposal. Written after the owner chose to map every SWE Common type with a defined shape (see the decision record, "Type mapping: every SWE Common type, with defined shapes") and asked for a table to review.
