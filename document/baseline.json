@@ -1,5 +1,8 @@
 {
   "expected": [
+    "X010:MODSPEC_1:/per/behavior-tree/node-type",
+    "X010:MODSPEC_1:/per/specification/postconditions",
+    "X010:MODSPEC_1:/per/specification/timeout",
     "X010:RELATON_4:CEL",
     "X010:RELATON_4:Common Core Ontologies",
     "X010:STANDOC_40:Could not retrieve IETF RFC 3986: no access to online site",
