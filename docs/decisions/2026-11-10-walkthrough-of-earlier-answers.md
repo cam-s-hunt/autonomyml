@@ -1990,3 +1990,18 @@ Asked for wording of the per-field rule. The owner chose **one requirement plus 
 
 - **Written (`status: proposed`, identifier is the Architect's proposal):** `/req/executor-run/composite-no-observation` ("An executor SHALL treat a condition that reads a record or an array as reading no observation when any field of the record, or any element of the array, has no usable value.") with an abstract test, listed in the class and conformance class; and a second sentence added to the Note of `/term/no-observation`: "A condition that reads a field reads no observation only if that field has no usable value." Counted from the class record, the run class now has 43 requirements. Gate stage 1 over the 338 records: no findings.
 - **Open:** "usable value" is not a defined term (it is used in the term's definition); "any field of a record" reads through nested records without saying so; the new rule covers conditions but not invariants or postconditions by name (the invariant and postcondition no-observation rules say "reads no observation", which the new rule defines for composites); the Note adds a rule-like sentence to a glossary entry.
+
+## Unit references are compared exactly, 2026-11-14
+
+Asked how two unit references should be compared. The owner chose **exact match of the same form** (recommendation followed; alternatives were equivalence by UCUM meaning, and leaving it to the executor).
+
+- **Decided (direction):** two unit references are the same only if both are UCUM codes with identical text (case-sensitive) or both are URIs with identical text; a code never equals a URI. Anything else differs and the run is rejected. No conversion (already decided). This closes the "unit-reference comparison rule" item.
+- **Cost recorded:** false rejections for equivalent spellings and for a code versus a URI naming the same unit; UCUM is not added to the pinned references.
+- **Not decided:** the requirement wording (none changed yet); whether the check also applies to units inside a time, a vector or a range (not decided earlier either).
+
+## unit-match reworded, 2026-11-14
+
+Asked whether to reword the unit-match rule. The owner chose **reword unit-match, one sentence** (recommendation followed; alternatives were a separate requirement, and the owner wording it).
+
+- **Reworded in place (`status: proposed`, identifier unchanged):** `/req/executor-start/unit-match` now ends "…, two units being the same only if both are UCUM codes with identical text or both are URIs with identical text."; its test gained steps (a different code, the same unit in another spelling, a code against a URI: rejected; an identical code or URI: not rejected). Gate stage 1 over the 338 records: no findings.
+- **Open:** the sentence bundles the check with the definition of "the same"; "UCUM code" is used without UCUM being a normative reference; the abstract class (`/req/specification/units`) says only that the unit is stated and does not say how units compare.

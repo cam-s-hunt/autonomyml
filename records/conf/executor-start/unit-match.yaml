@@ -7,3 +7,6 @@ steps:
   - Prepare a capability specification that declares a unit for a field.
   - Prepare a binding to a data stream whose result schema gives a different unit for that field.
   - Send a run request that names them and check that the executor rejects it.
+  - Repeat with a bound data stream whose unit is a different UCUM code, and check that the executor rejects the request.
+  - Repeat with the same unit written in another spelling, and with a UCUM code against a URI, and check that the executor rejects the request in each case.
+  - Repeat with an identical UCUM code, and with an identical URI, and check that the executor does not reject the request because of the unit.
