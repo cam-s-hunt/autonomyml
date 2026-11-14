@@ -1,0 +1,6 @@
+kind: term
+id: /term/read
+status: proposed
+term: read
+definition: of a condition, to name in its expression the local name of a data stream or a control stream.
+note: NOTE  A condition that names a local name reads that stream whether or not the value is used by the result of the condition.

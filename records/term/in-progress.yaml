@@ -1,0 +1,6 @@
+kind: term
+id: /term/in-progress
+status: proposed
+term: in progress
+definition: of a run, started and not yet ended.
+note: NOTE  A halt is in progress from the moment it is received until the run has ended.

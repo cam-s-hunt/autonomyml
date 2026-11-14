@@ -1929,3 +1929,19 @@ Asked how to handle the core `kind` rules that still list behavior tree. The own
 - **Written (`status: proposed`, identifiers are the Architect's proposals):** `/req/executor-start/kinds-supported` ("An executor SHALL support states of kind command, mode and terminal.") and `/req/executor-start/unsupported-kind` ("An executor SHALL reject a run request when the capability specification has a state of a kind that the executor does not support."), each with an abstract test, listed in the class and conformance class. Counted from the class record, the start class now has 14 requirements. Gate stage 1 over the 328 records: no findings.
 - **Cost recorded:** a document with a behavior-tree state is a conforming document that most executors will reject.
 - **Open:** `kinds-supported` is a broad requirement (supporting a kind means all of the run class's behavior for it); `unsupported-kind` does not say the executor must say which kind; whether an executor class for behavior trees would add to or replace these rules (not decided; it would need a new class since a class cannot loosen these).
+
+## "read" defined, 2026-11-14
+
+Asked which wording of "reads" to take forward (and told that I would define "reads" and "in progress" and leave "retrieve" and "references" as ordinary English). The owner chose **A: names it in the expression** (recommendation followed; alternatives were "uses its value", and no term).
+
+- **Written (`status: proposed`):** `/term/read`: "of a condition, to name in its expression the local name of a data stream or a control stream." NOTE: "A condition that names a local name reads that stream whether or not the value is used by the result of the condition." Gate stage 1 over the 329 records: no findings.
+- **Architect's adaptation (flagged):** the card gave the sentence "a condition reads a data stream or a control stream if its expression names the local name of that stream"; the term record uses the glossary's definition style (a verb phrase, "of a condition, to name …") instead of a full sentence. The meaning is the same.
+- **Open:** the rules use "reads" and "read" in running text, which the term "read" covers only if a reader accepts the verb forms; a condition's expression is not a defined term; how CEL writes a variable is not explained.
+
+## "in progress" defined, 2026-11-14
+
+Asked which wording of "in progress" to take forward. The owner chose **A: one term, for a run, with the halt in a Note** (recommendation followed; alternatives were two separate terms, and no term).
+
+- **Written (`status: proposed`):** `/term/in-progress`: "of a run, started and not yet ended." NOTE: "A halt is in progress from the moment it is received until the run has ended." Gate stage 1 over the 330 records: no findings.
+- **Open:** a run is "started" when the executor accepts the request (not stated); a rejected request is never in progress (not stated); the accepted *run* definition says a run goes "from its start until it reaches an ending" and the term relies on it.
+- **Terms now defined beyond the first 21:** fourteen (command, control stream, data stream, run request, mode, local name, cause, no observation, current state, duration, document, implementation, read, in progress). "Retrieve" and "references" are left as ordinary English; "child state" and "enclosing mode" are only in a Note.
