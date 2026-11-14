@@ -1837,3 +1837,25 @@ Asked how to bring the examples in line. The owner chose **a new conforming exam
 - **Checked:** only by a hand-written structural script (members present, names unique across states, invariants, actions and postconditions, targets exist, terminal states have no extra members, binding keys match the specification and its version). **Not checked:** CEL type-checking, SWE Common validation against the pinned schemas, the JSON classes' tests as run by a tool (none exists).
 - **Gaps the exercise showed (in the folder's README, not decided):** no run-time inputs (command parameters are constants, so the target is fixed in the document); no distance function; no sustained postcondition; a redundant hold command from the exit action plus the safe-hold state; stale readings in the safe-hold state; lost error names; arrival depends on both the command status and the postcondition.
 - **Not done:** the harder two examples (guarded navigation, aerial) were not converted: they rely on behavior trees with node types, a SensorML process, a blackboard and 3D reference systems, which the standard does not define; the examples README still describes the old files.
+
+## Independent review deferred, 2026-11-13
+
+Asked how to run the independent review of the 312 records. The owner chose **not now** (alternatives were a full review with the owner's own description, and a full review with a description built from the decided directions).
+
+- **Effect:** the records have been checked only by the gate (stage 1 over 312 records, and the first stage 2 build) and by the Architect. No second reader has tried them as a tester or implementer would. No subagent was launched.
+- **Open design questions still standing (the Architect's list, not ordered by importance):** whether an action must be COMPLETED before the run goes on; a command CANCELED by someone else; the order of several entry actions and of several exit actions; whether an enclosing mode's timeout applies while a child state is current; the core `kind` rules still list behavior tree; recording that a clean-up action failed; the undefined words "reads", "retrieve", "in progress" and "references"; nil values inside composites; the unit-reference comparison rule; the SWE Common mapping not checked against the pinned 24-014 text; the master document's prose; the ontology items (scope, name, IRIs, governance) and the `urn:autonomyml` registration (the owner's action).
+
+## Entering a state does not wait for commands, 2026-11-13
+
+Asked whether the run waits for a state's entry actions and its own command to finish before it checks transitions and timeouts. The owner chose **carry on at once; conditions decide** (recommendation followed; alternatives were waiting for every entry action, and also waiting for the state's own command).
+
+- **Decided (direction):** on entering a state the executor sends its entry actions and its command and at once begins evaluating the state's transitions, invariants and timeout. Nothing waits for COMPLETED; a state that must wait writes a transition condition on the command status. Exit actions are the exception: the run waits for each, up to its time limit. This closes open question (4) of the clean-up-failure section.
+- **Cost recorded:** an entry action still running when a transition fires is left running, not cancelled; an author must state any wait.
+- **Not decided:** the requirement wording (none written); whether a command still running when its state is left is cancelled by the executor (not decided; the exit-action rules are silent); what a command's REJECTED or FAILED status does after the state has been left (the failure rules speak only of the command of an action or state that is current).
+
+## No-wait requirement written, 2026-11-13
+
+Asked for wording of the no-wait rule. The owner chose **add it as worded** (recommendation followed; alternatives were rewording `entry-actions` and `command-on-entry`, and leaving it in the record only).
+
+- **Written (`status: proposed`, identifier is the Architect's proposal):** `/req/executor-run/no-wait` ("An executor SHALL begin evaluating the transitions, invariants and timeout of a state when it enters the state, without waiting for the command of the state or of an entry action to complete.") with an abstract test, listed in the class and conformance class. The run class now has 36 requirements (counted from the class record). Gate stage 1 over the 314 records: no findings.
+- **Open:** a command still running when its state is left (cancelled or left running: not decided); the overlap with `evaluation`; "perform" in `entry-actions` still means send.

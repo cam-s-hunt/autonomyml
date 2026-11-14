@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-run/no-wait
+status: proposed
+target: /req/executor-run/no-wait
+purpose: Verify that an executor does not wait for the commands of a state before evaluating it.
+steps:
+  - Use a capability specification with a state whose command and entry action do not complete, and with a transition whose condition can become met and a timeout.
+  - Cause the executor to enter the state.
+  - Check that the executor evaluates the transitions and invariants of the state at once, before the commands complete.
+  - Cause the transition condition to become met while the commands are still not complete, and check that the executor takes the transition.
+  - Repeat with no condition met, and check that the executor takes the timeout while the commands are still not complete.

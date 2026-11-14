@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/no-wait
+status: proposed
+statement: An executor SHALL begin evaluating the transitions, invariants and timeout of a state when it enters the state, without waiting for the command of the state or of an entry action to complete.

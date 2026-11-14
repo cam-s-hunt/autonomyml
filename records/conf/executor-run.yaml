@@ -12,6 +12,7 @@ tests:
   - /conf/executor-run/transition-order
   - /conf/executor-run/first-match
   - /conf/executor-run/evaluation
+  - /conf/executor-run/no-wait
   - /conf/executor-run/no-observation
   - /conf/executor-run/transitions-first
   - /conf/executor-run/timeout
