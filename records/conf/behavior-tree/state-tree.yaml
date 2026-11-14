@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/behavior-tree/state-tree
+status: proposed
+target: /req/behavior-tree/state-tree
+purpose: Verify that each state of kind behavior tree states a behavior tree.
+steps:
+  - Identify each state of kind behavior tree.
+  - For each, check that it states a behavior tree.

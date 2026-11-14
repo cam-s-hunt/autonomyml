@@ -1,0 +1,17 @@
+# PROPOSED. OPTIONAL class. Identifier /req/behavior-tree is the Architect's proposal; none is assigned.
+# Shape only (decision 2026-11-12 and 2026-11-13): node types, statuses, endings and halting are not defined in version 1; no executor class exists for it.
+# Inherits /req/core directly because ogcspec.gate.toml sets core_dependency = "direct" (M012).
+kind: requirements_class
+id: /req/behavior-tree
+title: Behavior tree
+status: proposed
+subject: Capability specification
+inherit:
+  - /req/core
+  - /req/document
+  - /req/specification
+requirements:
+  - /req/behavior-tree/state-tree
+  - /req/behavior-tree/root
+  - /req/behavior-tree/node-type
+  - /req/behavior-tree/node-children

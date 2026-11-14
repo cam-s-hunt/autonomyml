@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/behavior-tree/node-children
+status: proposed
+statement: A node that has child nodes SHALL state them in order.

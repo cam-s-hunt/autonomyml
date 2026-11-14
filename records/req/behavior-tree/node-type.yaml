@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/behavior-tree/node-type
+status: proposed
+statement: A node SHALL have a type, which is a name.

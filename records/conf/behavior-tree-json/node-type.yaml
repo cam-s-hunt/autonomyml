@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/behavior-tree-json/node-type
+status: proposed
+target: /req/behavior-tree-json/node-type
+purpose: Verify that each node states its type in a member named `type`.
+steps:
+  - Identify each node of each behavior tree.
+  - For each, locate its member named `type`.
+  - Check that its value is a string.

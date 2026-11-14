@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/behavior-tree/root
+status: proposed
+target: /req/behavior-tree/root
+purpose: Verify that each behavior tree has exactly one root node.
+steps:
+  - Identify each behavior tree.
+  - For each, count its root nodes.
+  - Check that the count is one.

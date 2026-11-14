@@ -1,0 +1,9 @@
+kind: conformance_class
+id: /conf/behavior-tree-json
+title: Behavior tree in JSON
+status: proposed
+target: /req/behavior-tree-json
+tests:
+  - /conf/behavior-tree-json/tree
+  - /conf/behavior-tree-json/node-type
+  - /conf/behavior-tree-json/node-children

@@ -1,0 +1,10 @@
+kind: conformance_class
+id: /conf/behavior-tree
+title: Behavior tree
+status: proposed
+target: /req/behavior-tree
+tests:
+  - /conf/behavior-tree/state-tree
+  - /conf/behavior-tree/root
+  - /conf/behavior-tree/node-type
+  - /conf/behavior-tree/node-children

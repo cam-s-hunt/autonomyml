@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/behavior-tree-json/node-children
+status: proposed
+statement: A node that has child nodes SHALL state them, in order, in a member named `children`, an array of objects each of which is a node.

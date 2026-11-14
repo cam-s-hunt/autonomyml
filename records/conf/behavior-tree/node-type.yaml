@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/behavior-tree/node-type
+status: proposed
+target: /req/behavior-tree/node-type
+purpose: Verify that each node has a type that is a name.
+steps:
+  - Identify each node of each behavior tree.
+  - For each, check that it has a type.
+  - Check that the type is a name.

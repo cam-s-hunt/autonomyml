@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/behavior-tree/node-children
+status: proposed
+target: /req/behavior-tree/node-children
+purpose: Verify that a node that has child nodes states them in order.
+steps:
+  - Identify each node that has child nodes.
+  - For each, check that its child nodes are stated in an order.

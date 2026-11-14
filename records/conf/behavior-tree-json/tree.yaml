@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/behavior-tree-json/tree
+status: proposed
+target: /req/behavior-tree-json/tree
+purpose: Verify that each state of kind behavior tree states its behavior tree in a member named `tree`.
+steps:
+  - Identify each state of kind behavior tree.
+  - For each, locate its member named `tree`.
+  - Check that its value is an object, which is the root node.

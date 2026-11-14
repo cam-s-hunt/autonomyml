@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/behavior-tree/state-tree
+status: proposed
+statement: A state of kind behavior tree SHALL state a behavior tree.

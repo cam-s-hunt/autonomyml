@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/behavior-tree/root
+status: proposed
+statement: A behavior tree SHALL have exactly one root node.

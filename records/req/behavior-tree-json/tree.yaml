@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/behavior-tree-json/tree
+status: proposed
+statement: A state of kind behavior tree SHALL state its behavior tree in a member named `tree`, an object.

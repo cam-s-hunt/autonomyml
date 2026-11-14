@@ -1,0 +1,5 @@
+# PROPOSED. A permission needs no abstract test. Written as a permission because "SHALL NOT make the document nonconforming" is not a requirement on a subject; the Architect's change of form, flagged in the decision record.
+kind: permission
+id: /per/behavior-tree/node-type
+status: proposed
+statement: A node MAY have a type that this standard does not define.

@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/behavior-tree-json/node-children
+status: proposed
+target: /req/behavior-tree-json/node-children
+purpose: Verify that a node that has child nodes states them in a member named `children`.
+steps:
+  - Identify each node that has child nodes.
+  - For each, locate its member named `children`.
+  - Check that its value is an array of objects, each a node, in order.

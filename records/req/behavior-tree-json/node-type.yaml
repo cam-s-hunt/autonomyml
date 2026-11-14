@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/behavior-tree-json/node-type
+status: proposed
+statement: A node SHALL state its type in a member named `type`, a string.

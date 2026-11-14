@@ -1,0 +1,17 @@
+# PROPOSED. OPTIONAL class. Identifier /req/behavior-tree-json is the Architect's proposal; none is assigned.
+# Shape only; see /req/behavior-tree.
+kind: requirements_class
+id: /req/behavior-tree-json
+title: Behavior tree in JSON
+status: proposed
+subject: Capability specification encoded as JSON
+inherit:
+  - /req/core
+  - /req/document
+  - /req/specification
+  - /req/specification-json
+  - /req/behavior-tree
+requirements:
+  - /req/behavior-tree-json/tree
+  - /req/behavior-tree-json/node-type
+  - /req/behavior-tree-json/node-children
