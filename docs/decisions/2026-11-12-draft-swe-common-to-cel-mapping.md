@@ -40,8 +40,8 @@ Status: **draft, 2026-11-12. Not normative. All nine choices below were decided 
 | DataArray | `list` of the element type | whole-array reads allowed; the element count is the list size; **large arrays are a cost and limit problem** (**Choice 7**) |
 | Matrix | `list(list(double))` in row-major order | a matrix is an array with a frame; the shape comes from `elementCount`; same cost limit as DataArray (Choice 7) |
 | DataChoice | `map` with exactly one key, the name of the chosen item | no CEL construct exists; the proposal turns "which item is present" into `has(x.itemName)` (the CEL presence macro) so a condition can test the chosen alternative (**Choice 8**) |
-| DataStream | `list` of the element type | as an array; an encoded block (text or binary) must be decoded before it can be read; "values out of band" (a link) is **not readable** (Choice 7) |
-| Geometry | `map(string, dyn)` holding the GeoJSON object (`type`, `coordinates`) plus an `srs` entry | readable but **not testable**: built-in CEL has no geometry functions (the standard's own function set is a deferred extension), so a condition can read `coordinates` as numbers and compare them, but cannot ask "inside this area". Coordinate reference system rules deferred (**Choice 9**) |
+| ~~DataStream~~ | *dropped 2026-11-24* | the pinned SWE Common 3.0 text says a DataStream is not a component and cannot be a result schema, so no condition can read one; the row never applies (see the decision record) |
+| Geometry | `map(string, dyn)` holding the GeoJSON object (`type`, `coordinates`); **amended 2026-11-24: no `srs` entry, the `srs` stays in the schema; only the six GeoJSON types the pinned text allows** | readable but **not testable**: built-in CEL has no geometry functions (the standard's own function set is a deferred extension), so a condition can read `coordinates` as numbers and compare them, but cannot ask "inside this area". Coordinate reference system rules deferred (**Choice 9**) |
 
 ## Choices that need the owner (each would be one card)
 

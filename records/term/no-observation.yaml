@@ -2,5 +2,5 @@ kind: term
 id: /term/no-observation
 status: proposed
 term: no observation
-definition: absence of a usable value on a data stream or control stream, which is the case when the value has never been reported, is older than the maximum age, is not a number, or equals a nil value the schema declares.
+definition: absence of a usable value on a data stream or control stream, which is the case when the value has never been reported, is older than the maximum age, is not a number, or equals a nil value the schema declares, or is a field that the schema marks optional and the value omits or sets to null.
 note: NOTE  A condition that reads no observation is not met, and an invariant that reads no observation is broken. A condition that reads a field reads no observation only if that field has no usable value.

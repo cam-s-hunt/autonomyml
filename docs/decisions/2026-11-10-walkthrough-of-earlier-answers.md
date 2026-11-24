@@ -2044,3 +2044,45 @@ Asked, from item 4 of the check against the pinned SWE Common text, how an optio
 
 - **Decided (direction):** a field that the schema marks optional and the value omits, or sets to `null`, is no observation. The per-field and whole-composite rules already decided apply to it. The "no observation" definition gains this case.
 - **Not decided:** the wording (the term and its Note are unchanged); whether a missing field that is not optional is a data error or also no observation (SWE Common does not cover it; assumed: no observation, not decided).
+
+## "no observation" reworded for an omitted or null optional field, 2026-11-24
+
+Asked whether to put the 2026-11-14 decision into the records. The owner chose **reword the term and add test steps** (recommendation followed; alternatives were the term only, and the owner wording it).
+
+- **Reworded in place (`status: proposed`, identifier unchanged):** `/term/no-observation` now ends "…, equals a nil value the schema declares, or is a field that the schema marks optional and the value omits or sets to null." The rules `/req/executor-run/no-observation` and `/req/executor-run/composite-no-observation` are unchanged; both follow from the definition.
+- **Tests:** `/conf/executor-run/no-observation` gained the omitted and null optional-field cases in its supply step; `/conf/executor-run/composite-no-observation` gained a repeat step for an omitted and a null optional field. Steps drafted from the rule text only. Gate stage 1 run after the edit: 338 records, no findings (stage 2 rules not run).
+- **Still not decided:** whether a missing field that is not optional is a data error or also no observation (assumed no observation; SWE Common does not cover it). The wording "or is a field that…" sits after "the value", so the sentence reads loosely; the owner approved it as proposed.
+- **Still open from the check:** DataStream not a component; numeric time with a frame-implied origin; record and vector array forms; geometry and its `srs`.
+
+## DataStream dropped from the SWE Common mapping, 2026-11-24
+
+Asked, from item 2 of the check against the pinned SWE Common text, what the mapping says about DataStream. The owner chose **drop DataStream** (recommendation followed; alternatives were keeping it as "not readable", and keeping it as decided).
+
+- **Decided (direction):** the mapping covers only what a data stream's result schema can contain. DataStream is not a component in the pinned text, so no condition reads one. Arrays and matrices stay readable as lists within the declared maximum size; out-of-band values stay not readable. This amends the 2026-11-12 Choice 7 decision, which named DataStream among the list types.
+- **Changed:** the DataStream row in `docs/decisions/2026-11-12-draft-swe-common-to-cel-mapping.md` is struck through with the reason. No record changed: no requirement or test mentions DataStream.
+- **Still open from the check:** numeric time with a frame-implied origin; record and vector array forms; geometry and its `srs`.
+
+## Numeric time keeps the reference-time rule, 2026-11-24
+
+Asked, from item 6 of the check against the pinned SWE Common text, whether a numeric time whose origin is only implied by its `referenceFrame` counts as a timestamp. The owner chose **keep: reference time required** (recommendation followed; alternatives were also accepting frames the standard lists, and reading numbers as plain numbers).
+
+- **Decided (direction):** the 2026-11-12 Choice 5 rule stands. A numeric time is readable as a timestamp only if the schema gives a `referenceTime`; a numeric time with only a frame is rejected at start when a condition uses it as a time. The pinned text does not say which frames imply which origin, so no rule can rest on it. A later version may add a named list of frames.
+- **Not decided:** the wording; no record about time exists yet. Also not covered: the unit a numeric time must carry, and the unit `http://www.opengis.net/def/uom/ISO-8601/0/Gregorian` the pinned text requires for an ISO 8601 time.
+- **Still open from the check:** record and vector array forms; geometry and its `srs`.
+
+## Records and vectors are read in object shape only, 2026-11-24
+
+Asked, from item 5 of the check against the pinned SWE Common text, what an executor does with a record or vector sent as a bare list (`recordsAsArrays` / `vectorsAsArrays`). The owner chose **object shape only; reject the list shape** (recommendation followed; alternatives were reading both shapes, and asking the OGC authors first).
+
+- **Decided (direction):** a condition reads records and vectors by field name. A result schema that sets either list-shape setting makes the start REJECTED. The standard does not rely on the pinned sentence about which setting gives which shape, which contradicts itself.
+- **Not decided:** the wording; no record states it yet (it would sit among the start checks, `/req/executor-start`). Nothing is sent to OGC.
+- **Still open from the check:** geometry and its `srs`.
+
+## Geometry is read as the value only, 2026-11-24
+
+Asked, from item 3 of the check against the pinned SWE Common text, what a condition sees of a geometry. The owner chose **value only; the `srs` stays in the schema** (recommendation followed; alternatives were exposing the `srs` as a second value, and rejecting geometry for now).
+
+- **Decided (direction):** a condition reads the GeoJSON shape (`type`, `coordinates`) only. It cannot read the `srs`; the executor still does no reference-system check. Only the six GeoJSON geometry types the pinned text allows are readable (no GeometryCollection). This amends the 2026-11-12 Choice 9 decision, which put the `srs` beside the shape.
+- **Changed:** the Geometry row in the draft mapping table. No record changed.
+- **Not decided:** the wording; no record about geometry exists yet. Which six types, and whether a start check rejects a schema declaring another, are for the wording.
+- **Closed:** this was the last open card from the check of the mapping against the pinned SWE Common text. All eight differences are now decided or noted; the "optional field" and "unit" ones are written in records, the rest are directions only.

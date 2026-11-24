@@ -8,4 +8,5 @@ steps:
   - Supply a result in which one field is missing, either NaN or a declared nil value, and the others are valid.
   - Check that the condition that reads the whole record is treated as reading no observation.
   - Check that the condition that reads only a valid field is not.
+  - Repeat with a record in which a field the schema marks optional is omitted, and again with that field set to null.
   - Repeat with an array result in which one element is missing, read whole.
