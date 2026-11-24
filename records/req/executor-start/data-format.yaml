@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/data-format
+status: proposed
+statement: An executor SHALL obtain the result schema of each bound data stream from the schema resource of that data stream for the media type application/json, and SHALL read the observations of that data stream in the media type application/json, and SHALL reject a run request when a bound data stream does not offer the media type application/json.

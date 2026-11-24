@@ -12,6 +12,7 @@ requirements:
   - /req/executor-start/accept-request
   - /req/executor-start/retrieve-specification
   - /req/executor-start/retrieve-binding
+  - /req/executor-start/data-format
   - /req/executor-start/binding-version
   - /req/executor-start/binding-complete
   - /req/executor-start/type-check

@@ -2117,3 +2117,32 @@ The owner asked whether TimeRange is part of any upstream standard before decidi
 
 - **Reworded in place (`status: proposed`):** `/req/executor-start/time-origin` now says "a Time or TimeRange field"; its test gained a repeat step for a TimeRange field. Gate stage 1: 340 records, no findings.
 - **Noted:** this writes a rule for a type no upstream example exercises; it was chosen knowingly. The TimeRange `referenceTime` was read in the SWE Common JSON schema in the API clone (`swecommon/schemas/json/TimeRange.json`), not in the pinned HTML text.
+
+## Format start rule written, 2026-11-24
+
+Asked whether to write a rule for the `application/json` decision. The owner chose **write it as proposed** (alternatives were writing it without the rejection test, and not now).
+
+- **Written (`status: proposed`; identifier and wording are the Architect's proposals):** `/req/executor-start/data-format` ("An executor SHALL obtain the result schema of each bound data stream from the schema resource of that data stream for the media type application/json, and SHALL read the observations of that data stream in the media type application/json.") with test `/conf/executor-start/data-format` (three steps). Added to `/req/executor-start` and `/conf/executor-start`. Gate stage 1: 342 records, no findings.
+- **Gap:** the rejection step in the test (a data stream offering its schema only in another media type) is not in the sentence of the requirement; the owner approved the test as described, but the sentence does not say an executor rejects in that case. The rule does not say what happens if `application/json` is unavailable, and `rejected-status` (REJECTED) is the only existing start outcome. Wording to settle: either add "and SHALL reject a run request when it cannot" or drop the step.
+- **Also:** a server offering no `application/json` schema cannot be used with version 1. Whether the API requires `application/json` of every datastream was not verified.
+
+## What the CS API requires of formats; the format rule reworded, 2026-11-24
+
+The owner asked what the API specifies before deciding on the rejection gap. Read in the pinned HTML (23-002, clause 2) and the clone's source (`clause_2_conformance.adoc`, `clause_8` `/req/datastream/schema-op`, `requirements_class_json.adoc`):
+
+- **The API does not require `application/json`.** "There is no Core requirements class but an implementation target is expected to implement at least one of the CS resource types and one encoding." The encodings are JSON, SWE Common JSON, SWE Common Text and SWE Common Binary, each its own requirements class; a conforming server may offer only a SWE Common encoding. This answers the "not verified" item above: **the API does not require every datastream to offer `application/json`.**
+- Each datastream lists its supported formats in the `formats` property, and `/req/datastream/schema-op` requires the schema resource to return a schema for the format named by `obsFormat`. The API allows extensions to add other formats.
+- So `application/json` only is **narrower than the API**: a conforming server with no JSON encoding cannot be used with version 1.
+
+The owner chose **keep JSON only; reject if absent, and say so** (alternatives were no rejection sentence, and reopening the format decision).
+
+- **Reworded in place (`status: proposed`):** `/req/executor-start/data-format` now ends ", and SHALL reject a run request when a bound data stream does not offer the media type application/json."; the test's rejection step now has the executor check the `formats` of the data stream, and its purpose says the same. Gate stage 1: 342 records, no findings.
+- **Not done:** the Note saying this is a version 1 limit narrower than the API. A requirement record has no `note` field (only terms have), so the limit is stated here only. A place for it in the document (an informative sentence in the clause, or in the term records) is open.
+
+## Where the application/json limit is stated, 2026-11-24
+
+Asked where to state that version 1 reads only `application/json`, narrower than the CS API. The owner chose **in the Scope clause, when you write it** (alternatives were a Note on the term 'data stream', and only in the rule).
+
+- **Decided (direction):** the limit goes into the Scope clause when the owner writes it. Nothing is written into `document/doc.adoc`; its Scope and Conformance clauses stay `OWNER` placeholders.
+- **Proposed one-sentence draft for the owner to reword:** "This standard reads the observations of a data stream only in the media type application/json; a server that offers a data stream only in a SWE Common encoding cannot be used with it."
+- **Scope clause must also carry (carried forward):** nothing else yet; add items here as they arise.

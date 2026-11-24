@@ -7,6 +7,7 @@ tests:
   - /conf/executor-start/accept-request
   - /conf/executor-start/retrieve-specification
   - /conf/executor-start/retrieve-binding
+  - /conf/executor-start/data-format
   - /conf/executor-start/binding-version
   - /conf/executor-start/binding-complete
   - /conf/executor-start/type-check
