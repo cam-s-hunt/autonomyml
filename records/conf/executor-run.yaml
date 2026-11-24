@@ -27,12 +27,14 @@ tests:
   - /conf/executor-run/end-halted
   - /conf/executor-run/cause
   - /conf/executor-run/cause-action
+  - /conf/executor-run/cause-data-error
   - /conf/executor-run/cause-halt
   - /conf/executor-run/halt
   - /conf/executor-run/exit-time-limit
   - /conf/executor-run/second-halt
   - /conf/executor-run/action-failure
   - /conf/executor-run/command-failure
+  - /conf/executor-run/data-error
   - /conf/executor-run/clean-up-failure
   - /conf/executor-run/clean-up-record
   - /conf/executor-run/result-schema

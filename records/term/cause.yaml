@@ -3,4 +3,4 @@ id: /term/cause
 status: proposed
 term: cause
 definition: name, recorded with the ending of a run, of the item of the capability specification that ended the run or where it was when halted.
-note: NOTE  The cause is the name of a terminal state, of a failing action, of a state whose command failed, of a broken postcondition, or, for a halt, of the innermost state the run was in.
+note: NOTE  The cause is the name of a terminal state, of a failing action, of a state whose command failed, of a broken postcondition, of a data stream whose result broke its schema, or, for a halt, of the innermost state the run was in.

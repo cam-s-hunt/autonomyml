@@ -2146,3 +2146,35 @@ Asked where to state that version 1 reads only `application/json`, narrower than
 - **Decided (direction):** the limit goes into the Scope clause when the owner writes it. Nothing is written into `document/doc.adoc`; its Scope and Conformance clauses stay `OWNER` placeholders.
 - **Proposed one-sentence draft for the owner to reword:** "This standard reads the observations of a data stream only in the media type application/json; a server that offers a data stream only in a SWE Common encoding cannot be used with it."
 - **Scope clause must also carry (carried forward):** nothing else yet; add items here as they arise.
+
+## A missing required field is a data error that ends the run in fail, 2026-11-24
+
+Asked what happens when a record result omits (or sets to null) a field the schema does not mark optional. The pinned SWE Common text lets only optional fields be omitted or null, so such a result breaks its schema; neither SWE Common nor the CS API says what a reader does. The owner chose **a data error that ends the run in fail** (alternatives were also no observation, which was the Architect's recommendation, and leaving it undefined).
+
+- **Decided (direction):** a result that breaks its schema by leaving out a required field is a fault in a data stream the run depends on; the run ends with the ending fail and a cause naming the data stream. This differs from the optional-field case, which stays no observation.
+- **Not decided (each a card):** what counts as a data error (only a missing required field, or any breach of the schema, and in which fields: only those a condition reads, or the whole result); the cause value (the local name of the data stream is assumed); what the run does on the way (clean-up with exit actions, as for a halt, assumed); whether the postconditions and invariants are checked; what a null value in a required field counts as; the effect on the existing rules `/req/executor-run/no-observation` and `/req/executor-run/composite-no-observation` and on the term "no observation". No record was written or changed.
+
+## A data error is a missing required field in a field read, 2026-11-24
+
+Asked what counts as a data error. The owner chose **(a) a missing required field, in fields a condition reads** (recommendation followed; alternatives were any schema breach in fields read, and validating every result against the whole schema).
+
+- **Decided (direction):** a data error is a result that omits, or sets to null, a field that the schema does not mark optional, in a field that a condition reads. A wrong type, a value outside a constraint, or a breach in a field no condition reads is not covered in version 1.
+- **Still open (each a card):** how the run ends and what the cause is; what a null in a required field counts as (assumed the same as omitted); the effect on the term and rules for no observation.
+
+## A data error ends the run like an action failure, 2026-11-24
+
+Asked how the run ends on a data error. The owner chose **same as an action failure** (recommendation followed; alternatives were ending in fail at once with no clean-up, and treating it as a broken invariant).
+
+- **Decided (direction):** on a data error the executor performs the exit actions of the states it is in, innermost first, then ends the run with the ending fail; the cause is the local name of the data stream whose result broke its schema. Invariants and postconditions are not checked on the way.
+- **Not decided:** the wording; a null in a required field counts as omitted (assumed); how this sits beside `/req/executor-run/composite-no-observation`, which says a condition reading a whole record reads no observation when any field "has no usable value" (a missing required field would also match that sentence).
+
+## Data error records written, 2026-11-24
+
+The owner chose **write all three as proposed** (alternatives were writing the two new rules only, and rewording first). All `status: proposed`; identifiers and sentences are the Architect's proposals.
+
+- **Written:** `/req/executor-run/data-error` ("An executor SHALL, when a condition reads a field that the result schema of its data stream does not mark optional and the value omits that field or sets it to null, perform the exit actions of the states it is in, innermost first, and then end the run with the ending fail.") and `/req/executor-run/cause-data-error` ("…record the local name of the data stream as the cause of a run that ends under /req/executor-run/data-error."), each with a test; `/req/executor-run/composite-no-observation` reworded to end ", except that /req/executor-run/data-error applies when the field is one the result schema does not mark optional." with one added test step. Added to `/req/executor-run` and `/conf/executor-run`. Gate stage 1: 346 records, no findings.
+- **Gaps, not decided:** the term `/term/cause` has a Note listing the kinds of cause (terminal state, failing action, state whose command failed, broken postcondition, halt); a data stream's local name is not in it, and the Note was not changed. "A condition" is read as any condition (transitions, invariants, postconditions, timeouts' conditions); not checked against how those rules say they read data. A null in a required field is treated as omitted (assumed). The start check does not know which fields are required at run time; it is run-time only. Postconditions and invariants are not checked on the way (direction decided; no sentence says so).
+
+## Note on 'cause' extended, 2026-11-24
+
+The owner chose **add it to the Note** (alternatives were leaving it, and rewording differently). `/term/cause` Note now lists "of a data stream whose result broke its schema" between the broken postcondition and the halt. Definition and rules unchanged; gate stage 1: 346 records, no findings. The Note still has no case for a broken invariant (its response state is a terminal fail state, so the cause is that state's name).

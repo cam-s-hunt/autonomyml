@@ -34,12 +34,14 @@ requirements:
   - /req/executor-run/end-halted
   - /req/executor-run/cause
   - /req/executor-run/cause-action
+  - /req/executor-run/cause-data-error
   - /req/executor-run/cause-halt
   - /req/executor-run/halt
   - /req/executor-run/exit-time-limit
   - /req/executor-run/second-halt
   - /req/executor-run/action-failure
   - /req/executor-run/command-failure
+  - /req/executor-run/data-error
   - /req/executor-run/clean-up-failure
   - /req/executor-run/clean-up-record
   - /req/executor-run/result-schema

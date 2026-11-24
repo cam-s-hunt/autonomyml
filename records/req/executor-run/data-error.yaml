@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/data-error
+status: proposed
+statement: An executor SHALL, when a condition reads a field that the result schema of its data stream does not mark optional and the value omits that field or sets it to null, perform the exit actions of the states it is in, innermost first, and then end the run with the ending fail.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/cause-data-error
+status: proposed
+statement: An executor SHALL record the local name of the data stream as the cause of a run that ends under /req/executor-run/data-error.

@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-run/cause-data-error
+status: proposed
+target: /req/executor-run/cause-data-error
+purpose: Verify that a run that ends because a required field is omitted or null records the local name of the data stream as its cause.
+steps:
+  - Use a capability specification with a condition that reads a required field of a data stream.
+  - Cause a run to reach the condition and the data stream to supply a result that omits the field.
+  - Read the record of the run.
+  - Check that its cause is the local name of the data stream.
