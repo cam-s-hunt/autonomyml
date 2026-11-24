@@ -2298,3 +2298,19 @@ Group 6, closing the CEL type groups. The owner chose **write both, with the cho
 - **Why the exception:** the unchosen items of a DataChoice are omitted by design, and `/req/executor-run/data-error` would otherwise end a run that tests them with `has()` (review finding).
 - **Gaps:** the exception sentence is a double negative the owner approved as proposed; it sits in a type rule instead of in `data-error`; the six allowed GeoJSON types are not listed in the rule (the pinned text restricts them); the geometry test's second step relies on the type check rejecting an unknown member; the has() test needs a DataChoice with `has()` available in the CEL environment.
 - **CEL batch 2 is complete** apart from the unwritten run-time size and out-of-band rules.
+
+## Size, out-of-band and result schema: three changes, 2026-11-24
+
+The owner chose **write all three as proposed** (alternatives were items 1 and 2 only, and rewording first). `status: proposed`.
+
+- **Reworded in place:** "or stream" removed from `/req/specification/max-sizes`, `/req/executor-start/size-limit` and their tests (a DataStream is not a component). `/term/no-observation` now ends "…or has more elements than the maximum size that the specification declares for it, or is held out of band."; the supply step of `/conf/executor-run/no-observation` gained both cases.
+- **Written (review finding A7, not earlier decided):** `/req/executor-start/result-in-schema` ("An executor SHALL reject a run request when the schema resource of a bound data stream gives no resultSchema.") with a test; added to the start class and its conformance class.
+- **Gate:** stage 1, 384 records, no findings.
+- **Gaps:** the term now has a long list in one sentence ("or ... or ... or"); "held out of band" is not defined (the API's `result@link` and the schema's `resultLink` are two different things: one per observation, one per data stream); `size-limit` tests the declared count, so a schema with no element count still passes (review finding); the term Note was not changed.
+
+## Rule conflict 1: failures during clean-up, 2026-11-24
+
+From the review (an exit action cancelled from outside or reaching its time limit during clean-up had no handling in `clean-up-failure`, though `clean-up-record` counts both and `action-failure` would start a second clean-up). The owner chose **reword as proposed** (alternatives were without the last clause, and rewording first).
+
+- **Reworded in place (`status: proposed`):** `/req/executor-run/clean-up-failure` now reads "An executor SHALL, when the command of an exit action is rejected, fails, is cancelled by a party other than the executor, or cannot be sent, or when an exit action reaches its time limit, during clean-up, perform the remaining exit actions and end the run with the ending it had already decided, and SHALL NOT treat that failure under /req/executor-run/action-failure." Its test gained two steps (a cancelled exit action, an exit action that reaches its time limit) and a check that no second clean-up starts. Gate stage 1: 384 records, no findings.
+- **Still open:** whether an exit action's overrun is a failure on an ordinary transition (open since 2026-11-13); "clean-up" is still not a defined term (review finding).

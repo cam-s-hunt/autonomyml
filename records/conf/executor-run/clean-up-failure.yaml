@@ -9,3 +9,5 @@ steps:
   - Make one of the exit actions fail.
   - Check that the executor performs the remaining exit actions and that the run ends as halted.
   - Repeat after an action failure and check that the run ends with the ending fail.
+  - Repeat with an exit action whose command is cancelled by a party other than the executor, and with an exit action that reaches its time limit, and check that the executor performs the remaining exit actions and that the run keeps its ending.
+  - In each case, check that the executor starts no second clean-up.

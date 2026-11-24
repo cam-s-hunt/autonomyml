@@ -17,6 +17,7 @@ requirements:
   - /req/executor-start/retrieve-specification
   - /req/executor-start/retrieve-binding
   - /req/executor-start/data-format
+  - /req/executor-start/result-in-schema
   - /req/executor-start/command-format
   - /req/executor-start/parameters-value
   - /req/executor-start/binding-version

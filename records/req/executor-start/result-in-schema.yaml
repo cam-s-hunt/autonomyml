@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/result-in-schema
+status: proposed
+statement: An executor SHALL reject a run request when the schema resource of a bound data stream gives no resultSchema.

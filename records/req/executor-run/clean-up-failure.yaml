@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-run/clean-up-failure
 status: proposed
-statement: An executor SHALL, when the command of an exit action is rejected, fails or cannot be sent during clean-up, perform the remaining exit actions and end the run with the ending it had already decided.
+statement: An executor SHALL, when the command of an exit action is rejected, fails, is cancelled by a party other than the executor, or cannot be sent, or when an exit action reaches its time limit, during clean-up, perform the remaining exit actions and end the run with the ending it had already decided, and SHALL NOT treat that failure under /req/executor-run/action-failure.

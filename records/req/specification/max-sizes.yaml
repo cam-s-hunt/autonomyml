@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/specification/max-sizes
 status: proposed
-statement: A capability specification SHALL state a maximum size for each array, matrix or stream that its conditions read.
+statement: A capability specification SHALL state a maximum size for each array or matrix that its conditions read.

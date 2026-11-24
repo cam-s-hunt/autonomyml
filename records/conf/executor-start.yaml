@@ -12,6 +12,7 @@ tests:
   - /conf/executor-start/retrieve-specification
   - /conf/executor-start/retrieve-binding
   - /conf/executor-start/data-format
+  - /conf/executor-start/result-in-schema
   - /conf/executor-start/command-format
   - /conf/executor-start/parameters-value
   - /conf/executor-start/binding-version

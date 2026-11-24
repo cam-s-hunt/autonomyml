@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/result-in-schema
+status: proposed
+target: /req/executor-start/result-in-schema
+purpose: Verify that an executor rejects a run request when the schema resource of a bound data stream gives no resultSchema.
+steps:
+  - Prepare a capability specification and a binding to a data stream whose schema resource for application/json gives a resultLink and no resultSchema.
+  - Send a run request that names them and check that the executor rejects it.
+  - Repeat with a data stream whose schema resource gives a resultSchema, and check that the executor does not reject the request because of the schema.
