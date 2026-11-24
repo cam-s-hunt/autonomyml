@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-start/choice-type
+status: proposed
+target: /req/executor-start/choice-type
+purpose: Verify that a DataChoice is a CEL map with one key whose value has the CEL type of the chosen item, and that an item that was not chosen does not end the run.
+steps:
+  - Prepare a result schema with a DataChoice that has an item of type Quantity and an item of type Text, and a binding to a data stream that has it.
+  - Prepare a capability specification with a condition that tests with has() which item is chosen and compares the item with a literal of the CEL type double or string, and check that the executor does not reject a run request because of the type of the condition.
+  - Repeat with a literal of another CEL type, and check that the executor rejects the run request.
+  - Publish an observation in which the Quantity item is chosen, and check that the condition on the Text item is not met and that the executor does not end the run because the Text item is absent.

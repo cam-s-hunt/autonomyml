@@ -27,6 +27,11 @@ tests:
   - /conf/executor-start/time-origin
   - /conf/executor-start/time-type
   - /conf/executor-start/time-unit
+  - /conf/executor-start/range-types
+  - /conf/executor-start/array-types
+  - /conf/executor-start/choice-type
+  - /conf/executor-start/geometry-type
+  - /conf/executor-start/record-types
   - /conf/executor-start/constants-valid
   - /conf/executor-start/rejected-status
   - /conf/executor-start/one-run

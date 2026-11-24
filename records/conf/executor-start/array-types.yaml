@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-start/array-types
+status: proposed
+target: /req/executor-start/array-types
+purpose: Verify that a DataArray and a Matrix are CEL lists whose elements have the CEL type of the element type.
+steps:
+  - Prepare a result schema with a DataArray whose element type is Quantity, and a DataArray whose element type is a DataArray of Quantity, each declared with a maximum size, and a binding to a data stream that has them.
+  - Prepare a capability specification with a condition that compares the first element of the first array with a literal of the CEL type double, and one that compares the first element of the first element of the second array with a literal of the CEL type double, and check that the executor does not reject a run request because of the type of the conditions.
+  - Repeat with a literal of another CEL type, for example an integer literal, and check that the executor rejects the run request.
+  - Repeat with a Matrix in place of the first array.

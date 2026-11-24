@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/array-types
+status: proposed
+statement: In a condition, a value of a field of type DataArray or Matrix SHALL be a CEL list whose elements have the CEL type of the element type of the field.

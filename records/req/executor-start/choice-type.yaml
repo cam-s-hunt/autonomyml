@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/choice-type
+status: proposed
+statement: "In a condition, a value of a field of type DataChoice SHALL be a CEL map with one key, the name of the chosen item, whose value has the CEL type of that item; an item of a DataChoice is not a field that the result schema does not mark optional."

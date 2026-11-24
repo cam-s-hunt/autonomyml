@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/geometry-type
+status: proposed
+target: /req/executor-start/geometry-type
+purpose: Verify that a Geometry is a CEL map with the members type and coordinates and no member for the coordinate reference system.
+steps:
+  - Prepare a result schema with a field of type Geometry, and a binding to a data stream that has it.
+  - Prepare a capability specification with a condition that compares the member type with a string literal and the first coordinate of a Point with a double literal, and check that the executor does not reject a run request because of the type of the condition.
+  - Prepare a condition that reads a member for the coordinate reference system, and check that the executor rejects the run request.

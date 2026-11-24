@@ -32,6 +32,11 @@ requirements:
   - /req/executor-start/time-origin
   - /req/executor-start/time-type
   - /req/executor-start/time-unit
+  - /req/executor-start/range-types
+  - /req/executor-start/array-types
+  - /req/executor-start/choice-type
+  - /req/executor-start/geometry-type
+  - /req/executor-start/record-types
   - /req/executor-start/constants-valid
   - /req/executor-start/rejected-status
   - /req/executor-start/one-run

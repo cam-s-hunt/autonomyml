@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-start/range-types
+status: proposed
+target: /req/executor-start/range-types
+purpose: Verify that the fields of type CountRange, QuantityRange, TimeRange and CategoryRange are lists of two elements with the CEL types int, double, timestamp and string in a condition.
+steps:
+  - Prepare a result schema with a field of each type CountRange, QuantityRange, TimeRange and CategoryRange, the TimeRange giving the unit s and a referenceTime, and a binding to a data stream that has them.
+  - For each field, prepare a capability specification with a condition that compares the first and the second element of the field with a literal of the CEL type int, double, timestamp and string respectively, and check that the executor does not reject a run request because of the type of the condition.
+  - For each field, repeat with a literal of another CEL type, and check that the executor rejects the run request.
+  - Publish an observation whose range has a lower bound and an upper bound, and check that the first element is the lower bound and the second the upper bound.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/geometry-type
+status: proposed
+statement: In a condition, a value of a field of type Geometry SHALL be a CEL map with the members type and coordinates of the GeoJSON geometry, and no member for the coordinate reference system.

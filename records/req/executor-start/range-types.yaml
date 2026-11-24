@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/range-types
+status: proposed
+statement: In a condition, a value of a field of type CountRange, QuantityRange, TimeRange or CategoryRange SHALL be a list of two elements, the lower bound first, whose CEL type is int, double, timestamp or string respectively.

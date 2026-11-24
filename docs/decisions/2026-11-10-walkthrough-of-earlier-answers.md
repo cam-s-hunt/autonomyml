@@ -2266,3 +2266,35 @@ The owner chose **write both as proposed** (alternatives were also accepting a s
 
 - **Written:** `/req/executor-start/time-type` (a Time field has the CEL type timestamp: an ISO 8601 value is that date and time; a numeric value is the instant that many seconds after the field's referenceTime) and `/req/executor-start/time-unit` (a run request is rejected when a condition reads a Time or TimeRange field whose unit is neither the ISO 8601 Gregorian unit nor the UCUM code `s`).
 - **Gaps:** a second given as a URI is rejected as written; "UCUM code" is not a normative reference; "ISO 8601 value" is not defined (the pinned text requires the Gregorian unit for an ISO time); TimeRange has no CEL type yet (ranges group); `time-origin` and `time-unit` overlap in cases, and the three time rules together are the full numeric-time rule.
+
+## CEL batch 2, range types written, 2026-11-24
+
+Group 3. The owner chose **write it as proposed** (alternatives were one rule per range type, and rewording first). `status: proposed`.
+
+- **Written:** `/req/executor-start/range-types` ("In a condition, a value of a field of type CountRange, QuantityRange, TimeRange or CategoryRange SHALL be a list of two elements, the lower bound first, whose CEL type is int, double, timestamp or string respectively.") with a test; added to the start class and its conformance class. Gate stage 1: 374 records, no findings.
+- **Gaps:** "lower bound first" relies on the pinned SWE Common text (a range value is a two-value array); a CategoryRange has no order, so "lower bound" is the first of its two code values (the standard says nothing about their order, per the 2026-11-12 decision, and no rule about string comparison was added); the rule bundles four types; a nil value or a missing bound inside a range falls under the existing composite rule.
+
+## CEL batch 2, records and vectors written, 2026-11-24
+
+Group 4. The pinned SWE Common 3.0 text says a vector coordinate "can thus only be of type Quantity, Count or Time", so the draft table's "a map of doubles" was wrong; a Vector is read like a record. In the application/json format records and vectors arrive as objects. The owner chose **write it as proposed** (alternatives were one rule each, and rewording first). `status: proposed`.
+
+- **Written:** `/req/executor-start/record-types` ("In a condition, a value of a field of type DataRecord or Vector SHALL be a CEL map read by the name of each of its fields or coordinates, the value read having the CEL type of that field or coordinate.") with a test; added to the start class and its conformance class. Gate stage 1: 376 records, no findings.
+- **Changed:** the Vector row of `docs/decisions/2026-11-12-draft-swe-common-to-cel-mapping.md` is corrected in place with a dated note.
+- **Gaps:** the rule bundles two types; "read by the name" of a field is already enforced by the type check (a name the schema does not define fails it); a nested record is covered by the same sentence applied recursively, which the sentence does not say.
+
+## CEL batch 2, arrays and matrices written, 2026-11-24
+
+Group 5. The pinned SWE Common text (`/req/json-encoding-rules/array-values-valid`) encodes a DataArray and a Matrix as a JSON array of elements encoded by the element type's rules (its example includes a 2D array); it does not give a Matrix a row-major list-of-lists form. The owner chose **write it as proposed** (alternatives were one rule each, and rewording first). `status: proposed`.
+
+- **Written:** `/req/executor-start/array-types` ("In a condition, a value of a field of type DataArray or Matrix SHALL be a CEL list whose elements have the CEL type of the element type of the field.") with a test; added to the start class and its conformance class. Gate stage 1: 378 records, no findings.
+- **Changed:** the Matrix row of the draft mapping table is corrected in place with a dated note.
+- **Still unwritten from the decisions:** the run-time rule (an array larger than its declared maximum size is no observation) and out-of-band results (a `result@link`, no inline result, are not readable); `size-limit` and `max-sizes` still say "or stream".
+
+## CEL batch 2, choice and geometry written, 2026-11-24
+
+Group 6, closing the CEL type groups. The owner chose **write both, with the choice exception** (alternatives were handling the conflict in `data-error`, and rewording first). `status: proposed`.
+
+- **Written:** `/req/executor-start/choice-type` ("...a CEL map with one key, the name of the chosen item, whose value has the CEL type of that item; an item of a DataChoice is not a field that the result schema does not mark optional.") and `/req/executor-start/geometry-type` ("...a CEL map with the members type and coordinates of the GeoJSON geometry, and no member for the coordinate reference system."), each with a test; added to the start class and its conformance class. Gate stage 1: 382 records, no findings.
+- **Why the exception:** the unchosen items of a DataChoice are omitted by design, and `/req/executor-run/data-error` would otherwise end a run that tests them with `has()` (review finding).
+- **Gaps:** the exception sentence is a double negative the owner approved as proposed; it sits in a type rule instead of in `data-error`; the six allowed GeoJSON types are not listed in the rule (the pinned text restricts them); the geometry test's second step relies on the type check rejecting an unknown member; the has() test needs a DataChoice with `has()` available in the CEL environment.
+- **CEL batch 2 is complete** apart from the unwritten run-time size and out-of-band rules.

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/record-types
+status: proposed
+statement: In a condition, a value of a field of type DataRecord or Vector SHALL be a CEL map read by the name of each of its fields or coordinates, the value read having the CEL type of that field or coordinate.

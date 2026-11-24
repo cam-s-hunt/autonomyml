@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-start/record-types
+status: proposed
+target: /req/executor-start/record-types
+purpose: Verify that a DataRecord and a Vector are read by the names of their fields or coordinates, each with the CEL type of that field or coordinate.
+steps:
+  - Prepare a result schema with a DataRecord that has a field of type Quantity, one of type Count and one of type Text, and a Vector that has a coordinate of type Quantity and one of type Count, and a binding to a data stream that has them.
+  - Prepare a capability specification with conditions that read each field and each coordinate by its name and compare it with a literal of the CEL type double, int and string, and double and int respectively, and check that the executor does not reject a run request because of the type of the conditions.
+  - Repeat with a literal of another CEL type for each, and check that the executor rejects the run request.
+  - Publish an observation, and check that each condition is evaluated against the value of the field or coordinate that its name denotes.
