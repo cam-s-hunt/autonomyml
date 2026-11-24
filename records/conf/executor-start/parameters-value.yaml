@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-start/parameters-value
+status: proposed
+target: /req/executor-start/parameters-value
+purpose: Verify that the parameters an executor sends in a command are the value of the component that the specification states.
+steps:
+  - Prepare a capability specification with a state of kind command whose parameters are a SWE Common component with a value, and a binding to a control stream.
+  - Start a run and bring it to that state.
+  - Read the command that the executor sent.
+  - Check that the parameters of the command are the value of the component, and not the component with its type and unit.
+  - Repeat with the parameters of an entry action.

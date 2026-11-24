@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/command-format
+status: proposed
+target: /req/executor-start/command-format
+purpose: Verify that an executor takes the schemas of a bound control stream and sends its commands in the media type application/json, and rejects a run request when a bound control stream does not list that media type.
+steps:
+  - Prepare a capability specification and a binding to a control stream that lists application/json in its formats.
+  - Send a run request that names them, and check from the requests the executor makes that it asks for the schema resource of the control stream with the media type application/json and sends the commands of the control stream in application/json.
+  - Repeat with a control stream whose formats do not list application/json, for example only application/swe+json, and check that the executor rejects the request.

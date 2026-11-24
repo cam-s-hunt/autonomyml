@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/parameters-value
+status: proposed
+statement: An executor SHALL send, as the parameters of a command, the value of the SWE Common component that the capability specification states as the parameters of that command.

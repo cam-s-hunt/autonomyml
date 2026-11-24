@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/command-format
+status: proposed
+statement: An executor SHALL obtain the parameters schema and the result schema of each bound control stream from the schema resource of that control stream for the media type application/json, and SHALL send the commands of that control stream in the media type application/json, and SHALL reject a run request when a bound control stream does not list the media type application/json in its formats.
