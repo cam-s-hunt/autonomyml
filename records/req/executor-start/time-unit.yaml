@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/time-unit
+status: proposed
+statement: An executor SHALL reject a run request when a condition reads a Time or TimeRange field whose unit is neither http://www.opengis.net/def/uom/ISO-8601/0/Gregorian nor the UCUM code s.

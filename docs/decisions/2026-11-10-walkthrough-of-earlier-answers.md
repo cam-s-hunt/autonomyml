@@ -2237,3 +2237,32 @@ From review finding B9 (the SWE Common to CEL decisions had no records). The own
 - **Written:** `condition-language` (a condition is evaluated as a CEL expression with only the functions the language defines; the CEL version pin, `v0.26.0`, is not in the sentence and stays in the normative references), `condition-bool` (a run request is rejected when a condition does not have the CEL type bool), `data-stream-variable` (a data stream's local name denotes the latest observation with `result`, `resultTime`, `phenomenonTime`), `control-stream-variable` (a control stream's local name denotes the latest command with the properties of the API's Command).
 - **Open:** "latest" is undefined (resultTime for observations, issueTime or the executor's own command for a command on a shared stream, both assumptions); a data stream that has not reported is no observation, not a missing variable (no sentence says so); how `condition-language` relates to `type-check` (a function CEL does not define fails the type check); the test step for `condition-language` rests on the type-check rule for its rejection; the `statusCode` correction above.
 - **Batch 2 (not started):** the CEL type of each SWE Common component in a condition, grouped into about six requirements (simple types, ranges, records and vectors, arrays and matrices, choices, geometry).
+
+## "Latest" defined for the CEL variables, 2026-11-24
+
+The API has a notion of latest only for observations (`resultTime=latest`: "only observations with the latest result time", optional advanced filtering class); for commands it has none and a control stream may be shared. The owner chose, for commands, **the last command this run sent on that stream** (recommendation followed; alternatives were the newest by `issueTime`, and leaving it open). Observations follow the API: the greatest `resultTime`.
+
+- **Reworded in place (`status: proposed`):** `/req/executor-start/data-stream-variable` now says "the observation of that data stream with the greatest resultTime"; `/req/executor-start/control-stream-variable` now says "the last command that the run has sent on that control stream". Tests changed (observations published out of order; a foreign command on the same stream is not read). Gate stage 1: 366 records, no findings.
+- **Noted, no change:** a control stream on which the run has sent no command reads as no observation under "never been reported" in `/term/no-observation`; the term was not changed. The earlier "one command at a time assumed" is superseded for the variable but a run that sends two commands on one stream in a row denotes only the last.
+
+## CEL batch 2, scalar types written, 2026-11-24
+
+Group 1 of about six for the CEL type of each SWE Common component in a condition. The owner chose **write it as proposed** (alternatives were one rule per type, and rewording first). `status: proposed`.
+
+- **Written:** `/req/executor-start/scalar-types` ("In a condition, a value of a field of type Boolean SHALL have the CEL type bool; of type Count, int; of type Quantity, double; and of type Text or Category, string.") with a test; added to the start class and its conformance class. Gate stage 1: 368 records, no findings.
+- **Gaps:** the rule bundles five types in one sentence; the test checks a compare with a literal of the right and of another CEL type, an observable effect of the start type check; the SWE Common mapping was drafted from the API repository's schemas and checked against the pinned text on 2026-11-14 (agreement for these types).
+- **Next groups:** Time (how a number becomes a time; unit open), ranges, records and vectors, arrays and matrices, choices, geometry.
+
+## Numeric time is in seconds only, 2026-11-24
+
+Asked, for the CEL type of Time (CEL batch 2, group 2), how version 1 treats the unit of a numeric Time. The owner chose **seconds only; other units rejected at start** (recommendation followed; alternatives were any UCUM time unit converted, and not reading numeric time as a timestamp).
+
+- **Decided (direction):** a numeric Time is the number of seconds after its `referenceTime` (UCUM `s`); a numeric Time with another unit that a condition reads makes the start REJECTED. This is narrower than SWE Common, which allows other time units; to be said plainly in the Scope draft.
+- **Not decided:** the wording; whether a unit given as a URI for the second counts; whether the rule covers TimeRange (the time-origin rule does).
+
+## CEL batch 2, Time written, 2026-11-24
+
+The owner chose **write both as proposed** (alternatives were also accepting a second given as a URI, and rewording first). `status: proposed`; identifiers and sentences are the Architect's proposals; each has a test; added to the start class and its conformance class. Gate stage 1: 372 records, no findings.
+
+- **Written:** `/req/executor-start/time-type` (a Time field has the CEL type timestamp: an ISO 8601 value is that date and time; a numeric value is the instant that many seconds after the field's referenceTime) and `/req/executor-start/time-unit` (a run request is rejected when a condition reads a Time or TimeRange field whose unit is neither the ISO 8601 Gregorian unit nor the UCUM code `s`).
+- **Gaps:** a second given as a URI is rejected as written; "UCUM code" is not a normative reference; "ISO 8601 value" is not defined (the pinned text requires the Gregorian unit for an ISO time); TimeRange has no CEL type yet (ranges group); `time-origin` and `time-unit` overlap in cases, and the three time rules together are the full numeric-time rule.

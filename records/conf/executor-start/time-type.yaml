@@ -1,0 +1,10 @@
+kind: abstract_test
+id: /conf/executor-start/time-type
+status: proposed
+target: /req/executor-start/time-type
+purpose: Verify that a Time field has the CEL type timestamp in a condition, with the instant read from an ISO 8601 value or from a number of seconds after the referenceTime.
+steps:
+  - Prepare a result schema with a Time field whose unit is http://www.opengis.net/def/uom/ISO-8601/0/Gregorian, and another Time field whose unit is the UCUM code s and that gives a referenceTime, and a binding to a data stream that has them.
+  - Prepare a capability specification with a condition that compares each field with a CEL timestamp literal, and check that the executor does not reject a run request because of the type of the condition.
+  - Publish an observation whose ISO 8601 field is a given date and time and whose numeric field is a number of seconds after the referenceTime, and check that each condition is evaluated against the instant that the value states.
+  - Repeat with a condition that compares a Time field with a number, and check that the executor rejects the run request.

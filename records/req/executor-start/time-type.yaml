@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/time-type
+status: proposed
+statement: In a condition, a value of a field of type Time SHALL have the CEL type timestamp, an ISO 8601 value being that date and time and a numeric value being the instant that lies that many seconds after the referenceTime of the field.

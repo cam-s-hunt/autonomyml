@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-start/control-stream-variable
 status: proposed
-statement: In a condition, the local name of a control stream SHALL denote the latest command of that control stream, with the properties of the Command resource of the CS API.
+statement: In a condition, the local name of a control stream SHALL denote the last command that the run has sent on that control stream, with the properties of the Command resource of the CS API.

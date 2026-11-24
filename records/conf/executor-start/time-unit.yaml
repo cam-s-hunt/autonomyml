@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-start/time-unit
+status: proposed
+target: /req/executor-start/time-unit
+purpose: Verify that an executor rejects a run request when a condition reads a Time or TimeRange field whose unit is not ISO 8601 and not seconds.
+steps:
+  - Prepare a capability specification with a condition that reads a Time field of a bound data stream.
+  - Prepare a binding to a data stream whose result schema gives that field a unit that is neither http://www.opengis.net/def/uom/ISO-8601/0/Gregorian nor the UCUM code s, for example the UCUM code min. Send a run request that names them and check that the executor rejects it.
+  - Repeat with the UCUM code s and a referenceTime, and with the unit http://www.opengis.net/def/uom/ISO-8601/0/Gregorian, and check that the executor does not reject the request because of the unit.
+  - Repeat each of the steps above with a TimeRange field in place of the Time field.
+  - Repeat with a condition that does not read the field, the result schema giving it the code min, and check that the executor does not reject the request because of the unit.

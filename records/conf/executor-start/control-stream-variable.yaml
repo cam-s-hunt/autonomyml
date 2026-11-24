@@ -2,8 +2,9 @@ kind: abstract_test
 id: /conf/executor-start/control-stream-variable
 status: proposed
 target: /req/executor-start/control-stream-variable
-purpose: Verify that a condition that names the local name of a control stream sees the latest command with the properties of the Command resource.
+purpose: Verify that a condition that names the local name of a control stream sees the last command that the run sent on it, with the properties of the Command resource.
 steps:
   - Prepare a capability specification with a condition that reads the currentStatus of a control stream by its local name, and a binding to a control stream.
   - Start a run, bring it to a state that sends a command on the control stream, and report the status of the command as EXECUTING and then COMPLETED.
-  - Check that the condition reads the status of the latest command, that is EXECUTING and then COMPLETED.
+  - Check that the condition reads the status of that command, that is EXECUTING and then COMPLETED.
+  - Have another party post a command on the same control stream, and check that the condition does not read it.

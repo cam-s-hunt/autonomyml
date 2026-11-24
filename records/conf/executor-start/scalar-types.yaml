@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/scalar-types
+status: proposed
+target: /req/executor-start/scalar-types
+purpose: Verify that the fields of type Boolean, Count, Quantity, Text and Category have the CEL types bool, int, double and string in a condition.
+steps:
+  - Prepare a result schema with a field of each type Boolean, Count, Quantity, Text and Category, and a binding to a data stream that has it.
+  - For each field, prepare a capability specification with a condition that compares the field with a literal of the CEL type bool, int, double, string and string respectively, and check that the executor does not reject a run request because of the type of the condition.
+  - For each field, repeat with a literal of another CEL type, for example an integer literal for the Quantity, and check that the executor rejects the run request.

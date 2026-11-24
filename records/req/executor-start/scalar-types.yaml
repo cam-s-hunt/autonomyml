@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/scalar-types
+status: proposed
+statement: In a condition, a value of a field of type Boolean SHALL have the CEL type bool; of type Count, int; of type Quantity, double; and of type Text or Category, string.
