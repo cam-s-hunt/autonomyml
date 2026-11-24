@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/run-stream-format
+status: proposed
+statement: The control stream on which an executor accepts run requests SHALL list the media type application/json in its formats.

@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/run-stream-cancel
+status: proposed
+target: /req/executor-start/run-stream-cancel
+purpose: Verify that the control stream on which an executor accepts run requests accepts a status report with the status code CANCELED.
+steps:
+  - Identify the control stream on which the executor accepts run requests and send a run request on it.
+  - Post a status report with the status code CANCELED to the command's status endpoint.
+  - Check that the executor accepts the status report and that the status of the command is CANCELED.

@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/result-create
+status: proposed
+target: /req/executor-start/result-create
+purpose: Verify that an executor supports creating CommandResult resources for the commands of its run control stream.
+steps:
+  - Send a run request on the control stream on which the executor accepts run requests.
+  - Create a CommandResult resource at the result endpoint of the run's command, as the CREATE operation of the CS API defines it.
+  - Check that the executor accepts the request and that the resource can be retrieved.

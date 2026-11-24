@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/run-stream-format
+status: proposed
+target: /req/executor-start/run-stream-format
+purpose: Verify that the control stream on which an executor accepts run requests lists application/json among its formats.
+steps:
+  - Identify the control stream on which the executor accepts run requests.
+  - Retrieve the control stream resource.
+  - Check that its property `formats` includes application/json.

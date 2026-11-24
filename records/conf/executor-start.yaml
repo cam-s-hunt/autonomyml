@@ -5,6 +5,10 @@ status: proposed
 target: /req/executor-start
 tests:
   - /conf/executor-start/accept-request
+  - /conf/executor-start/run-stream-async
+  - /conf/executor-start/run-stream-cancel
+  - /conf/executor-start/run-stream-format
+  - /conf/executor-start/result-create
   - /conf/executor-start/retrieve-specification
   - /conf/executor-start/retrieve-binding
   - /conf/executor-start/data-format

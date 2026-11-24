@@ -10,6 +10,10 @@ inherit:
   - /req/core
 requirements:
   - /req/executor-start/accept-request
+  - /req/executor-start/run-stream-async
+  - /req/executor-start/run-stream-cancel
+  - /req/executor-start/run-stream-format
+  - /req/executor-start/result-create
   - /req/executor-start/retrieve-specification
   - /req/executor-start/retrieve-binding
   - /req/executor-start/data-format

@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/result-create
+status: proposed
+statement: An executor SHALL support the CREATE operation for CommandResult resources of the commands of the control stream on which it accepts run requests.

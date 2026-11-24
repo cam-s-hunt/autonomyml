@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/run-stream-async
+status: proposed
+statement: The control stream on which an executor accepts run requests SHALL have the property async set to true.

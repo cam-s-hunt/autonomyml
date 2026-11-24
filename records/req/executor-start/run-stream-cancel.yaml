@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/run-stream-cancel
+status: proposed
+statement: The control stream on which an executor accepts run requests SHALL accept a status report with the status code CANCELED for a command of that control stream.

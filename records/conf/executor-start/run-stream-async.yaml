@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/run-stream-async
+status: proposed
+target: /req/executor-start/run-stream-async
+purpose: Verify that the control stream on which an executor accepts run requests is asynchronous.
+steps:
+  - Identify the control stream on which the executor accepts run requests.
+  - Retrieve the control stream resource.
+  - Check that its property `async` is true.
