@@ -2086,3 +2086,34 @@ Asked, from item 3 of the check against the pinned SWE Common text, what a condi
 - **Changed:** the Geometry row in the draft mapping table. No record changed.
 - **Not decided:** the wording; no record about geometry exists yet. Which six types, and whether a start check rejects a schema declaring another, are for the wording.
 - **Closed:** this was the last open card from the check of the mapping against the pinned SWE Common text. All eight differences are now decided or noted; the "optional field" and "unit" ones are written in records, the rest are directions only.
+
+## The executor reads application/json only; the list-shape direction is withdrawn, 2026-11-24
+
+After the record-shape and numeric-time directions above, the owner declined to have two start rules written and said: "Seems like we are drifting from the CS API standard. Let's ensure we are matching that standard as much as possible." The Architect then read CS API Part 2 (local clone at master HEAD, `api/part2/standard/sections/clause_20` and `clause_21`; the clone-to-pin match is only known from commit dates) and found:
+
+- **Plain `application/json` (clause 20):** the schema resource holds `resultSchema` with no `JSONEncoding` object; an observation has a `result` property "encoded according to the schema of the parent DataStream"; the API's own vector example sends the result as a named object (`{"lat": ..., "lon": ...}`). `recordsAsArrays` and `vectorsAsArrays` never appear.
+- **`application/swe+json` (clause 21):** the schema key is `recordSchema` with an `encoding` set to a `JSONEncoding` object; an observation is one flat record following SWE Common's JSON encoding rules (24-014 clause 10.2), its time identified by a `definition` URI, with no `result` wrapper. The list-shape settings exist only here.
+- **Not verified:** whether the API requires every datastream to offer `application/json`; the only requirement read (`/req/datastream/schema-op`) requires the schema operation and an `obsFormat` parameter.
+
+The owner first chose to also allow swe+json, then, shown that the swe+json shape differs and would need mapping rules, chose **version 1: `application/json` only** (recommendation followed; alternatives were both formats with the executor rebuilding the plain shape, and both formats with the specification naming its format).
+
+- **Decided (direction):** the executor learns a data stream's result schema from `{api_root}/datastreams/{id}/schema?obsFormat=application/json` and reads observations in that format only. This settles the question left open on 2026-11-12 (which format the executor reads). The condition shape (`battery.result.level`, `battery.resultTime`) stands.
+- **Withdrawn:** the direction "records and vectors are read in object shape only; a list-shape setting makes the start REJECTED" (2026-11-24, above). In `application/json` a record or vector is always an object, so nothing needs rejecting. No record was written for it.
+- **Consequence for time:** numeric time keeps the reference-time rule (Choice 5), but it now applies to `Time` components in a `resultSchema`; nothing yet says how the result's own time (`resultTime`, `phenomenonTime`) relates, those being ISO strings in the API's JSON.
+- **Not decided:** the wording; a server that offers no `application/json` schema cannot be used (the standard says nothing more); swe+json, swe+text and swe+binary are possible later extensions. No record was written or changed.
+- **Open:** whether to still write the numeric-time start rule, and whether the existing `/req/executor-start` rules should name the format (they say only "the result schemas of the bound data streams").
+
+## Numeric time start rule written, 2026-11-24
+
+The owner said "Start the numeric time rule now" after the `application/json` decision above. Written as `status: proposed`; identifier and wording are the Architect's proposals (the owner has not named them).
+
+- **Written:** `/req/executor-start/time-origin` ("An executor SHALL reject a run request when a condition reads a Time field of a bound data stream whose unit is not http://www.opengis.net/def/uom/ISO-8601/0/Gregorian and whose result schema gives no referenceTime for it.") with test `/conf/executor-start/time-origin` (five steps: rejected without a reference time; not rejected with one; not rejected for an ISO 8601 unit; not rejected when the condition does not read the field). Added to `/req/executor-start` and `/conf/executor-start`. Gate stage 1: 340 records, no findings.
+- **Reworded from the earlier proposal:** "numeric" is stated by the unit (anything but the ISO 8601 Gregorian unit, which the pinned SWE Common text requires of an ISO time), because a start check cannot see a value. The format is not named, so the rule applies to whatever result schema the executor reads.
+- **Gaps, not decided:** whether TimeRange is covered (the 2026-11-12 table says "same caveat"; this rule names Time only); the rule rests on the Gregorian-unit statement from the pinned 24-014 text, read in the 2026-11-14 check and not re-read here; the term "Time field" and "referenceTime" are not defined terms; "reads" is.
+
+## TimeRange joins the numeric time rule, 2026-11-24
+
+The owner asked whether TimeRange is part of any upstream standard before deciding. Answer given: it is one of the four range types of SWE Common 3.0 (24-014, pinned); the published text of CS API Parts 1 and 2 and SensorML 3.0 never names it (0 mentions each; SensorML 3.0 has one mention in a diagram file, not opened); no CS API example schema read uses one. The pinned text says a TimeRange shares most properties with Time (checked: `referenceFrame`, `uom` with the ISO 8601 Gregorian unit; the JSON schema `TimeRange.json` has `referenceTime` and `uom`). The owner chose **extend the rule to TimeRange** (alternatives were leaving it out, and rejecting TimeRange).
+
+- **Reworded in place (`status: proposed`):** `/req/executor-start/time-origin` now says "a Time or TimeRange field"; its test gained a repeat step for a TimeRange field. Gate stage 1: 340 records, no findings.
+- **Noted:** this writes a rule for a type no upstream example exercises; it was chosen knowingly. The TimeRange `referenceTime` was read in the SWE Common JSON schema in the API clone (`swecommon/schemas/json/TimeRange.json`), not in the pinned HTML text.

@@ -1,0 +1,12 @@
+kind: abstract_test
+id: /conf/executor-start/time-origin
+status: proposed
+target: /req/executor-start/time-origin
+purpose: Verify that an executor rejects a run request when a condition reads a numeric time or time range whose origin the result schema does not state.
+steps:
+  - Prepare a capability specification with a condition that reads a Time field of a bound data stream.
+  - Prepare a binding to a data stream whose result schema gives that field a unit other than http://www.opengis.net/def/uom/ISO-8601/0/Gregorian and no referenceTime. Send a run request that names them and check that the executor rejects it.
+  - Repeat with a result schema that gives the same field a referenceTime, and check that the executor does not reject the request because of the time.
+  - Repeat with a result schema that gives the field the unit http://www.opengis.net/def/uom/ISO-8601/0/Gregorian and no referenceTime, and check that the executor does not reject the request because of the time.
+  - Repeat each of the three steps above with a TimeRange field in place of the Time field.
+  - Repeat with a condition that does not read the field, the result schema giving it a numeric unit and no referenceTime, and check that the executor does not reject the request because of the time.

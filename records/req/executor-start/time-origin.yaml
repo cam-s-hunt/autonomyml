@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/time-origin
+status: proposed
+statement: An executor SHALL reject a run request when a condition reads a Time or TimeRange field of a bound data stream whose unit is not http://www.opengis.net/def/uom/ISO-8601/0/Gregorian and whose result schema gives no referenceTime for it.

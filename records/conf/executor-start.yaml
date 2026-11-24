@@ -12,6 +12,7 @@ tests:
   - /conf/executor-start/type-check
   - /conf/executor-start/unit-match
   - /conf/executor-start/size-limit
+  - /conf/executor-start/time-origin
   - /conf/executor-start/constants-valid
   - /conf/executor-start/rejected-status
   - /conf/executor-start/one-run
