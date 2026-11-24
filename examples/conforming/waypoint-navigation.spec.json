@@ -53,8 +53,8 @@
         }
       ],
       "transitions": [
-        { "condition": "navigate.currentStatus.statusCode == 'FAILED' || navigate.currentStatus.statusCode == 'REJECTED'", "target": "SafeHold" },
-        { "condition": "navigate.currentStatus.statusCode == 'COMPLETED'", "target": "Arrived" }
+        { "condition": "navigate.currentStatus == 'FAILED' || navigate.currentStatus == 'REJECTED'", "target": "SafeHold" },
+        { "condition": "navigate.currentStatus == 'COMPLETED'", "target": "Arrived" }
       ],
       "timeout": {
         "duration": { "type": "Quantity", "definition": "https://example.org/autonomyml/def/Timeout", "uom": { "code": "s" }, "value": 120.0 },

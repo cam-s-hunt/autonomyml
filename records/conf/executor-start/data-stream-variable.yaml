@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/data-stream-variable
+status: proposed
+target: /req/executor-start/data-stream-variable
+purpose: Verify that a condition that names the local name of a data stream sees the latest observation with its result, resultTime and phenomenonTime.
+steps:
+  - Prepare a capability specification with conditions that read the result, the resultTime and the phenomenonTime of a data stream by its local name, and a binding to a data stream.
+  - Start a run and publish two observations on the data stream, with different values and times.
+  - Check that each condition is evaluated against the later observation and that its value is the result, resultTime or phenomenonTime of that observation.

@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/condition-language
+status: proposed
+target: /req/executor-start/condition-language
+purpose: Verify that an executor evaluates a condition as a CEL expression with only the built-in functions.
+steps:
+  - Prepare a capability specification with a condition that uses a built-in function of the Common Expression Language, and a binding to the streams it reads.
+  - Start a run and supply values for which the condition is true, and check that the executor treats the condition as holding.
+  - Repeat with a condition that uses a function that the language does not define, and check that the executor does not evaluate the condition with that function.

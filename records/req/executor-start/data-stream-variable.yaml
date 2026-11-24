@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/data-stream-variable
+status: proposed
+statement: In a condition, the local name of a data stream SHALL denote the latest observation of that data stream, with the properties result, resultTime and phenomenonTime of the Observation resource of the CS API.

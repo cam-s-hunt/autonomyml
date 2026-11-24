@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/condition-bool
+status: proposed
+statement: An executor SHALL reject a run request when a condition does not have the CEL type bool.

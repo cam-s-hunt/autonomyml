@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/condition-language
+status: proposed
+statement: An executor SHALL evaluate a condition as an expression of the Common Expression Language, using only the functions that the language defines.

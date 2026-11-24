@@ -1,0 +1,9 @@
+kind: abstract_test
+id: /conf/executor-start/condition-bool
+status: proposed
+target: /req/executor-start/condition-bool
+purpose: Verify that an executor rejects a run request when a condition does not have the CEL type bool.
+steps:
+  - Prepare a capability specification with a condition that has the CEL type string, and a binding for it.
+  - Send a run request that names them and check that the executor rejects it.
+  - Repeat with a condition that has the CEL type bool and check that the executor does not reject the request because of the type of the condition.

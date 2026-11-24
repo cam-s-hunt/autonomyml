@@ -16,6 +16,10 @@ tests:
   - /conf/executor-start/parameters-value
   - /conf/executor-start/binding-version
   - /conf/executor-start/binding-complete
+  - /conf/executor-start/condition-language
+  - /conf/executor-start/condition-bool
+  - /conf/executor-start/data-stream-variable
+  - /conf/executor-start/control-stream-variable
   - /conf/executor-start/type-check
   - /conf/executor-start/unit-match
   - /conf/executor-start/size-limit

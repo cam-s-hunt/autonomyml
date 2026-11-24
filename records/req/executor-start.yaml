@@ -21,6 +21,10 @@ requirements:
   - /req/executor-start/parameters-value
   - /req/executor-start/binding-version
   - /req/executor-start/binding-complete
+  - /req/executor-start/condition-language
+  - /req/executor-start/condition-bool
+  - /req/executor-start/data-stream-variable
+  - /req/executor-start/control-stream-variable
   - /req/executor-start/type-check
   - /req/executor-start/unit-match
   - /req/executor-start/size-limit
