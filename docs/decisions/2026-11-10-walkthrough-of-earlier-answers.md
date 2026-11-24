@@ -2178,3 +2178,24 @@ The owner chose **write all three as proposed** (alternatives were writing the t
 ## Note on 'cause' extended, 2026-11-24
 
 The owner chose **add it to the Note** (alternatives were leaving it, and rewording differently). `/term/cause` Note now lists "of a data stream whose result broke its schema" between the broken postcondition and the halt. Definition and rules unchanged; gate stage 1: 346 records, no findings. The Note still has no case for a broken invariant (its response state is a terminal fail state, so the cause is that state's name).
+
+## Review finding: a halted run and the CANCELED status, 2026-11-24
+
+An independent review (three readers; report in `_bmad-output/review-2026-11-24-records.md`, local only) found that the records conflict with the CS API for a halted run. Checked in the pinned 23-002 HTML: a cancel is "implemented by posting a new status report with status code CANCELED at the command status endpoint" (clause 14.5 note); CANCELED means "canceled by an authorized user", "must be used if the system supports user driven task cancellations", "The REJECTED state should be used instead if the command was canceled by the receiving system", and "This is a final state. No further status updates will be sent." A CommandResult is a separate resource: `{api_root}/commands/{cmdId}/result` is created with POST under Requirement 74 (class `/req/create-replace-delete`, optional), and a command has "a list of results generated during the execution of the command". The API does not say whether a result may be created after the command's status is final (silent).
+
+The records had the executor report a halted run as CANCELED (`end-halted`) and write `cause` and `failedCleanUp` into the inline result of the final status report (`record-in-result`), which cannot work after a final CANCELED set by someone else. The owner chose **record in a CommandResult for every ending** (recommendation followed; alternatives were keeping the inline record for succeed and fail with none for halted, and having the executor post the CANCELED status itself).
+
+- **Decided (direction):** for every run, whatever its ending, the executor creates a CommandResult on the run's command carrying `cause` and `failedCleanUp`; the CANCELED status of a halted run is set by the cancel, not by the executor.
+- **Our reading, stated plainly:** creating a CommandResult after the command is final is a reading of an API silence.
+- **Costs accepted:** the executor's API must implement the Create/Replace/Delete class (optional in the API); `end-halted`, `record-in-result` and `result-schema` change.
+- **Not decided (open):** whether the CommandResult is created before or after the final status for succeed and fail; the status of `second-halt` (a second CANCELED after a final CANCELED cannot occur on a conforming server, so the rule is vacuous); which requirement states the executor's API classes; the wording.
+
+## Halted run: records reworded, 2026-11-24
+
+The owner chose **reword all three as proposed** (alternatives were rewording 1 and 2 only, and rewording first). All `status: proposed`; identifiers unchanged; sentences are the Architect's proposals.
+
+- **`/req/executor-run/end-halted`:** "An executor SHALL NOT report a status code other than CANCELED for the command of a halted run." Its test now reads the status reports after the run ends and checks the status is CANCELED and no later report with another status code exists (the old test passed trivially).
+- **`/req/executor-run/record-in-result`:** "An executor SHALL create, when a run ends, a CommandResult on the command of the run that states the cause of the run in a field `cause` and the names of its failed clean-up actions in a field `failedCleanUp`." Its test reads the CommandResult for a succeed, a halted and a failed run.
+- **`/req/executor-run/result-schema`:** "…SHALL be a DataRecord with a field named `cause` of type Text and a field named `failedCleanUp` that is a DataArray whose elements are Text."
+- **Gate:** stage 1 run after the edit: 346 records, no findings.
+- **Still open:** `second-halt` unchanged (vacuous on a conforming server); whether the CommandResult is created before or after the final status for succeed and fail; no rule requires the executor's API to offer Create/Replace/Delete, an asynchronous run control stream, or cancel (review finding A2, to be asked); the term `/term/halt` and its Note unchanged; `clean-up-record` still says "record with the ending of a run" and was not changed.
