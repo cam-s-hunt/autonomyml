@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/terminal-top-level
+status: proposed
+target: /req/specification/terminal-top-level
+purpose: Verify that no state of kind terminal is a child state of a mode.
+steps:
+  - Identify each state of kind mode.
+  - For each, check that none of its child states, at any depth, has the kind terminal.

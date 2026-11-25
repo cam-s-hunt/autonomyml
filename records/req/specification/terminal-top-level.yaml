@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/terminal-top-level
+status: proposed
+statement: A state of kind terminal SHALL NOT be a child state of a mode.

@@ -2403,3 +2403,12 @@ The owner chose **yes: any state of the specification** (alternatives were limit
 Written without a card (an examples-only continuation of the owner's choice to convert the guarded rover example): `examples/conforming/takeoff-survey-and-rtl.spec.json` and `takeoff-survey-and-rtl.uav-quad-04.binding.json`, with nine gaps in `examples/conforming/README.md`. The structural check passes; CEL was not type-checked and SWE Common (including the waypoint `DataArray`) was not validated. Nothing normative changed.
 
 - **Gaps worth a decision later:** a terminal state inside a mode (left open since 2026-11-12); no choice kind forces a duplicated return state; a fallback after an action failure cannot be written; a condition mixing streams is not met until all have values (stated in the term 'no observation', not as a rule for authors).
+
+## A terminal state only at the top level, 2026-11-25
+
+The owner chose **top level only** (alternatives were allowing a terminal state anywhere, which needs rules on the exit actions of enclosing modes when a run ends inside one, and leaving it open). `status: proposed`. This closes the item left open since 2026-11-12.
+
+- **Written:** `/req/specification/terminal-top-level` ("A state of kind terminal SHALL NOT be a child state of a mode.") with a test; added to the specification class and its conformance class. Gate stage 1: 401 records, no findings.
+- **Reason given:** by the time a run ends, the executor has left every enclosing mode by the ordinary transition rules, so no rule on a mode ending is needed; targets may cross modes, so any state can still reach a top-level terminal.
+- **Effect:** the two conforming examples already comply and are unchanged. The old non-conforming examples (a `succeed` inside `AirborneEnvelope`) do not.
+- **Gaps:** the term notes for 'mode' and 'terminal state' do not mention the restriction; the old assumption "(assumed allowed)" in earlier entries above is superseded.
