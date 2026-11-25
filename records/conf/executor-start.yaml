@@ -20,6 +20,7 @@ tests:
   - /conf/executor-start/condition-language
   - /conf/executor-start/condition-bool
   - /conf/executor-start/data-stream-variable
+  - /conf/executor-start/data-stream-tie
   - /conf/executor-start/control-stream-variable
   - /conf/executor-start/type-check
   - /conf/executor-start/scalar-types

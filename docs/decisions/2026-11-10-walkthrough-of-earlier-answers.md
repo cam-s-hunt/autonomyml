@@ -2494,3 +2494,11 @@ From the Codex review (terms: "age has no common clock rule"; edge cases 9). Ans
 - **Written:** `/req/executor-run/observation-age` ("An executor SHALL measure the age of an observation as the time of its own clock minus the phenomenonTime of the observation, or minus its resultTime when the observation has no phenomenonTime.") with a test (old phenomenonTime with a current resultTime; both current; no phenomenonTime with an old and a current resultTime); added to the run class and its conformance class. Gate stage 1: 407 records, no findings.
 - **Cost accepted:** the sensor's clock and the executor's must agree; the standard says nothing about clock accuracy or skew. The rule that picks the latest observation (`data-stream-variable`) still uses the greatest resultTime, so two different times are in use.
 - **Gaps:** the term 'no observation' and `/req/specification/max-age` do not mention the measure (they stay as accepted); how "its own clock" is defined or kept accurate is not stated; the age of a control stream's last command is not covered; tied resultTime (review finding) is still open.
+
+## Review finding: two observations with the same greatest resultTime, 2026-11-25
+
+From the Codex review (adversarial 12, edge cases 10). The owner chose **the one received last wins** (alternatives were the first received, treating a tie as no observation, and leaving it open). `status: proposed`.
+
+- **Written:** `/req/executor-start/data-stream-tie` ("An executor SHALL, when two observations of a data stream have the same greatest resultTime, let the local name of the data stream denote the one that it received later.") with a test (two tied observations of opposite results, in both orders); added to the start class and its conformance class. Gate stage 1: 409 records, no findings.
+- **Not changed:** `data-stream-variable` (greatest resultTime).
+- **Gaps:** "received later" is the executor's own order of receipt, which the standard does not otherwise define; more than two tied observations are covered by the same wording (the last received); the control-stream counterpart (which is "the last command") is not addressed.

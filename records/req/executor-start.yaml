@@ -25,6 +25,7 @@ requirements:
   - /req/executor-start/condition-language
   - /req/executor-start/condition-bool
   - /req/executor-start/data-stream-variable
+  - /req/executor-start/data-stream-tie
   - /req/executor-start/control-stream-variable
   - /req/executor-start/type-check
   - /req/executor-start/scalar-types

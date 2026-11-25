@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/data-stream-tie
+status: proposed
+statement: An executor SHALL, when two observations of a data stream have the same greatest resultTime, let the local name of the data stream denote the one that it received later.

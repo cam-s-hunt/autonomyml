@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-start/data-stream-tie
+status: proposed
+target: /req/executor-start/data-stream-tie
+purpose: Verify that, of two observations with the same greatest resultTime, an executor uses the one that it received later.
+steps:
+  - Prepare a capability specification with a condition that reads the result of a data stream by its local name, and a binding to a data stream.
+  - Start a run and publish an observation with a result that makes the condition true.
+  - Publish a second observation with the same resultTime and a result that makes the condition false.
+  - Check that the condition is evaluated against the second observation.
+  - Repeat with the observations published in the opposite order, and check that the condition is evaluated against the observation published second.
