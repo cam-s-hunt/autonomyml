@@ -2412,3 +2412,7 @@ The owner chose **top level only** (alternatives were allowing a terminal state 
 - **Reason given:** by the time a run ends, the executor has left every enclosing mode by the ordinary transition rules, so no rule on a mode ending is needed; targets may cross modes, so any state can still reach a top-level terminal.
 - **Effect:** the two conforming examples already comply and are unchanged. The old non-conforming examples (a `succeed` inside `AirborneEnvelope`) do not.
 - **Gaps:** the term notes for 'mode' and 'terminal state' do not mention the restriction; the old assumption "(assumed allowed)" in earlier entries above is superseded.
+
+## No Note on 'terminal state' for the top-level rule, 2026-11-25
+
+The owner chose **no: leave the term as accepted** (alternatives were adding a Note that points to the requirement, and leaving it open). The accepted wording of 'terminal state' (three Notes) is unchanged; the restriction lives only in `/req/specification/terminal-top-level`. This closes the "terms do not mention the restriction" gap of the entry above. No record changed.
