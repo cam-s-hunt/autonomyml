@@ -42,5 +42,6 @@ requirements:
   - /req/executor-start/rejected-status
   - /req/executor-start/one-run
   - /req/executor-start/no-early-entry
+  - /req/executor-start/cancel-in-start
   - /req/executor-start/kinds-supported
   - /req/executor-start/unsupported-kind

@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-start/cancel-in-start
+status: proposed
+target: /req/executor-start/cancel-in-start
+purpose: Verify that an executor that is cancelled during its start checks enters no state, performs no action and reports only CANCELED.
+steps:
+  - Prepare a capability specification and a binding whose retrieval or checks take long enough to cancel in the middle.
+  - Send a run request that names them.
+  - Cancel the command of the run request before the checks have passed.
+  - Check that the executor enters no state and sends no command.
+  - Check that the status of the command is CANCELED and that the executor reports no other status code.

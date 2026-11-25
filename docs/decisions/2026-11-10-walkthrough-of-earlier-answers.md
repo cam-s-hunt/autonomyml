@@ -2336,3 +2336,11 @@ The owner chose **write it as proposed** (alternatives were the cause being the 
 - **Written:** `/req/executor-run/halt-in-clean-up` ("An executor SHALL, when the command of a run is cancelled while the executor performs the exit actions required by an action failure, a command failure or a data error, end the run as halted instead of with the ending fail, and record as its cause the name of the innermost state the run was in when that clean-up began.") with a test; added to the run class and its conformance class. Gate stage 1: 386 records, no findings.
 - **Gaps:** `action-failure`, `command-failure` and `data-error` still say the run ends with the ending fail and are not reworded; the new rule takes precedence by its "instead of" wording only. "When that clean-up began" is the Architect's choice, not the owner's decision. A cancel after the executor has reported FAILED is refused by the API and no rule says so. `second-halt` is untouched.
 - **Still open:** a cancel during the start checks; a cancel in the middle of a transition.
+
+## Halt timing 2: a cancel during the start checks, 2026-11-24
+
+The owner chose **write it as proposed** (alternatives were finishing the checks and ending halted, and leaving it open). `status: proposed`.
+
+- **Written:** `/req/executor-start/cancel-in-start` ("An executor SHALL, when the command of a run request is cancelled before every check in this class has passed, enter no state, perform no action and report no status code other than CANCELED.") with a test; added to the start class and its conformance class. Gate stage 1: 388 records, no findings.
+- **Consequence stated, not in a sentence:** no run began, so no cause is recorded and no CommandResult is created (`record-in-result` says "when a run ends").
+- **Gaps:** "every check in this class" is the Architect's wording; the sentence does not say the executor may stop its remaining checks; whether a request being checked counts as "in progress" for `one-run` is open; a cancel in the middle of a transition is still open.

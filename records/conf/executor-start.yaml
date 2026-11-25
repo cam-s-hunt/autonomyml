@@ -37,5 +37,6 @@ tests:
   - /conf/executor-start/rejected-status
   - /conf/executor-start/one-run
   - /conf/executor-start/no-early-entry
+  - /conf/executor-start/cancel-in-start
   - /conf/executor-start/kinds-supported
   - /conf/executor-start/unsupported-kind

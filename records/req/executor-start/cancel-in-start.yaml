@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-start/cancel-in-start
+status: proposed
+statement: An executor SHALL, when the command of a run request is cancelled before every check in this class has passed, enter no state, perform no action and report no status code other than CANCELED.
