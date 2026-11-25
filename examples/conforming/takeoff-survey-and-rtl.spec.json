@@ -1,0 +1,499 @@
+{
+  "uniqueId": "https://example.org/autonomyml/specifications/takeoff-survey-and-rtl",
+  "version": "1.0.0",
+  "dataStreams": {
+    "pose": {
+      "maxAge": {
+        "type": "Quantity",
+        "definition": "https://example.org/autonomyml/def/MaximumAge",
+        "uom": {
+          "code": "s"
+        },
+        "value": 0.5
+      },
+      "fields": [
+        {
+          "path": "lat",
+          "uom": {
+            "code": "deg"
+          }
+        },
+        {
+          "path": "lon",
+          "uom": {
+            "code": "deg"
+          }
+        },
+        {
+          "path": "altitudeAgl",
+          "uom": {
+            "code": "m"
+          }
+        },
+        {
+          "path": "verticalSpeed",
+          "uom": {
+            "code": "m/s"
+          }
+        }
+      ]
+    },
+    "wind": {
+      "maxAge": {
+        "type": "Quantity",
+        "definition": "https://example.org/autonomyml/def/MaximumAge",
+        "uom": {
+          "code": "s"
+        },
+        "value": 2.0
+      },
+      "fields": [
+        {
+          "uom": {
+            "code": "m/s"
+          }
+        }
+      ]
+    },
+    "battery": {
+      "maxAge": {
+        "type": "Quantity",
+        "definition": "https://example.org/autonomyml/def/MaximumAge",
+        "uom": {
+          "code": "s"
+        },
+        "value": 1.0
+      },
+      "fields": [
+        {
+          "uom": {
+            "code": "%"
+          }
+        }
+      ]
+    },
+    "payload": {
+      "maxAge": {
+        "type": "Quantity",
+        "definition": "https://example.org/autonomyml/def/MaximumAge",
+        "uom": {
+          "code": "s"
+        },
+        "value": 1.0
+      }
+    }
+  },
+  "controlStreams": [
+    "takeoff",
+    "trajectory",
+    "camera",
+    "rtl",
+    "land"
+  ],
+  "initial": "AirborneEnvelope",
+  "states": {
+    "AirborneEnvelope": {
+      "kind": "mode",
+      "initial": "MissionFlight",
+      "invariants": [
+        {
+          "name": "BatteryAboveCriticalLand",
+          "condition": "battery.result >= 15.0",
+          "response": "EmergencyLandImmediate"
+        }
+      ],
+      "states": {
+        "MissionFlight": {
+          "kind": "mode",
+          "initial": "Takeoff",
+          "invariants": [
+            {
+              "name": "GeofenceAndCeilingClear",
+              "condition": "pose.result.lat >= 49.99 && pose.result.lat <= 50.01 && pose.result.lon >= 7.99 && pose.result.lon <= 8.01 && pose.result.altitudeAgl <= 120.0",
+              "response": "AbortReturnHome"
+            },
+            {
+              "name": "WindWithinEnvelope",
+              "condition": "wind.result <= 12.0",
+              "response": "AbortReturnHome"
+            },
+            {
+              "name": "BatteryAboveRtlReserve",
+              "condition": "battery.result >= 30.0",
+              "response": "AbortReturnHome"
+            }
+          ],
+          "transitions": [
+            {
+              "condition": "takeoff.currentStatus == 'FAILED' || takeoff.currentStatus == 'REJECTED'",
+              "target": "AbortReturnHome"
+            },
+            {
+              "condition": "trajectory.currentStatus == 'FAILED' || trajectory.currentStatus == 'REJECTED'",
+              "target": "AbortReturnHome"
+            },
+            {
+              "condition": "trajectory.currentStatus == 'COMPLETED' && payload.result.transectCaptureComplete",
+              "target": "ReturnHome"
+            }
+          ],
+          "timeout": {
+            "duration": {
+              "type": "Quantity",
+              "definition": "https://example.org/autonomyml/def/Timeout",
+              "uom": {
+                "code": "s"
+              },
+              "value": 960.0
+            },
+            "target": "AbortReturnHome"
+          },
+          "states": {
+            "Takeoff": {
+              "kind": "command",
+              "controlStream": "takeoff",
+              "parameters": {
+                "type": "DataRecord",
+                "definition": "https://example.org/autonomyml/def/TakeoffCommand",
+                "fields": [
+                  {
+                    "name": "targetAltitudeAgl",
+                    "type": "Quantity",
+                    "definition": "https://example.org/autonomyml/def/AltitudeAboveGroundLevel",
+                    "uom": {
+                      "code": "m"
+                    },
+                    "value": 40.0
+                  }
+                ]
+              },
+              "transitions": [
+                {
+                  "condition": "takeoff.currentStatus == 'COMPLETED' && pose.result.altitudeAgl - 40.0 < 1.0 && 40.0 - pose.result.altitudeAgl < 1.0 && pose.result.verticalSpeed < 0.3 && pose.result.verticalSpeed > -0.3",
+                  "target": "Survey"
+                }
+              ],
+              "timeout": {
+                "duration": {
+                  "type": "Quantity",
+                  "definition": "https://example.org/autonomyml/def/Timeout",
+                  "uom": {
+                    "code": "s"
+                  },
+                  "value": 60.0
+                },
+                "target": "AbortReturnHome"
+              }
+            },
+            "Survey": {
+              "kind": "command",
+              "controlStream": "trajectory",
+              "parameters": {
+                "type": "DataArray",
+                "definition": "https://example.org/autonomyml/def/WaypointArray3D",
+                "elementCount": {
+                  "type": "Count",
+                  "value": 3
+                },
+                "elementType": {
+                  "name": "waypoint",
+                  "type": "DataRecord",
+                  "fields": [
+                    {
+                      "name": "lat",
+                      "type": "Quantity",
+                      "uom": {
+                        "code": "deg"
+                      }
+                    },
+                    {
+                      "name": "lon",
+                      "type": "Quantity",
+                      "uom": {
+                        "code": "deg"
+                      }
+                    },
+                    {
+                      "name": "altitudeAgl",
+                      "type": "Quantity",
+                      "uom": {
+                        "code": "m"
+                      }
+                    }
+                  ]
+                },
+                "encoding": {
+                  "type": "JSONEncoding"
+                },
+                "values": [
+                  [
+                    50.0,
+                    8.0,
+                    40.0
+                  ],
+                  [
+                    50.001,
+                    8.0,
+                    40.0
+                  ],
+                  [
+                    50.001,
+                    8.001,
+                    40.0
+                  ]
+                ]
+              },
+              "entryActions": [
+                {
+                  "name": "StartCapture",
+                  "controlStream": "camera",
+                  "parameters": {
+                    "type": "DataRecord",
+                    "definition": "https://example.org/autonomyml/def/CameraCommand",
+                    "fields": [
+                      {
+                        "name": "trigger",
+                        "type": "Text",
+                        "definition": "https://example.org/autonomyml/def/Trigger",
+                        "value": "START"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "exitActions": [
+                {
+                  "name": "StopCapture",
+                  "controlStream": "camera",
+                  "parameters": {
+                    "type": "DataRecord",
+                    "definition": "https://example.org/autonomyml/def/CameraCommand",
+                    "fields": [
+                      {
+                        "name": "trigger",
+                        "type": "Text",
+                        "definition": "https://example.org/autonomyml/def/Trigger",
+                        "value": "STOP"
+                      }
+                    ]
+                  },
+                  "timeLimit": {
+                    "type": "Quantity",
+                    "definition": "https://example.org/autonomyml/def/TimeLimit",
+                    "uom": {
+                      "code": "s"
+                    },
+                    "value": 3.0
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ReturnHome": {
+          "kind": "command",
+          "controlStream": "rtl",
+          "parameters": {
+            "type": "DataRecord",
+            "definition": "https://example.org/autonomyml/def/ReturnToLaunchCommand",
+            "fields": [
+              {
+                "name": "home",
+                "type": "Vector",
+                "definition": "http://www.opengis.net/def/property/OGC/0/PlatformLocation",
+                "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4979",
+                "coordinates": [
+                  {
+                    "name": "lat",
+                    "type": "Quantity",
+                    "definition": "http://www.opengis.net/def/axis/OGC/1/lat",
+                    "axisID": "Lat",
+                    "uom": {
+                      "code": "deg"
+                    },
+                    "value": 50.0
+                  },
+                  {
+                    "name": "lon",
+                    "type": "Quantity",
+                    "definition": "http://www.opengis.net/def/axis/OGC/1/lon",
+                    "axisID": "Lon",
+                    "uom": {
+                      "code": "deg"
+                    },
+                    "value": 8.0
+                  },
+                  {
+                    "name": "ellipsoidalHeight",
+                    "type": "Quantity",
+                    "definition": "http://www.opengis.net/def/axis/OGC/1/h",
+                    "axisID": "h",
+                    "uom": {
+                      "code": "m"
+                    },
+                    "value": 120.0
+                  }
+                ]
+              },
+              {
+                "name": "minimumRtlAltitudeAgl",
+                "type": "Quantity",
+                "definition": "https://example.org/autonomyml/def/MinimumRtlAltitude",
+                "uom": {
+                  "code": "m"
+                },
+                "value": 45.0
+              }
+            ]
+          },
+          "transitions": [
+            {
+              "condition": "pose.result.lat - 50.0 < 0.00002 && 50.0 - pose.result.lat < 0.00002 && pose.result.lon - 8.0 < 0.00002 && 8.0 - pose.result.lon < 0.00002 && pose.result.altitudeAgl <= 0.2 && !pose.result.armed",
+              "target": "SurveyMissionCompleted"
+            },
+            {
+              "condition": "rtl.currentStatus == 'FAILED' || rtl.currentStatus == 'REJECTED'",
+              "target": "EmergencyLandImmediate"
+            }
+          ],
+          "timeout": {
+            "duration": {
+              "type": "Quantity",
+              "definition": "https://example.org/autonomyml/def/Timeout",
+              "uom": {
+                "code": "s"
+              },
+              "value": 300.0
+            },
+            "target": "EmergencyLandImmediate"
+          }
+        },
+        "AbortReturnHome": {
+          "kind": "command",
+          "controlStream": "rtl",
+          "parameters": {
+            "type": "DataRecord",
+            "definition": "https://example.org/autonomyml/def/ReturnToLaunchCommand",
+            "fields": [
+              {
+                "name": "home",
+                "type": "Vector",
+                "definition": "http://www.opengis.net/def/property/OGC/0/PlatformLocation",
+                "referenceFrame": "http://www.opengis.net/def/crs/EPSG/0/4979",
+                "coordinates": [
+                  {
+                    "name": "lat",
+                    "type": "Quantity",
+                    "definition": "http://www.opengis.net/def/axis/OGC/1/lat",
+                    "axisID": "Lat",
+                    "uom": {
+                      "code": "deg"
+                    },
+                    "value": 50.0
+                  },
+                  {
+                    "name": "lon",
+                    "type": "Quantity",
+                    "definition": "http://www.opengis.net/def/axis/OGC/1/lon",
+                    "axisID": "Lon",
+                    "uom": {
+                      "code": "deg"
+                    },
+                    "value": 8.0
+                  },
+                  {
+                    "name": "ellipsoidalHeight",
+                    "type": "Quantity",
+                    "definition": "http://www.opengis.net/def/axis/OGC/1/h",
+                    "axisID": "h",
+                    "uom": {
+                      "code": "m"
+                    },
+                    "value": 120.0
+                  }
+                ]
+              },
+              {
+                "name": "minimumRtlAltitudeAgl",
+                "type": "Quantity",
+                "definition": "https://example.org/autonomyml/def/MinimumRtlAltitude",
+                "uom": {
+                  "code": "m"
+                },
+                "value": 45.0
+              }
+            ]
+          },
+          "transitions": [
+            {
+              "condition": "pose.result.lat - 50.0 < 0.00002 && 50.0 - pose.result.lat < 0.00002 && pose.result.lon - 8.0 < 0.00002 && 8.0 - pose.result.lon < 0.00002 && pose.result.altitudeAgl <= 0.2 && !pose.result.armed",
+              "target": "SafeStateTerminal"
+            },
+            {
+              "condition": "rtl.currentStatus == 'FAILED' || rtl.currentStatus == 'REJECTED'",
+              "target": "EmergencyLandImmediate"
+            }
+          ],
+          "timeout": {
+            "duration": {
+              "type": "Quantity",
+              "definition": "https://example.org/autonomyml/def/Timeout",
+              "uom": {
+                "code": "s"
+              },
+              "value": 300.0
+            },
+            "target": "EmergencyLandImmediate"
+          }
+        }
+      }
+    },
+    "EmergencyLandImmediate": {
+      "kind": "command",
+      "controlStream": "land",
+      "parameters": {
+        "type": "DataRecord",
+        "definition": "https://example.org/autonomyml/def/LandCommand",
+        "fields": [
+          {
+            "name": "mode",
+            "type": "Text",
+            "definition": "https://example.org/autonomyml/def/Mode",
+            "value": "LAND_VERTICAL"
+          }
+        ]
+      },
+      "transitions": [
+        {
+          "condition": "pose.result.altitudeAgl <= 0.2 && !pose.result.armed",
+          "target": "SafeStateTerminal"
+        }
+      ],
+      "timeout": {
+        "duration": {
+          "type": "Quantity",
+          "definition": "https://example.org/autonomyml/def/Timeout",
+          "uom": {
+            "code": "s"
+          },
+          "value": 120.0
+        },
+        "target": "SafeStateTerminal"
+      }
+    },
+    "SurveyMissionCompleted": {
+      "kind": "terminal",
+      "ending": "succeed"
+    },
+    "SafeStateTerminal": {
+      "kind": "terminal",
+      "ending": "fail"
+    }
+  },
+  "postconditions": [
+    {
+      "name": "LandedAtHome",
+      "condition": "pose.result.lat - 50.0 < 0.00002 && 50.0 - pose.result.lat < 0.00002 && pose.result.lon - 8.0 < 0.00002 && 8.0 - pose.result.lon < 0.00002 && pose.result.altitudeAgl <= 0.2 && !pose.result.armed"
+    }
+  ]
+}

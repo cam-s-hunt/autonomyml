@@ -2397,3 +2397,9 @@ The owner chose **yes: any state of the specification** (alternatives were limit
 
 - **Written:** the permission `/per/specification/target-outside-mode` ("The target of a transition, of an invariant response or of a timeout MAY be a state outside the mode that contains the state, invariant or timeout that names it."), free-standing like `/per/specification/timeout` (not listed in a class, no test). The three existing `target` rules ("a state of the same state machine") are not reworded.
 - **Gaps:** the baseline `document/baseline.json` has NOT been updated: a new permission will produce one more X010 MODSPEC_1 message at stage 2, as the other three permissions did (stage 2 not re-run). A permission has no test, so a cross-mode target is still not tested; the executor's order of leaving and entering is covered by `/req/executor-run/transition-order`. Whether a mode's invariant or timeout naming a state INSIDE the same mode is allowed is implied, not stated.
+
+## Aerial example in the decided shapes, 2026-11-25
+
+Written without a card (an examples-only continuation of the owner's choice to convert the guarded rover example): `examples/conforming/takeoff-survey-and-rtl.spec.json` and `takeoff-survey-and-rtl.uav-quad-04.binding.json`, with nine gaps in `examples/conforming/README.md`. The structural check passes; CEL was not type-checked and SWE Common (including the waypoint `DataArray`) was not validated. Nothing normative changed.
+
+- **Gaps worth a decision later:** a terminal state inside a mode (left open since 2026-11-12); no choice kind forces a duplicated return state; a fallback after an action failure cannot be written; a condition mixing streams is not met until all have values (stated in the term 'no observation', not as a rule for authors).

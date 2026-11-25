@@ -1,0 +1,23 @@
+{
+  "uniqueId": "https://example.org/autonomyml/bindings/takeoff-survey-and-rtl.uav-quad-04",
+  "version": "1.0.0",
+  "specification": {
+    "href": "https://example.org/autonomyml/specifications/takeoff-survey-and-rtl",
+    "uniqueId": "https://example.org/autonomyml/specifications/takeoff-survey-and-rtl",
+    "version": "1.0.0"
+  },
+  "system": "urn:ogc:def:system:uav-quad-04",
+  "dataStreams": {
+    "pose": "https://csapi.example.org/ogcapi/datastreams/uav-quad-04-air-pose",
+    "wind": "https://csapi.example.org/ogcapi/datastreams/uav-quad-04-wind",
+    "battery": "https://csapi.example.org/ogcapi/datastreams/uav-quad-04-battery",
+    "payload": "https://csapi.example.org/ogcapi/datastreams/uav-quad-04-eo-camera-status"
+  },
+  "controlStreams": {
+    "takeoff": "https://csapi.example.org/ogcapi/controlstreams/uav-quad-04-takeoff",
+    "trajectory": "https://csapi.example.org/ogcapi/controlstreams/uav-quad-04-trajectory3d",
+    "camera": "https://csapi.example.org/ogcapi/controlstreams/uav-quad-04-eo-camera",
+    "rtl": "https://csapi.example.org/ogcapi/controlstreams/uav-quad-04-rtl",
+    "land": "https://csapi.example.org/ogcapi/controlstreams/uav-quad-04-land"
+  }
+}
