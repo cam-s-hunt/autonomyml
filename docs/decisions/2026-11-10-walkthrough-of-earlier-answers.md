@@ -2438,3 +2438,10 @@ The owner approved limiting both and keeping the three prohibitions (alternative
 - **Reworded in place (same identifiers, `status: proposed`):** `/req/executor-run/invariant-response` now reads "... when an invariant is broken and the command of the run has not been cancelled and no clean-up for a failure is in progress, take a transition ..."; `/req/executor-run/invariant-order` has the same condition after "when more than one invariant is broken". Each test gained one step: repeat with a cancel and with a failure clean-up and check that no response is taken. Gate stage 1: 401 records, no findings.
 - **Accepted repetition:** `halt-before-invariants`, `halt-no-invariants` and `clean-up-no-invariants` now repeat the limit and stay unchanged; deleting or merging them is a later option.
 - **Unchanged:** `invariants-checked` (checking is not taking the response).
+
+## Rewording 4: `halt-in-transition` limited, 2026-11-25
+
+The owner approved excluding the transition into a succeed terminal state (alternatives were also ending the run as halted for a fail terminal state, and leaving the rule). This ends the four planned rewordings of rules that the halt batch overrides.
+
+- **Reworded in place (same identifier, `status: proposed`):** `/req/executor-run/halt-in-transition` now reads "... while a transition other than a transition into a terminal state with the ending succeed is in progress, complete that transition, then treat the cancel as a halt of the states the run is in after the transition." Its test gained a step naming `halt-before-success` for the excluded case. Gate stage 1: 401 records, no findings.
+- **Still open:** a cancel during a transition into a terminal state with the ending FAIL: the rule completes the transition, which enters the fail terminal state and ends the run as fail, so the cancel is too late. "Halt of the states the run is in after the transition" has no meaning there. Neither rule says the cancel is refused. Likely needs a card.
