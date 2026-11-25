@@ -2381,3 +2381,12 @@ The owner chose **yes: ignore invariants during failure clean-up** (alternatives
 
 - **Written:** `/req/executor-run/clean-up-no-invariants` ("An executor SHALL NOT take the response of an invariant, and SHALL NOT record an invariant as the cause of the run, while it performs the exit actions required by an action failure, a command failure or a data error.") with a test; added to the run class and its conformance class. The first cause stands.
 - **Gaps:** the rule is silent on the clean-up that a halt starts (covered by `halt-no-invariants`) and on the exit actions of an ordinary transition (invariants of the state entered are checked after it, as before). `invariants-checked` is not reworded.
+
+## Guarded rover example in the decided shapes, 2026-11-25
+
+The owner chose to convert the guarded rover example next (alternatives were starting the independent review and rewording the rules that the halt batch overrides).
+
+- **Written (examples only, nothing normative):** `examples/conforming/guarded-waypoint-navigation.spec.json` and `guarded-waypoint-navigation.ugv-alpha-01.binding.json`, with nine gaps listed in `examples/conforming/README.md`. A hand-written structural check (members present, names unique, targets exist, binding keys match, condition variables declared) passes for both conforming examples; CEL was not type-checked and SWE Common was not validated.
+- **Main gaps:** the behavior tree, detour process, run-time inputs, geofence polygon and sustained postconditions do not carry over; the invariants are broken at start until fresh data arrives; mode-level members naming states outside the mode are allowed by the records but not tested.
+- **Also corrected:** the earlier "names of state kinds and fields are open" item was stale; the records already name every JSON member.
+- **Still not converted:** the aerial example (`examples/aerial-uxs/`), which needs nested modes and mode invariants; the old non-conforming files are kept.

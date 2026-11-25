@@ -1,0 +1,19 @@
+{
+  "uniqueId": "https://example.org/autonomyml/bindings/guarded-waypoint-navigation.ugv-alpha-01",
+  "version": "1.0.0",
+  "specification": {
+    "href": "https://example.org/autonomyml/specifications/guarded-waypoint-navigation",
+    "uniqueId": "https://example.org/autonomyml/specifications/guarded-waypoint-navigation",
+    "version": "1.0.0"
+  },
+  "system": "urn:ogc:def:system:ugv-alpha-01",
+  "dataStreams": {
+    "pose": "https://csapi.example.org/ogcapi/datastreams/ugv-alpha-01-gnss-ins-pose",
+    "velocity": "https://csapi.example.org/ogcapi/datastreams/ugv-alpha-01-twist",
+    "battery": "https://csapi.example.org/ogcapi/datastreams/ugv-alpha-01-battery"
+  },
+  "controlStreams": {
+    "navigate": "https://csapi.example.org/ogcapi/controlstreams/ugv-alpha-01-nav2d",
+    "hold": "https://csapi.example.org/ogcapi/controlstreams/ugv-alpha-01-hold"
+  }
+}
