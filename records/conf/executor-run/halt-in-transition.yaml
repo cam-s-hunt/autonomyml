@@ -11,4 +11,4 @@ steps:
   - Check that the executor then performs the exit actions of the states it is in, innermost first.
   - Check that the run ends as halted and that its cause is the name of the innermost state entered by the transition.
   - Check that the status of the run's command is CANCELED and that the executor reports no other status code.
-  - Check that the transition used is not a transition into a terminal state with the ending succeed; that case is tested under /conf/executor-run/halt-before-success.
+  - Check that the transition used is not a transition into a terminal state; that case is tested under /conf/executor-run/halt-before-terminal.

@@ -1,0 +1,14 @@
+kind: abstract_test
+id: /conf/executor-run/halt-before-terminal
+status: proposed
+target: /req/executor-run/halt-before-terminal
+purpose: Verify that a run whose command is cancelled during a transition into a terminal state ends as halted and that no postcondition is evaluated.
+steps:
+  - Use a capability specification with a transition into a terminal state with the ending succeed and another into a terminal state with the ending fail, a slow exit action on the state being left, and a postcondition that reads a data stream the test can observe being read.
+  - Start a run, bring it to the state being left and cause the transition into the terminal state with the ending succeed to be taken.
+  - While the exit action of the transition is in progress, cancel the run's command.
+  - Check that the run ends as halted and that it does not enter the terminal state.
+  - Check that the executor evaluates no postcondition.
+  - Check that the cause of the run is the name of the innermost state the run was in when the transition began.
+  - Check that the status of the run's command is CANCELED and that the executor reports no other status code.
+  - Repeat with the transition into the terminal state with the ending fail, and check the same.

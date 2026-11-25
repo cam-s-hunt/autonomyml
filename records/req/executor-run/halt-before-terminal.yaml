@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/halt-before-terminal
+status: proposed
+statement: An executor SHALL, when the command of a run is cancelled while a transition into a terminal state is in progress, end the run as halted instead of entering that terminal state, evaluate no postcondition, and record as its cause the name of the innermost state the run was in when that transition began.

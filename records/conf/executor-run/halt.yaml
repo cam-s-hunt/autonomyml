@@ -9,4 +9,4 @@ steps:
   - Cancel the run's command.
   - Check that the executor performs the exit actions of the states it is in, innermost first.
   - Check that the run then ends as halted.
-  - Check that the cancel was sent while the run was in a state, with no transition and no clean-up for a failure in progress; the cases where one is in progress are tested under /conf/executor-run/halt-in-transition, /conf/executor-run/halt-before-success and /conf/executor-run/halt-in-clean-up.
+  - Check that the cancel was sent while the run was in a state, with no transition and no clean-up for a failure in progress; the cases where one is in progress are tested under /conf/executor-run/halt-in-transition, /conf/executor-run/halt-before-terminal and /conf/executor-run/halt-in-clean-up.

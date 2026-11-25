@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-run/halt-in-transition
 status: proposed
-statement: An executor SHALL, when the command of a run is cancelled while a transition other than a transition into a terminal state with the ending succeed is in progress, complete that transition, then treat the cancel as a halt of the states the run is in after the transition.
+statement: An executor SHALL, when the command of a run is cancelled while a transition other than a transition into a terminal state is in progress, complete that transition, then treat the cancel as a halt of the states the run is in after the transition.
