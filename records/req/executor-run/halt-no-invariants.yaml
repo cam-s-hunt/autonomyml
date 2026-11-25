@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/halt-no-invariants
+status: proposed
+statement: An executor SHALL NOT take the response of an invariant, and SHALL NOT record an invariant as the cause of the run, once it has begun to halt a run.

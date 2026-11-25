@@ -1,0 +1,13 @@
+kind: abstract_test
+id: /conf/executor-run/halt-no-invariants
+status: proposed
+target: /req/executor-run/halt-no-invariants
+purpose: Verify that an invariant that becomes broken while a run is being halted does not change the ending of the run.
+steps:
+  - Use a capability specification with a state that has an invariant whose response names a terminal state with the ending fail, and a slow exit action.
+  - Start a run and bring it to that state with the invariant holding.
+  - Cancel the run's command, and while the exit action is in progress make the invariant broken by reporting a new observation.
+  - Check that the executor does not take the response of the invariant.
+  - Check that the executor performs the exit actions and that the run ends as halted.
+  - Check that the cause of the run is the name of the innermost state the run was in when the halt began.
+  - Check that the status of the run's command is CANCELED and that the executor reports no other status code.

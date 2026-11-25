@@ -2367,3 +2367,10 @@ The owner chose **the halt wins; skip the invariant check** (alternatives were c
 
 - **Written:** `/req/executor-run/halt-before-invariants` ("An executor SHALL NOT take the response of an invariant, and SHALL NOT record an invariant as the cause of the run, when the command of the run was cancelled before the invariants of the state entered by a transition were checked.") with a test; added to the run class and its conformance class.
 - **Gaps:** the rule covers only the check that follows a transition, as asked; invariant checks on new observations while a halt is in progress, and a cancel that arrives after the check has begun, are not addressed (the Architect would extend the same principle but it is not decided). The cause in the test (the innermost state the transition entered) comes from `halt-in-transition`; for a transition into a succeed terminal state `halt-before-success` governs. `invariants-checked` is not reworded; the new rule limits it by its own wording only.
+
+## Halt timing 6: invariants while a halt is in progress, 2026-11-25
+
+The owner chose **no: invariants are not acted on during a halt** (alternatives were letting a broken invariant end the run as fail, and leaving it open). `status: proposed`.
+
+- **Written:** `/req/executor-run/halt-no-invariants` ("An executor SHALL NOT take the response of an invariant, and SHALL NOT record an invariant as the cause of the run, once it has begun to halt a run.") with a test; added to the run class and its conformance class. It subsumes `halt-before-invariants` for the check after a transition, which is left in place.
+- **Gaps:** "has begun to halt a run" is the Architect's wording and is not defined (it could mean from the accepted cancel or from the first exit action); `invariants-checked` is not reworded. Whether invariants are acted on during the clean-up that follows an action failure, a command failure or a data error is not stated: `clean-up-failure` and `halt-in-clean-up` imply the ending is already decided, but no rule says invariants are ignored there.
