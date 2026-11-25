@@ -1,0 +1,8 @@
+kind: abstract_test
+id: /conf/specification/stream-names
+status: proposed
+target: /req/specification/stream-names
+purpose: Verify that no local name is used for two of the data streams and control streams that a capability specification declares.
+steps:
+  - Collect the local names of all data streams and control streams that the capability specification declares.
+  - Check that no local name occurs more than once in the collection, whether among data streams, among control streams or across the two kinds.

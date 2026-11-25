@@ -12,6 +12,7 @@ tests:
   - /conf/specification/condition
   - /conf/specification/target
   - /conf/specification/state-names
+  - /conf/specification/stream-names
   - /conf/specification/data-stream-declared
   - /conf/specification/max-age
   - /conf/specification/units

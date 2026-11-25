@@ -18,6 +18,7 @@ requirements:
   - /req/specification/condition
   - /req/specification/target
   - /req/specification/state-names
+  - /req/specification/stream-names
   - /req/specification/data-stream-declared
   - /req/specification/max-age
   - /req/specification/units

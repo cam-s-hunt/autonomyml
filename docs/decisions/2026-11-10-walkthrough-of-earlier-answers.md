@@ -2502,3 +2502,11 @@ From the Codex review (adversarial 12, edge cases 10). The owner chose **the one
 - **Written:** `/req/executor-start/data-stream-tie` ("An executor SHALL, when two observations of a data stream have the same greatest resultTime, let the local name of the data stream denote the one that it received later.") with a test (two tied observations of opposite results, in both orders); added to the start class and its conformance class. Gate stage 1: 409 records, no findings.
 - **Not changed:** `data-stream-variable` (greatest resultTime).
 - **Gaps:** "received later" is the executor's own order of receipt, which the standard does not otherwise define; more than two tied observations are covered by the same wording (the last received); the control-stream counterpart (which is "the last command") is not addressed.
+
+## Review finding: a local name shared by a data stream and a control stream, 2026-11-25
+
+From the Codex review (adversarial 7, terms). The owner chose **stream names must be unique across both kinds** (alternatives were extending `state-names` to cover streams, which would forbid a state and a stream sharing a name as the examples do, and leaving it open). `status: proposed`.
+
+- **Written:** `/req/specification/stream-names` ("A capability specification SHALL NOT use the same local name for two of the data streams and control streams that it declares.") with a test; added to the specification class and its conformance class. Gate stage 1: 411 records, no findings.
+- **Not changed:** `state-names`. A stream name may still equal a state, invariant, action or postcondition name (none of those is a CEL variable).
+- **Gaps:** the JSON encoding already cannot repeat a name within `dataStreams`, but `controlStreams` is an array and can; the rule covers both. The binding is untouched (it maps the same names). The conforming examples comply (no shared names).

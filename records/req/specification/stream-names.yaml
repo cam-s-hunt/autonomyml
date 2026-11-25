@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/specification/stream-names
+status: proposed
+statement: A capability specification SHALL NOT use the same local name for two of the data streams and control streams that it declares.
