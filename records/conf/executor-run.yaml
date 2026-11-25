@@ -21,6 +21,7 @@ tests:
   - /conf/executor-run/invariant-no-observation
   - /conf/executor-run/invariant-response
   - /conf/executor-run/invariant-order
+  - /conf/executor-run/invariants-before-transitions
   - /conf/executor-run/end-on-terminal
   - /conf/executor-run/end-succeed
   - /conf/executor-run/end-fail

@@ -28,6 +28,7 @@ requirements:
   - /req/executor-run/invariant-no-observation
   - /req/executor-run/invariant-response
   - /req/executor-run/invariant-order
+  - /req/executor-run/invariants-before-transitions
   - /req/executor-run/end-on-terminal
   - /req/executor-run/end-succeed
   - /req/executor-run/end-fail

@@ -1,0 +1,12 @@
+kind: abstract_test
+id: /conf/executor-run/invariants-before-transitions
+status: proposed
+target: /req/executor-run/invariants-before-transitions
+purpose: Verify that an executor that finds an invariant broken takes its response and not a transition or a timeout that the same evaluation would also allow.
+steps:
+  - Use a capability specification with a state that has an invariant whose response names state A, a transition whose condition reads the same data stream and names state B, and a timeout that is about to elapse and names state C, with A, B and C different.
+  - Start a run and bring it to that state with the invariant holding and the transition condition not met.
+  - Report one new observation that breaks the invariant and meets the transition condition.
+  - Check that the executor takes the response of the invariant and enters state A.
+  - Check that the executor does not enter state B.
+  - Repeat with the timeout elapsing in the same evaluation as the broken invariant, and check that the executor enters state A and not state C.
