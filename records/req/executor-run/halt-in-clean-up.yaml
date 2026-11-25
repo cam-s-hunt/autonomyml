@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/halt-in-clean-up
+status: proposed
+statement: An executor SHALL, when the command of a run is cancelled while the executor performs the exit actions required by an action failure, a command failure or a data error, end the run as halted instead of with the ending fail, and record as its cause the name of the innermost state the run was in when that clean-up began.

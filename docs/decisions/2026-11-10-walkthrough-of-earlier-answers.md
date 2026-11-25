@@ -2314,3 +2314,25 @@ From the review (an exit action cancelled from outside or reaching its time limi
 
 - **Reworded in place (`status: proposed`):** `/req/executor-run/clean-up-failure` now reads "An executor SHALL, when the command of an exit action is rejected, fails, is cancelled by a party other than the executor, or cannot be sent, or when an exit action reaches its time limit, during clean-up, perform the remaining exit actions and end the run with the ending it had already decided, and SHALL NOT treat that failure under /req/executor-run/action-failure." Its test gained two steps (a cancelled exit action, an exit action that reaches its time limit) and a check that no second clean-up starts. Gate stage 1: 384 records, no findings.
 - **Still open:** whether an exit action's overrun is a failure on an ordinary transition (open since 2026-11-13); "clean-up" is still not a defined term (review finding).
+
+## Rule conflict 2: data error against no observation, 2026-11-24
+
+From the review: the exception in `composite-no-observation` covered more than `data-error` (a required field that is NaN or nil), and a stale observation that also omits a required field matched both rules. The owner chose **make both changes** (alternatives were change (a) only, and rewording first).
+
+- **Reworded in place (`status: proposed`):** `/req/executor-run/composite-no-observation` ends "...except that /req/executor-run/data-error applies when the field is one the result schema does not mark optional and the value omits it or sets it to null." `/req/executor-run/data-error` now reads "...when a condition reads a field of an observation that is not older than the maximum age, the field being one that the result schema of its data stream does not mark optional and that the value omits or sets to null, ...". Tests gained a step each (a NaN or nil required field; a stale observation that omits the field). Gate stage 1: 384 records, no findings.
+- **Still open:** data-error says "a condition", read as any condition including invariants and postconditions, with the cause then the data stream's name (not checked against the postcondition rules); a null in a required field is treated as omitted; a field of a never-reported stream has no observation to be "not older than the maximum age", so it stays no observation by the term, not by this sentence.
+
+## Halt timing 1: a cancel during failure clean-up, 2026-11-24
+
+From the review: a cancel arriving while the run cleans up after an action failure, a command failure or a data error had no stated outcome. The API: the cancel is the user's CANCELED status report on the run's command; the executor reports FAILED only after clean-up; a cancel accepted before then makes CANCELED final, and a cancel after FAILED is refused (final state). The owner chose **the halt wins; the run ends halted** (recommendation followed; alternatives were the failure standing with the halt ignored, and leaving it to the API).
+
+- **Decided (direction):** a cancel received while clean-up for a failure is running ends the run as halted: clean-up carries on, the ending becomes halted, the status is the user's CANCELED, the cause is the innermost state as for any halt, and failed clean-up actions are still recorded. The failure that started the clean-up is not the cause.
+- **Not decided:** the wording; which "innermost state" (when the cancel arrives or when the clean-up began, assumed the latter); a cancel during start checks; a cancel mid-transition.
+
+## Halt timing 1: rule written, 2026-11-24
+
+The owner chose **write it as proposed** (alternatives were the cause being the innermost state when the cancel arrives, and rewording first). `status: proposed`.
+
+- **Written:** `/req/executor-run/halt-in-clean-up` ("An executor SHALL, when the command of a run is cancelled while the executor performs the exit actions required by an action failure, a command failure or a data error, end the run as halted instead of with the ending fail, and record as its cause the name of the innermost state the run was in when that clean-up began.") with a test; added to the run class and its conformance class. Gate stage 1: 386 records, no findings.
+- **Gaps:** `action-failure`, `command-failure` and `data-error` still say the run ends with the ending fail and are not reworded; the new rule takes precedence by its "instead of" wording only. "When that clean-up began" is the Architect's choice, not the owner's decision. A cancel after the executor has reported FAILED is refused by the API and no rule says so. `second-halt` is untouched.
+- **Still open:** a cancel during the start checks; a cancel in the middle of a transition.

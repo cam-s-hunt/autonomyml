@@ -10,5 +10,6 @@ steps:
   - Check that the executor performs the exit actions of the states it is in, innermost first.
   - Check that the run then ends with the ending fail.
   - Repeat with a result that sets the field to null.
+  - Repeat with an observation that is older than the maximum age and omits the field, and check that the executor treats the condition as reading no observation and does not end the run under this rule.
   - Repeat with a result that omits a field the result schema marks optional, and check that the executor does not end the run under this rule.
   - Repeat with a result that omits a required field that no condition reads, and check that the executor does not end the run under this rule.

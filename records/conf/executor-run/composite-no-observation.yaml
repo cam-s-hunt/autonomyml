@@ -9,5 +9,6 @@ steps:
   - Check that the condition that reads the whole record is treated as reading no observation.
   - Check that the condition that reads only a valid field is not.
   - Repeat with a record in which a field the schema marks optional is omitted, and again with that field set to null.
+  - Repeat with a record in which a field the schema does not mark optional is NaN or a declared nil value, and check that the condition is treated as reading no observation and that the executor does not end the run as /req/executor-run/data-error requires.
   - Repeat with a record in which a field the schema does not mark optional is omitted, and check that the executor ends the run as /req/executor-run/data-error requires and does not treat the condition as reading no observation.
   - Repeat with an array result in which one element is missing, read whole.

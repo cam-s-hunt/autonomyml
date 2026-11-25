@@ -1,0 +1,14 @@
+kind: abstract_test
+id: /conf/executor-run/halt-in-clean-up
+status: proposed
+target: /req/executor-run/halt-in-clean-up
+purpose: Verify that a run whose command is cancelled during the clean-up for a failure ends as halted, with the innermost state at the start of the clean-up as its cause.
+steps:
+  - Use a capability specification with nested states that have exit actions, one of them slow.
+  - Bring a run to a nested state and cause an action failure so that the clean-up begins.
+  - While an exit action is in progress, cancel the run's command.
+  - Check that the executor performs the remaining exit actions.
+  - Check that the run ends as halted and not with the ending fail.
+  - Check that the cause of the run is the name of the innermost state the run was in when the clean-up began.
+  - Check that the status of the run's command is CANCELED and that the executor reports no other status code.
+  - Repeat with a command failure and with a data error in place of the action failure.
