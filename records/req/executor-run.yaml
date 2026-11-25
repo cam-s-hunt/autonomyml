@@ -41,6 +41,7 @@ requirements:
   - /req/executor-run/second-halt
   - /req/executor-run/halt-in-clean-up
   - /req/executor-run/halt-in-transition
+  - /req/executor-run/halt-before-success
   - /req/executor-run/action-failure
   - /req/executor-run/command-failure
   - /req/executor-run/data-error
