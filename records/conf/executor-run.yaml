@@ -18,6 +18,7 @@ tests:
   - /conf/executor-run/transitions-first
   - /conf/executor-run/timeout
   - /conf/executor-run/invariants-checked
+  - /conf/executor-run/invariants-on-expiry
   - /conf/executor-run/invariant-no-observation
   - /conf/executor-run/invariant-response
   - /conf/executor-run/invariant-order

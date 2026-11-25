@@ -25,6 +25,7 @@ requirements:
   - /req/executor-run/transitions-first
   - /req/executor-run/timeout
   - /req/executor-run/invariants-checked
+  - /req/executor-run/invariants-on-expiry
   - /req/executor-run/invariant-no-observation
   - /req/executor-run/invariant-response
   - /req/executor-run/invariant-order

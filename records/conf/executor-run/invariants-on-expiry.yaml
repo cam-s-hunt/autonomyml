@@ -1,0 +1,12 @@
+kind: abstract_test
+id: /conf/executor-run/invariants-on-expiry
+status: proposed
+target: /req/executor-run/invariants-on-expiry
+purpose: Verify that an executor checks an invariant when the latest observation that it reads becomes too old, without any new observation.
+steps:
+  - Use a capability specification with a state that has an invariant whose condition reads a data stream with a maximum age of a few seconds and whose response names a different state.
+  - Start a run, bring it to that state, and report one observation on the data stream that makes the invariant hold.
+  - Check that the executor stays in the state.
+  - Report no further observation and no command status, and wait until the observation is older than the maximum age.
+  - Check that the executor takes the response of the invariant without any new observation or command status having been reported.
+  - Repeat with the invariant on a mode that encloses the current state.

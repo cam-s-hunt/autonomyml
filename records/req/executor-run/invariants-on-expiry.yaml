@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/invariants-on-expiry
+status: proposed
+statement: An executor SHALL check the invariants of its current state and of the modes that enclose it when the latest observation of a data stream that an invariant's condition reads becomes older than the maximum age.
