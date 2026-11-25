@@ -7,3 +7,4 @@ steps:
   - Use a capability specification with an invariant that names a response state.
   - Break the invariant.
   - Check that the executor takes a transition to the response state, leaving and entering states in the order of the transition rule.
+  - Repeat once with the run's command cancelled, and once during the clean-up for a failure, and check that the executor takes no response (see the tests of /req/executor-run/halt-no-invariants and /req/executor-run/clean-up-no-invariants).

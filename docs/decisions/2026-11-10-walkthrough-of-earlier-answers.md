@@ -2430,3 +2430,11 @@ The owner approved limiting `halt` as proposed (alternatives were an "except as 
 
 - **Reworded in place (same identifier, `status: proposed`):** `/req/executor-run/halt` now reads "An executor SHALL, when the command of a run is cancelled while the run is in a state and no transition and no clean-up for a failure is in progress, treat the cancel as a halt, perform the exit actions of the states it is in, innermost first, and then end the run as halted." Its test gained a step stating the scope and naming the three tests for the other cases. Gate stage 1: 401 records, no findings.
 - **Gaps:** "in a state" is the Architect's wording and is not defined; a cancel while a halt's own exit actions are in progress is `second-halt`; a cancel during the clean-up that follows an ordinary transition's exit actions is part of the transition (`halt-in-transition`).
+
+## Rewording 3: `invariant-response` and `invariant-order` limited, 2026-11-25
+
+The owner approved limiting both and keeping the three prohibitions (alternatives were merging the three prohibitions into one rule, and leaving the two rules).
+
+- **Reworded in place (same identifiers, `status: proposed`):** `/req/executor-run/invariant-response` now reads "... when an invariant is broken and the command of the run has not been cancelled and no clean-up for a failure is in progress, take a transition ..."; `/req/executor-run/invariant-order` has the same condition after "when more than one invariant is broken". Each test gained one step: repeat with a cancel and with a failure clean-up and check that no response is taken. Gate stage 1: 401 records, no findings.
+- **Accepted repetition:** `halt-before-invariants`, `halt-no-invariants` and `clean-up-no-invariants` now repeat the limit and stay unchanged; deleting or merging them is a later option.
+- **Unchanged:** `invariants-checked` (checking is not taking the response).

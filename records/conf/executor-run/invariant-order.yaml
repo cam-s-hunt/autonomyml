@@ -8,3 +8,4 @@ steps:
   - Break both invariants at the same moment.
   - Check that the executor takes the response of the invariant of the mode.
   - Use a state with two invariants stated in order, break both at the same moment, and check that the executor takes the response of the one stated first.
+  - Repeat once with the run's command cancelled, and once during the clean-up for a failure, and check that the executor takes no response (see the tests of /req/executor-run/halt-no-invariants and /req/executor-run/clean-up-no-invariants).

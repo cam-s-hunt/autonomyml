@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-run/invariant-response
 status: proposed
-statement: An executor SHALL, when an invariant is broken, take a transition to the response state that the invariant names.
+statement: An executor SHALL, when an invariant is broken and the command of the run has not been cancelled and no clean-up for a failure is in progress, take a transition to the response state that the invariant names.

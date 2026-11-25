@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-run/invariant-order
 status: proposed
-statement: An executor SHALL, when more than one invariant is broken, take the response of the first broken invariant, checking the invariants of the modes that enclose its current state from the outermost inward, and then those of its current state, each list in the order stated.
+statement: An executor SHALL, when more than one invariant is broken and the command of the run has not been cancelled and no clean-up for a failure is in progress, take the response of the first broken invariant, checking the invariants of the modes that enclose its current state from the outermost inward, and then those of its current state, each list in the order stated.
