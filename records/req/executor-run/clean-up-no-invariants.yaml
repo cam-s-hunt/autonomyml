@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/clean-up-no-invariants
+status: proposed
+statement: An executor SHALL NOT take the response of an invariant, and SHALL NOT record an invariant as the cause of the run, while it performs the exit actions required by an action failure, a command failure or a data error.

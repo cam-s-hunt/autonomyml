@@ -2374,3 +2374,10 @@ The owner chose **no: invariants are not acted on during a halt** (alternatives 
 
 - **Written:** `/req/executor-run/halt-no-invariants` ("An executor SHALL NOT take the response of an invariant, and SHALL NOT record an invariant as the cause of the run, once it has begun to halt a run.") with a test; added to the run class and its conformance class. It subsumes `halt-before-invariants` for the check after a transition, which is left in place.
 - **Gaps:** "has begun to halt a run" is the Architect's wording and is not defined (it could mean from the accepted cancel or from the first exit action); `invariants-checked` is not reworded. Whether invariants are acted on during the clean-up that follows an action failure, a command failure or a data error is not stated: `clean-up-failure` and `halt-in-clean-up` imply the ending is already decided, but no rule says invariants are ignored there.
+
+## Halt timing 7: invariants during the clean-up for a failure, 2026-11-25
+
+The owner chose **yes: ignore invariants during failure clean-up** (alternatives were letting a broken invariant change the cause, and leaving it open). `status: proposed`.
+
+- **Written:** `/req/executor-run/clean-up-no-invariants` ("An executor SHALL NOT take the response of an invariant, and SHALL NOT record an invariant as the cause of the run, while it performs the exit actions required by an action failure, a command failure or a data error.") with a test; added to the run class and its conformance class. The first cause stands.
+- **Gaps:** the rule is silent on the clean-up that a halt starts (covered by `halt-no-invariants`) and on the exit actions of an ordinary transition (invariants of the state entered are checked after it, as before). `invariants-checked` is not reworded.

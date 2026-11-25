@@ -1,0 +1,13 @@
+kind: abstract_test
+id: /conf/executor-run/clean-up-no-invariants
+status: proposed
+target: /req/executor-run/clean-up-no-invariants
+purpose: Verify that an invariant that becomes broken during the clean-up for a failure does not change the cause of the run.
+steps:
+  - Use a capability specification with a state that has an invariant whose response names a terminal state with the ending fail, and a slow exit action.
+  - Start a run, bring it to that state with the invariant holding, and cause an action failure so that the clean-up begins.
+  - While the exit action is in progress, make the invariant broken by reporting a new observation.
+  - Check that the executor does not take the response of the invariant.
+  - Check that the executor performs the remaining exit actions and that the run ends with the ending fail.
+  - Check that the cause of the run is the one that the failure itself requires, the name of the failing action in the first case, and not the invariant.
+  - Repeat with a command failure and with a data error in place of the action failure, and check in each case that the cause is the one that failure requires.
