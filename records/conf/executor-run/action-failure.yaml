@@ -12,3 +12,4 @@ steps:
   - Repeat with a command that is cancelled directly on its control stream by a party other than the executor.
   - Check that the executor cleans up and ends the run with the ending fail.
   - Cause the executor to cancel an entry-action command itself by leaving the state, and check that this is not treated as a failure.
+  - Repeat once with the run's command cancelled while the exit actions are in progress, and check that the run then ends as halted and not with the ending fail (see the test of /req/executor-run/halt-in-clean-up).

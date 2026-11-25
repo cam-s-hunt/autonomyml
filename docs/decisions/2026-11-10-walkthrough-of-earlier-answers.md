@@ -2416,3 +2416,10 @@ The owner chose **top level only** (alternatives were allowing a terminal state 
 ## No Note on 'terminal state' for the top-level rule, 2026-11-25
 
 The owner chose **no: leave the term as accepted** (alternatives were adding a Note that points to the requirement, and leaving it open). The accepted wording of 'terminal state' (three Notes) is unchanged; the restriction lives only in `/req/specification/terminal-top-level`. This closes the "terms do not mention the restriction" gap of the entry above. No record changed.
+
+## Rewording 1: the three failure rules and the cancel, 2026-11-25
+
+The owner approved adding the exception to each rule in the same words (alternatives were pointing to `halt-in-clean-up` by identifier, and leaving the rules alone). Part of the rewording of rules that the halt batch overrides only by wording (4 planned: failures, `halt`, invariants, `halt-in-transition`).
+
+- **Reworded in place (same identifiers, `status: proposed`):** `/req/executor-run/action-failure`, `command-failure` and `data-error` now end "... and then, unless the command of the run is cancelled before those exit actions are complete, end the run with the ending fail." Each test gained one step: repeat with a cancel during the exit actions and check the run ends as halted (see the test of `halt-in-clean-up`). Gate stage 1: 401 records, no findings.
+- **Unchanged:** `halt-in-clean-up` still says "instead of with the ending fail" (harmless, now consistent).

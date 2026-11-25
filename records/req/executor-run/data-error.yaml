@@ -1,4 +1,4 @@
 kind: requirement
 id: /req/executor-run/data-error
 status: proposed
-statement: An executor SHALL, when a condition reads a field of an observation that is not older than the maximum age, the field being one that the result schema of its data stream does not mark optional and that the value omits or sets to null, perform the exit actions of the states it is in, innermost first, and then end the run with the ending fail.
+statement: An executor SHALL, when a condition reads a field of an observation that is not older than the maximum age, the field being one that the result schema of its data stream does not mark optional and that the value omits or sets to null, perform the exit actions of the states it is in, innermost first, and then, unless the command of the run is cancelled before those exit actions are complete, end the run with the ending fail.
