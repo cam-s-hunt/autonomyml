@@ -2423,3 +2423,10 @@ The owner approved adding the exception to each rule in the same words (alternat
 
 - **Reworded in place (same identifiers, `status: proposed`):** `/req/executor-run/action-failure`, `command-failure` and `data-error` now end "... and then, unless the command of the run is cancelled before those exit actions are complete, end the run with the ending fail." Each test gained one step: repeat with a cancel during the exit actions and check the run ends as halted (see the test of `halt-in-clean-up`). Gate stage 1: 401 records, no findings.
 - **Unchanged:** `halt-in-clean-up` still says "instead of with the ending fail" (harmless, now consistent).
+
+## Rewording 2: the `halt` rule limited to the ordinary case, 2026-11-25
+
+The owner approved limiting `halt` as proposed (alternatives were an "except as stated below" clause, and leaving it).
+
+- **Reworded in place (same identifier, `status: proposed`):** `/req/executor-run/halt` now reads "An executor SHALL, when the command of a run is cancelled while the run is in a state and no transition and no clean-up for a failure is in progress, treat the cancel as a halt, perform the exit actions of the states it is in, innermost first, and then end the run as halted." Its test gained a step stating the scope and naming the three tests for the other cases. Gate stage 1: 401 records, no findings.
+- **Gaps:** "in a state" is the Architect's wording and is not defined; a cancel while a halt's own exit actions are in progress is `second-halt`; a cancel during the clean-up that follows an ordinary transition's exit actions is part of the transition (`halt-in-transition`).
