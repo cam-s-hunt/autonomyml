@@ -2344,3 +2344,12 @@ The owner chose **write it as proposed** (alternatives were finishing the checks
 - **Written:** `/req/executor-start/cancel-in-start` ("An executor SHALL, when the command of a run request is cancelled before every check in this class has passed, enter no state, perform no action and report no status code other than CANCELED.") with a test; added to the start class and its conformance class. Gate stage 1: 388 records, no findings.
 - **Consequence stated, not in a sentence:** no run began, so no cause is recorded and no CommandResult is created (`record-in-result` says "when a run ends").
 - **Gaps:** "every check in this class" is the Architect's wording; the sentence does not say the executor may stop its remaining checks; whether a request being checked counts as "in progress" for `one-run` is open; a cancel in the middle of a transition is still open.
+
+## Halt timing 3: a cancel in the middle of a transition, 2026-11-25
+
+The owner chose **finish the move, then halt** (alternatives were stopping at once and cleaning up what was entered, and leaving it open). `status: proposed`.
+
+- **Written:** `/req/executor-run/halt-in-transition` ("An executor SHALL, when the command of a run is cancelled while a transition is in progress, complete that transition, then treat the cancel as a halt of the states the run is in after the transition.") with a test; added to the run class and its conformance class. Gate stage 1: 390 records, no findings.
+- **Reason given:** a transition is bounded (each exit action has a time limit, entry actions are sent without waiting), so the halt is delayed only briefly, and no half-entered state needs defining.
+- **Gaps:** a transition into a succeed terminal state: whether the postconditions are checked before the halt is not stated (the halt rule is silent; the Architect would read the halt as taking precedence, but this is not decided). The rule does not say whether the invariant check at the end of a transition happens before the halt. The cause follows `cause-halt` (innermost state after the transition). The "halt in progress" for `second-halt` begins when the transition completes, not at the cancel; a second cancel during the transition is not addressed.
+- **Still open:** none of the halt-timing cases listed earlier remain, apart from the gaps above and the API refusing a cancel after FAILED (no rule says so).

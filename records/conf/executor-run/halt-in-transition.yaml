@@ -1,0 +1,13 @@
+kind: abstract_test
+id: /conf/executor-run/halt-in-transition
+status: proposed
+target: /req/executor-run/halt-in-transition
+purpose: Verify that a run whose command is cancelled during a transition completes the transition and then halts from the states it has entered.
+steps:
+  - Use a capability specification with a transition that leaves a nested state with a slow exit action and enters a state that has entry actions.
+  - Start a run, bring it to the nested state and cause the transition to be taken.
+  - While the exit action of the transition is in progress, cancel the run's command.
+  - Check that the executor completes the exit actions of the states being left and enters the states being entered.
+  - Check that the executor then performs the exit actions of the states it is in, innermost first.
+  - Check that the run ends as halted and that its cause is the name of the innermost state entered by the transition.
+  - Check that the status of the run's command is CANCELED and that the executor reports no other status code.
