@@ -1,0 +1,11 @@
+kind: abstract_test
+id: /conf/executor-run/observation-age
+status: proposed
+target: /req/executor-run/observation-age
+purpose: Verify that an executor measures the age of an observation from its phenomenonTime, or from its resultTime when it has no phenomenonTime, against its own clock.
+steps:
+  - Use a capability specification with a data stream whose maximum age is a few seconds and a condition that reads it.
+  - Report an observation whose resultTime is the current time and whose phenomenonTime is older than the maximum age, and check that the executor treats the condition as reading no observation.
+  - Report an observation whose resultTime and phenomenonTime are both current, and check that the executor treats the condition as reading a usable value.
+  - Report an observation with no phenomenonTime and a resultTime older than the maximum age, and check that the executor treats the condition as reading no observation.
+  - Report an observation with no phenomenonTime and a current resultTime, and check that the executor treats the condition as reading a usable value.

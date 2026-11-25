@@ -15,6 +15,7 @@ tests:
   - /conf/executor-run/no-wait
   - /conf/executor-run/cancel-on-leave
   - /conf/executor-run/no-observation
+  - /conf/executor-run/observation-age
   - /conf/executor-run/transitions-first
   - /conf/executor-run/timeout
   - /conf/executor-run/invariants-checked

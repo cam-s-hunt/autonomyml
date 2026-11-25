@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/observation-age
+status: proposed
+statement: An executor SHALL measure the age of an observation as the time of its own clock minus the phenomenonTime of the observation, or minus its resultTime when the observation has no phenomenonTime.
