@@ -2390,3 +2390,10 @@ The owner chose to convert the guarded rover example next (alternatives were sta
 - **Main gaps:** the behavior tree, detour process, run-time inputs, geofence polygon and sustained postconditions do not carry over; the invariants are broken at start until fresh data arrives; mode-level members naming states outside the mode are allowed by the records but not tested.
 - **Also corrected:** the earlier "names of state kinds and fields are open" item was stale; the records already name every JSON member.
 - **Still not converted:** the aerial example (`examples/aerial-uxs/`), which needs nested modes and mode invariants; the old non-conforming files are kept.
+
+## Targets outside a mode, 2026-11-25
+
+The owner chose **yes: any state of the specification** (alternatives were limiting a target to the same or an enclosing mode, which contradicts the 2026-11-12 decision, and leaving it open). `status: proposed`.
+
+- **Written:** the permission `/per/specification/target-outside-mode` ("The target of a transition, of an invariant response or of a timeout MAY be a state outside the mode that contains the state, invariant or timeout that names it."), free-standing like `/per/specification/timeout` (not listed in a class, no test). The three existing `target` rules ("a state of the same state machine") are not reworded.
+- **Gaps:** the baseline `document/baseline.json` has NOT been updated: a new permission will produce one more X010 MODSPEC_1 message at stage 2, as the other three permissions did (stage 2 not re-run). A permission has no test, so a cross-mode target is still not tested; the executor's order of leaving and entering is covered by `/req/executor-run/transition-order`. Whether a mode's invariant or timeout naming a state INSIDE the same mode is allowed is implied, not stated.

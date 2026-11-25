@@ -1,0 +1,5 @@
+# PROPOSED. A permission needs no abstract test.
+kind: permission
+id: /per/specification/target-outside-mode
+status: proposed
+statement: The target of a transition, of an invariant response or of a timeout MAY be a state outside the mode that contains the state, invariant or timeout that names it.
