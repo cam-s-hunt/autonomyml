@@ -5,5 +5,5 @@ target: /req/executor-run/no-observation
 purpose: Verify that a condition that reads a value counted as no observation is treated as not met.
 steps:
   - Use a capability specification with a transition whose condition would be met by a valid value.
-  - Supply each case of no observation: a value that is stale, a stream that has never reported, a NaN, a declared nil value, and, for a condition that reads a field the schema marks optional, a record that omits the field and a record that sets it to null, an array with more elements than the maximum size that the specification declares, and an observation whose result is held out of band.
+  - "Supply each case of no observation: a value that is stale, a stream that has never reported, a NaN, a declared nil value, and, for a condition that reads a field the schema marks optional, a record that omits the field and a record that sets it to null, an array with more elements than the maximum size that the specification declares, and an observation whose result is held out of band."
   - For each, check that the executor treats the condition as not met and takes no transition.
