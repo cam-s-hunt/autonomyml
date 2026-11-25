@@ -1,0 +1,4 @@
+kind: requirement
+id: /req/executor-run/halt-before-invariants
+status: proposed
+statement: An executor SHALL NOT take the response of an invariant, and SHALL NOT record an invariant as the cause of the run, when the command of the run was cancelled before the invariants of the state entered by a transition were checked.

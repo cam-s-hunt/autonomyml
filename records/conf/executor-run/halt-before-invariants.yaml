@@ -1,0 +1,13 @@
+kind: abstract_test
+id: /conf/executor-run/halt-before-invariants
+status: proposed
+target: /req/executor-run/halt-before-invariants
+purpose: Verify that a run whose command is cancelled during a transition is halted and not failed by an invariant of the state that the transition enters.
+steps:
+  - Use a capability specification with a transition into a state that has an invariant whose response names a terminal state with the ending fail, and a slow exit action on the state being left.
+  - Arrange the data so that the invariant is broken once the state is entered.
+  - Start a run, bring it to the state being left and cause the transition to be taken.
+  - While the exit action of the transition is in progress, cancel the run's command.
+  - Check that the executor does not take the response of the invariant.
+  - Check that the run ends as halted and that its cause is the name of the innermost state entered by the transition.
+  - Check that the status of the run's command is CANCELED and that the executor reports no other status code.

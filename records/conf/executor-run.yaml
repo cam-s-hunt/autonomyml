@@ -35,6 +35,7 @@ tests:
   - /conf/executor-run/halt-in-clean-up
   - /conf/executor-run/halt-in-transition
   - /conf/executor-run/halt-before-success
+  - /conf/executor-run/halt-before-invariants
   - /conf/executor-run/action-failure
   - /conf/executor-run/command-failure
   - /conf/executor-run/data-error
